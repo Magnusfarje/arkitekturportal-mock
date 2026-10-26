@@ -20,7 +20,7 @@ modellen, exemplen, en referensimplementation och motiven bakom valen.
 
 ## Läsordning
 
-1. [docs/overlamning.md](docs/overlamning.md): vad som byggdes, designvalen och
+1. [docs/mock.md](docs/mock.md): vad som byggdes, designvalen och
    varför, vad som inte är gjort, och frågorna som återstår att besluta.
 2. [innehall/artefaktdefinition.md](innehall/artefaktdefinition.md):
    artefakttyperna, uppgifterna, relationerna och reglerna. Det är modellen.
