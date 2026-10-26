@@ -1,0 +1,58 @@
+id: RA-MOB-01
+kind: reference-architecture
+title: Mobilapp för användare i fält
+topic: Mobilappar
+solution: Appen talar med ett eget API i tjänstezonen, publicerat genom exponeringsplattformen och den externa API-gatewayen. Användaren loggar in enligt RA-ID-03. Det som görs utan täckning sparas krypterat i telefonen och skickas när anslutningen är tillbaka.
+rationale: En telefon är alltid på internet, också när den är myndighetens egen. Appen får därför samma väg in som alla andra som kommer utifrån, och allt som kräver skydd avgörs i API:et, inte i appen.
+fits: Appar för medarbetare, entreprenörer och andra som arbetar ute i anläggningen eller på resande fot. Räcker det med en webbsida som fungerar i telefonens webbläsare följer du RA-EXP-01.
+responsibilities: |-
+  - Räkna med att telefonen inte är hanterad av oss. Kräv skärmlås, och spara bara det användaren behöver för sina egna uppdrag.
+  - Kryptera det som sparas i telefonen, och ta bort det vid utloggning och när inloggningen har återkallats.
+  - Ge varje ändring som görs utan täckning ett eget ID, så att den kan skickas flera gånger utan att utföras mer än en gång.
+  - Bestäm vad som gäller när två har ändrat samma sak, och visa användaren vad som ännu inte är skickat.
+  - Ladda upp foton i delar som kan återupptas. Kontrollera dem i API:et som data utifrån, enligt TP-IND-01.
+  - Lägg inga hemligheter i appen. Allt i en app går att läsa för den som har den.
+  - Låt API:et avvisa appversioner som är för gamla, och säg det till användaren.
+  - Publicera appen i appbutikerna från pipelinen, med samma granskning som annan kod.
+variants: |-
+  - Entreprenörens tekniker: loggar in som extern användare. Uppdragen kommer från det system som äger dem, genom dess API.
+  - Medarbetare med myndighetens telefon: samma väg in. Telefonen hanteras av klienthanteringen, men appen litar inte på det.
+  - Surfplatta som delas av flera: varje användare loggar in själv, och inget sparas mellan användarna.
+flows:
+  - from: { name: Mobilapp, zone: internet }
+    to: { name: Exponeringsplattform, zone: dmz }
+    label: HTTPS med publikt certifikat
+  - from: { name: Exponeringsplattform, zone: dmz }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: användaren loggar in
+  - from: { name: Exponeringsplattform, zone: dmz }
+    to: { name: Extern API-gateway, zone: dmz }
+    label: anrop med användarens token
+  - from: { name: Extern API-gateway, zone: dmz }
+    to: { name: Appens API, zone: tjanst }
+    label: HTTPS med mTLS, användarens token följer med
+  - from: { name: Appens API, zone: tjanst }
+    to: { name: Din databas, zone: data }
+    label: TLS med kortlivat konto
+  - from: { name: Appens API, zone: tjanst }
+    to: { name: Objektlagring, zone: data }
+    label: foton och bilagor
+  - from: { name: Appens API, zone: tjanst }
+    to: { name: Utskickstjänst, zone: plattform }
+    label: pushnotiser till appen
+uses:
+  - target: component:it-miljo/exponeringsplattform
+    role: tar emot trafiken från telefonerna
+  - target: component:it-miljo/api-gateway-extern
+    role: släpper igenom publicerade operationer
+  - target: component:it-miljo/inloggningstjanst
+    role: inloggning enligt RA-ID-03
+  - target: component:it-miljo/containerplattform
+    role: kör appens API
+  - target: component:it-miljo/databasplattform
+    role: lagring
+  - target: component:it-miljo/objektlagring
+    role: foton och bilagor
+  - target: component:it-miljo/utskickstjanst
+    role: pushnotiser till appen
+motivatedBy: [TP-EXP-01, TP-ID-01, TP-TEK-01, TP-BEH-01, TP-IND-01]

@@ -1,0 +1,33 @@
+id: RA-ID-02
+kind: reference-architecture
+title: En tjänst anropar en annan tjänst
+topic: Identitet och åtkomst
+solution: Den anropande tjänsten hämtar en kortlivad token från inloggningstjänsten med sin egen identitet och skickar den i anropet. Den anropade tjänsten kontrollerar token och avgör behörighet utifrån vilken tjänst som anropar.
+rationale: Varje anrop går att knyta till en tjänst, och ingen delad nyckel behöver spridas eller bytas för hand.
+fits: Anrop mellan tjänster i tjänstezonen. Anrop mellan verksamhetsområden går dessutom genom intern API-gateway, enligt RA-INT-01.
+responsibilities: |-
+  - Anropande tjänst: registrera en egen klient per tjänst och miljö. Autentisera klienten med plattformsidentitet eller certifikat. Används en klienthemlighet ligger den i hemlighetstjänsten.
+  - Anropande tjänst: begär token för just den tjänst som ska anropas, och återanvänd den tills den går ut.
+  - Anropad tjänst: kontrollera signatur, utfärdare, mottagare och giltighetstid, och avgör behörighet per operation utifrån klientens roller. Hämta inloggningstjänstens nycklar en gång och spara dem, inte vid varje anrop.
+  - Anropad tjänst: neka anrop utan giltig token, även från samma zon.
+variants: |-
+  - mTLS i stället för token: båda sidor har certifikat från intern PKI. Passar system som inte kan hantera token.
+  - På uppdrag av en användare: byt användarens token i inloggningstjänsten mot en token som är utfärdad för den anropade tjänsten. Skicka aldrig en ID-token eller en token för en annan mottagare vidare.
+flows:
+  - from: { name: Anropande tjänst, zone: tjanst }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: client credentials, får token som gäller i minuter
+  - from: { name: Anropande tjänst, zone: tjanst }
+    to: { name: Anropad tjänst, zone: tjanst }
+    label: HTTPS med token
+  - from: { name: Anropad tjänst, zone: tjanst }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: hämtar nycklar för kontroll av token
+uses:
+  - target: component:it-miljo/inloggningstjanst
+    role: tjänsteidentitet och token
+  - target: component:it-miljo/intern-pki
+    role: certifikat för TLS och mTLS
+  - target: component:it-miljo/hemlighetstjanst
+    role: klienthemlighet, om en sådan används
+motivatedBy: [TP-ID-02, TP-KRY-01, TP-BEH-01]

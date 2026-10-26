@@ -1,0 +1,29 @@
+id: RA-INT-03
+kind: reference-architecture
+title: Filer genom filöverföringstjänsten
+topic: Integration mellan domäner
+solution: Avsändaren lämnar filen i filöverföringstjänstens yttre nod, som kontrollerar den och lägger den i mottagarens inkorg i tjänstezonen. Mottagaren hämtar filen och kvitterar.
+rationale: Avsändare och mottagare behöver ingen direkt anslutning till varandra, och varje fil går att spåra från att den lämnas tills den kvitteras.
+fits: Stora datamängder, utbyte med en partner som inte har API, och system som bara hanterar filer. Nya integrationer inom verksamhets-IT väljer API eller händelser i första hand.
+responsibilities: |-
+  - Kom överens om filformat, namnregler, hur ofta filer kommer och vad som händer när en fil uteblir.
+  - Validera innehållet som data utifrån. Tjänstens kontroll av skadlig kod ersätter inte din validering.
+  - Bearbeta varje fil en gång, även om den levereras igen.
+  - Använd inte delade filytor eller e-post som integrationsväg.
+variants: |-
+  - Utgående fil: tjänsten lämnar filen i sin utkorg, och partnern hämtar den från den yttre noden.
+  - Mellan lösningar i verksamhets-IT: båda sidor använder inkorgar i tjänstezonen. Filen passerar inte exponeringszonen.
+flows:
+  - from: { name: Partnersystem, zone: partner }
+    to: { name: Filöverföringstjänst, zone: dmz }
+    label: lämnar fil med SFTP eller HTTPS
+  - from: { name: Filöverföringstjänst, zone: dmz }
+    to: { name: Inkorg, zone: tjanst }
+    label: kontrollerad fil
+  - from: { name: Mottagande tjänst, zone: tjanst }
+    to: { name: Inkorg, zone: tjanst }
+    label: hämtar fil och kvitterar
+uses:
+  - target: component:it-miljo/filoverforing
+    role: mottagning, kontroll, leverans och kvittens
+motivatedBy: [TP-INT-01, TP-ZON-01, TP-IND-01]

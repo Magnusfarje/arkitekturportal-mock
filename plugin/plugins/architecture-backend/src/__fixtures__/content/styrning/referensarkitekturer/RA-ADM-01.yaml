@@ -1,0 +1,40 @@
+id: RA-ADM-01
+kind: reference-architecture
+title: Administration genom privilegierad åtkomst
+topic: Identitet och åtkomst
+solution: Administratören loggar in i privilegierad åtkomst med personlig identitet och MFA och når lösningen därifrån. En leverantör ansluter först genom fjärråtkomst till en hanterad arbetsplats, och går sedan samma väg. OT-system administreras genom OT-hoppservern.
+rationale: All administration går en känd väg, går att knyta till en person och kan stoppas på ett ställe.
+fits: All administration av system, plattformar och anskaffade produkter, av egen personal och av leverantörer.
+responsibilities: |-
+  - Beställ administrativa behörigheter hos teamet för säkerhetstjänster, med ansvarig och tidsgräns för återkallelse.
+  - Exponera lösningens administrativa gränssnitt bara mot förvaltningszonen.
+  - Ge leverantörens tekniker personliga konton. Ett delat leverantörskonto uppfyller inte TP-ÅTK-01-K02.
+  - Bestäm hur nödåtkomst fungerar när privilegierad åtkomst är nere.
+  - Ta bort lokala administratörskonton som följer med en anskaffad produkt, eller lägg deras lösenord i privilegierad åtkomst.
+flows:
+  - from: { name: Administratör, zone: klient }
+    to: { name: Privilegierad åtkomst, zone: forvaltning }
+    label: personlig identitet och MFA
+  - from: { name: Privilegierad åtkomst, zone: forvaltning }
+    to: { name: Din lösning, zone: tjanst }
+    label: administrativ session
+  - from: { name: Leverantör, zone: internet }
+    to: { name: Fjärråtkomst, zone: dmz }
+    label: personlig identitet och MFA
+  - from: { name: Fjärråtkomst, zone: dmz }
+    to: { name: Hanterad arbetsplats, zone: klient }
+    label: leverantören arbetar från en hanterad arbetsplats
+  - from: { name: Privilegierad åtkomst, zone: forvaltning }
+    to: { name: OT-hoppserver, zone: ot-dmz }
+    label: administration av OT
+  - from: { name: OT-hoppserver, zone: ot-dmz }
+    to: { name: OT-system, zone: ot }
+    label: administrativ session
+uses:
+  - target: component:it-miljo/pam
+    role: inloggning, sessioner och spårbarhet
+  - target: component:it-miljo/fjarratkomst
+    role: leverantörens väg in till en hanterad arbetsplats
+  - target: component:it-miljo/ot-hoppserver
+    role: administration av OT
+motivatedBy: [TP-ÅTK-01, TP-ZON-01, TP-OT-01]

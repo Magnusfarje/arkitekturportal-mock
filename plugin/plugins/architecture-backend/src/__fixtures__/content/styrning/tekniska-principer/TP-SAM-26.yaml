@@ -1,0 +1,11 @@
+id: TP-SAM-26
+kind: technical-principle
+title: Betydande beslut dokumenteras
+binding: recommended
+topic: Samarbete och beslut
+statement: Resonemanget bakom betydande arkitektur- och tekniska beslut skrivs ner och går att hitta.
+rationale: Långlivade system byter team. Utan dokumenterad motivering kommer framtida team antingen att kopiera beslut de inte förstår eller riva upp sådana som var medvetna. Även den naturliga platsen för att dokumentera avvikelser från en huvudregel.
+scope: Betydande arkitektur- och tekniska beslut i ett system, och avvikelser från en huvudregel. En obligatorisk post som inte är uppfylld är en dokumenterad brist, inte ett beslut.
+preconditions: Ett lättviktigt, överenskommet format; en plats där dokumentationen går att hitta.
+solutions: 'Architecture Decision Records (ADR:er) lagrade i repot; var och en dokumenterar sammanhang, beslut och konsekvenser. Obs: en obligatorisk post som inte är uppfylld är ingen ADR utan en dokumenterad brist — se Tillämpning. En ADR beskriver ett beslut; en brist finns till för att stängas.'
+ifNotMet: 'Huvudregel — vad det innebär. Formatet är fritt så länge resonemanget går att hitta. Att avstå helt går inte att dokumentera bort: dokumentationen är utfallet.'

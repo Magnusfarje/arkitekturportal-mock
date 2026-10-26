@@ -1,0 +1,33 @@
+id: VL-DRI-01
+kind: guide
+title: Hur loggar jag, och vart skickas loggarna?
+topic: Drift och plattform
+answer: 'Skicka loggar, mätvärden och spår till telemetriinsamlingen, så att de finns kvar utanför din lösning och går att söka i efteråt. Logga säkerhetshändelser särskilt: inloggningar, ändrade behörigheter, administrativa åtgärder och avvisade anslutningar. Lösningen bygger ingen egen logglagring och ingen egen övervakning.'
+before: |-
+  - Vilka säkerhetshändelser har lösningen: inloggningar, behörighetsändringar, administrativa åtgärder och avvisade anslutningar?
+  - Vad behöver du se för att förstå varför lösningen gör fel?
+  - Hur länge ska säkerhetsloggarna sparas, och bevakar någon dem?
+scope: Alla lösningar i drift i verksamhets-IT.
+steps: |-
+  1. Logga strukturerat till standard output, med samma fält i hela lösningen. Containerplattformen samlar in loggarna.
+  2. Logga säkerhetshändelserna enligt TP-DRI-13.
+  3. Instrumentera med OpenTelemetry och skicka spår till telemetriinsamlingen med OTLP. Spårets ID följer med över integrationsgränser och är lösningens korrelations-ID. Överföringen är skyddad enligt TP-SÄK-10.
+  4. Använd den gemensamma tidskällan på alla värdar, så att loggarna går att lägga bredvid andras.
+  5. Lägg till en health-endpoint, och mätvärden i OpenMetrics-format för de viktigaste flödena.
+  6. Lägg larmregler och egna driftvyer i lösningens repo. Larm går till teamets kö i IT-ärendehanteringen.
+  7. Håll hemligheter, personuppgifter och innehållet i det lösningen behandlar borta från loggarna.
+  8. Väljer du en annan väg än telemetriinsamlingen bygger och driftar du något likvärdigt själv. Dokumentera valet som ett beslut i lösningens repo, enligt TP-SAM-26.
+motivatedBy: [TP-DRI-13, TP-SÄK-10]
+uses:
+  - target: component:it-miljo/telemetriinsamling
+    role: tar emot loggar, mätvärden och spår
+  - target: component:it-miljo/loggplattform
+    role: lagrar loggarna och gör dem sökbara
+  - target: component:it-miljo/matvarden
+    role: lagrar mätvärden
+  - target: component:it-miljo/sparning
+    role: visar ett anrops väg genom flera tjänster
+  - target: component:it-miljo/driftvyer
+    role: vyer per lösning, och larm till det förvaltande teamet
+  - target: component:it-miljo/overvakning
+    role: kontrollerar utifrån att tjänsten svarar

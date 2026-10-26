@@ -1,0 +1,19 @@
+id: TP-FLO-06
+kind: technical-principle
+title: Huvudbranchen är alltid leveransklar
+binding: binding
+topic: Flöde och kvalitet
+statement: Huvudbranchen kan byggas, testas och levereras när som helst; trasig kod ligger inte kvar där.
+rationale: En leveransklar huvudbranch är grunden för att kunna leverera tryggt. En trasig huvudbranch blockerar alla och döljer risk fram till leveransdagen.
+scope: Alla system med en gemensam huvudbranch.
+preconditions: Pålitlig, rimligt snabb CI; automatiska tester som faktiskt körs vid varje ändring; ett sätt att dölja ofärdigt arbete så att det kan integreras innan det är klart.
+solutions: Obligatoriska CI-kontroller som måste passera före merge; feature flags / branch-by-abstraction för pågående arbete; automatisk återställning (revert) av ändringar som bryter bygget; att integrera i små steg och ofta, snarare än i långlivade brancher.
+ifNotMet: Obligatoriskt — inget system är undantaget. Den som inte når utfallet bär en dokumenterad brist med namngiven ägare och datum. Se Tillämpning.
+requirements:
+  - id: TP-FLO-06-K01
+    title: Huvudbranchen går att bygga, testa och leverera när som helst
+    statement: Huvudbranchen ska kunna byggas, testas och levereras när som helst. Trasig kod ska inte ligga kvar där.
+    scope: Alltid.
+    criteria: |-
+      - Bygge och tester passerar på huvudbranchen.
+      - En ändring som bryter huvudbranchen rättas eller återställs utan dröjsmål.

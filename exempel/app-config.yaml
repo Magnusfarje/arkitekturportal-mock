@@ -1,0 +1,39 @@
+# The parts of a production configuration that concern the architecture plugin.
+# Everything else (app and backend baseUrl, database, integrations token) is the
+# organisation's ordinary Backstage configuration.
+
+# Production signs in through the organisation's identity provider; see
+# https://backstage.io/docs/auth/. The guest provider is for local use only.
+auth:
+  providers: {}
+
+# The organisation's permission policy decides who reads the governance
+# (permission architecture.read). The allow-all policy is for local use only.
+permission:
+  enabled: true
+
+catalog:
+  # The IT environment comes from the content repository, in namespace it-miljo.
+  # The organisation's own systems are registered as usual, and place themselves
+  # in the environment with the annotation architecture.portal/segment.
+  locations:
+    - type: url
+      target: ${ARCHITECTURE_CONTENT_URL}/it-miljo/katalog.yaml
+      rules:
+        - allow: [Component, System, Domain, Resource, Group]
+
+# The content repository, read as a tree through the UrlReader. The git host needs
+# an entry under integrations. ARCHITECTURE_CONTENT_URL is the blob URL of the
+# repository's root, for example https://github.com/myndigheten/arkitekturstyrning/blob/main,
+# and ARCHITECTURE_CONTENT_TREE_URL the tree URL, .../arkitekturstyrning/tree/main.
+architecture:
+  content:
+    url: ${ARCHITECTURE_CONTENT_TREE_URL}
+    browseUrl: ${ARCHITECTURE_CONTENT_URL}/{path}
+    schedule:
+      frequency: { minutes: 5 }
+      timeout: { minutes: 2 }
+  # Optional. Without this block the assistant is off.
+  # assistant:
+  #   baseUrl: http://ollama.intern.myndigheten.example:11434
+  #   model: gemma4:latest

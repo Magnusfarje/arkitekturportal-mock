@@ -1,0 +1,11 @@
+id: TP-SAM-27
+kind: technical-principle
+title: Process och ceremoni förtjänar sin plats
+binding: recommended
+topic: Samarbete och beslut
+statement: Teamprocess, ceremoni och påtvingad overhead finns endast där de tjänar ett uttalat utfall; steg som inte längre gör det avvecklas snarare än behålls av gammal vana.
+rationale: 'Komplexitet i process kostar lika mycket som komplexitet i system (TP-ENK-19 tillämpad på hur vi arbetar), men är mindre synlig — ingen äger den, så den ackumuleras. Overhead som inte tjänar ett utfall gör varje ändring dyrare och tränger undan de discipliner som spelar roll. Obs: detta gäller processen team själva råder över. Det är ingen licens att hoppa över krav från styrning, juridik eller regelefterlevnad — de är utfall för sig (se TP-SÄK-11).'
+scope: Process och ceremoni som teamet självt råder över. Krav från styrning, juridik eller regelefterlevnad omfattas inte.
+preconditions: Vilja att namnge det utfall ett steg tjänar; någon med mandat att avveckla process som inte förtjänar sin plats; ärligheten att skilja en externt krävd kontroll från en vana ingen ifrågasatt.
+solutions: Fråga för varje återkommande steg vilket utfall det tjänar — i dessa dokument eller ett explicit externt krav — och om det är lättaste sättet dit; ta bort steg som bara finns av vana; automatisera hellre en kontroll än att lägga till en manuell ritual.
+ifNotMet: Huvudregel — vad det innebär.

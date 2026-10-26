@@ -1,0 +1,59 @@
+id: TP-BEH-01
+kind: technical-principle
+title: Servern avgör vad användaren får göra
+binding: binding
+statement: 'Varje anrop ska prövas på serversidan mot anroparens rättigheter: till funktionen, till det enskilda objektet och till skyddade fält. Klienten avgör aldrig åtkomst.'
+rationale: Klienter och anrop kan manipuleras. Kontrolleras behörigheten bara i gränssnittet kan den som anropar API:et direkt, eller byter ett ID, nå mer än den ska.
+scope: Webbapplikationer och API:er med åtkomstbegränsade funktioner eller information, även när anroparen är en annan tjänst. Med serversidan menas en kontrollpunkt som anroparen inte kan påverka.
+consequences: |-
+  - Lösningen har en beslutad behörighetsmodell: vem som får göra vad, med vilka objekt och vilka fält.
+  - Funktioner som är avsedda för anonym användning är utpekade.
+  - Varje anropsväg omfattas, även direktanrop till API, sökning, export och batch.
+  - Verifieringen innehåller negativa tester med flera identiteter.
+howTo: |-
+  Beskriv behörigheterna i en matris och härled både tillåtna och otillåtna testfall ur den. När samma matris styr både implementation och test syns det direkt när en ny operation saknar regel eller test.
+
+  Innan du börjar:
+
+  - Vilka funktioner och vilken information är åtkomstbegränsade?
+  - Vilka roller finns, och vilka objekt får var och en nå?
+
+  Gör så här:
+
+  1. Beskriv funktion, aktör, objektavgränsning och skyddade fält i samma matris.
+  2. Skapa testidentiteter som skiljer sig både i roll och i objekträttighet.
+  3. Kombinera tillåtna och otillåtna fall för varje vald funktion, och anropa API:et direkt.
+  4. Kontrollera det lagrade tillståndet efter nekade ändringsförsök.
+  5. Håll testdata åtskilda från verkliga personuppgifter.
+  6. Uppdatera matris och tester när en ny operation tillkommer.
+concretizes: [AP-SÄK-03]
+requirements:
+  - id: TP-BEH-01-K01
+    title: Skyddade funktioner kräver uttrycklig rättighet
+    statement: En skyddad funktion ska bara kunna utföras av en anropare med uttrycklig rättighet. Rättigheten ska prövas på serversidan innan funktionen utförs, inte bara i klientens gränssnitt.
+    scope: Funktionen kräver rättighet enligt den beslutade behörighetsmodellen. Saknas en behörighetsmodell ska tillämpligheten utredas.
+    criteria: |-
+      - Koppla varje skyddad operation till tillåtna aktörer och en kontrollpunkt, och peka ut de funktioner som är avsedda för anonym användning.
+      - Se till att kontrollpunkterna är aktiva i den driftsättning som bedöms och omfattar varje anropsväg, även direktanrop till API.
+      - Testa med behörig, obehörig och oautentiserad aktör: tillåtna anrop fungerar, otillåtna utför inte operationen.
+    notEnough: En felkod. Kontrollera i verksamhetsdata att operationen inte utfördes och inte lämnade bestående sidoeffekter.
+  - id: TP-BEH-01-K02
+    title: Rätt till funktionen ger inte rätt till varje objekt
+    statement: Åtkomst till ett skyddat objekt ska prövas mot anroparens rättighet till just det objektet. Att anroparen känner till objektets identifierare, eller får använda funktionen, ger inte åtkomst.
+    scope: Rättigheten till objekt skiljer sig mellan användare, organisationer eller andra avgränsningar. Gäller också sökning, export och batchåtkomst där de finns.
+    criteria: |-
+      - Beskriv objektägande, delning och avgränsningar, och var beslutet om det enskilda objektet fattas.
+      - Tillämpa anroparens rättigheter när objekt väljs ut och ändras.
+      - Testa med två identiteter som har samma funktionsroll men olika objekträttigheter: byt objekt-ID vid läsning och ändring, och pröva list-, export- och batchvägar.
+    notEnough: Filtrering i klienten.
+  - id: TP-BEH-01-K03
+    title: Skyddade fält går inte att läsa eller ändra utan rättighet
+    statement: Läsning och ändring av skyddade fält ska begränsas enligt rättigheter för fältet. Indata från klienten ska inte kunna ändra fält som anroparen saknar rätt att påverka.
+    scope: Ett objekt har fält med olika rättigheter, eller fält som servern styr, till exempel ägare eller behörighetsnivå. Finns inga sådana skillnader kan en gemensam objekträttighet räcka; det ska motiveras.
+    criteria: |-
+      - Ange läs- och skrivrättigheter för skyddade fält och hur serverstyrda fält hanteras.
+      - Låt modeller för begäran och svar, bindning och serialisering följa rättighetsmodellen.
+      - Skicka extra och skyddade fält vid skapande och uppdatering, och visa att de varken ändras eller röjs i svar, listor eller export. Testa också nästlade objekt där de stöds.
+    notEnough: Att kontrollera svaret. Jämför också det lagrade tillståndet efter testet.
+externalReferences:
+  - 'OWASP Top 10 A01:2025 – Broken Access Control. Arbetssättet: OWASP Authorization Cheat Sheet [S7 i paket 0.4].'

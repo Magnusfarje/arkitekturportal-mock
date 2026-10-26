@@ -1,0 +1,57 @@
+id: RA-WEB-01
+kind: reference-architecture
+title: Intern webbapplikation
+topic: Webbapplikationer
+solution: Webbapplikationen körs på containerplattformen i tjänstezonen och nås från klientzonen genom lastbalanseringen. Webbläsaren talar bara med applikationens egen serverdel, som håller sessionen, anropar andra tjänster och läser i databasen. Gränssnittet byggs med komponentbiblioteket.
+rationale: Applikationen får samma väg in, samma inloggning och samma utseende som andra interna applikationer. Token och anrop till andra tjänster stannar på serversidan, där de går att skydda och följa.
+fits: Applikationer med grafiskt gränssnitt för medarbetare och konsulter. Ska applikationen också nås från internet publiceras den enligt RA-EXP-01; bygget är detsamma.
+responsibilities: |-
+  - Välj React eller Angular, och bygg vyerna med komponentbiblioteket.
+  - Se till att gränssnittet går att använda med tangentbord och skärmläsare och uppfyller WCAG 2.1 nivå AA. Komponenterna är prövade, men dina vyer prövar du själv.
+  - Håll sessionen på serversidan. Webbläsaren får en sessionskaka som är Secure, HttpOnly och SameSite=Lax, inte token.
+  - Skydda anrop som ändrar något mot förfalskade förfrågningar (CSRF).
+  - Beställ rollerna som grupper, och pröva behörighet i serverdelen för varje anrop, enligt TP-BEH-01. Att en knapp är dold i gränssnittet är inget skydd.
+  - Validera indata i serverdelen och koda utdata, enligt TP-IND-01.
+  - Visa när underlaget från andra system senast uppdaterades, och vad som gäller när en källa inte svarar.
+  - Håll administration, hälsokontroller och API-dokumentation borta från den adress användarna når.
+variants: |-
+  - Ensidesapplikation (SPA): gränssnittet körs i webbläsaren, men talar bara med applikationens egen serverdel, som håller token.
+  - Uppdateringar till webbläsaren: serverdelen skickar ändringar som Server-Sent Events på en öppen anslutning genom lastbalanseringen. Webbläsaren ansluter igen när anslutningen bryts, och fortsätter från den senaste händelsen.
+  - Operativt system: applikationen körs i de operativa klustren, och används också från de operativa arbetsplatserna i driftcentralerna.
+  - Anskaffad produkt på virtuell server: samma väg in genom lastbalanseringen. Stöder produkten inte OpenID Connect ansluts den med SAML.
+  - Också från internet: publicera enligt RA-EXP-01.
+flows:
+  - from: { name: Användare, zone: klient }
+    to: { name: Lastbalansering, zone: tjanst }
+    label: HTTPS med internt certifikat
+  - from: { name: Lastbalansering, zone: tjanst }
+    to: { name: Din webbapplikation, zone: tjanst }
+    label: HTTPS till klustrets ingress
+  - from: { name: Användare, zone: klient }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: omdirigeras och loggar in, utan ny lösenordsfråga från en hanterad arbetsplats
+  - from: { name: Din webbapplikation, zone: tjanst }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: byter kod mot token
+  - from: { name: Din webbapplikation, zone: tjanst }
+    to: { name: Din databas, zone: data }
+    label: TLS med kortlivat konto
+  - from: { name: Din webbapplikation, zone: tjanst }
+    to: { name: Telemetriinsamling, zone: plattform }
+    label: loggar, mätvärden och spår
+uses:
+  - target: component:it-miljo/lastbalansering
+    role: ingången från klientzonen, i båda datahallarna
+  - target: component:it-miljo/containerplattform
+    role: kör applikationen
+  - target: component:it-miljo/inloggningstjanst
+    role: inloggning och token
+  - target: component:it-miljo/databasplattform
+    role: lagring
+  - target: component:it-miljo/hemlighetstjanst
+    role: klienthemlighet och kortlivat databaskonto
+  - target: component:it-miljo/komponentbibliotek
+    role: gränssnittets komponenter
+  - target: component:it-miljo/telemetriinsamling
+    role: loggar, mätvärden och spår
+motivatedBy: [TP-ID-01, TP-KRY-01, TP-TEK-01, TP-BEH-01, TP-IND-01, TP-KON-01]

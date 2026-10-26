@@ -1,0 +1,37 @@
+id: VL-INT-01
+kind: guide
+title: Hur ska trafik mellan domäner hanteras?
+topic: Integration mellan domäner
+answer: 'Trafik över en zongräns, mellan domäner eller mellan verksamhetsområden går genom en utpekad övergång: API-gateway, meddelandeplattform, filöverföringstjänst, utgående proxy eller OT-relä. Välj övergång efter vad som ska utbytas och mellan vilka zoner. En direkt anslutning mellan två lösningar i olika domäner löses inte med en brandväggsöppning.'
+before: |-
+  - I vilka zoner finns avsändare och mottagare? Se zonmodellen.
+  - Behöver avsändaren svar direkt, eller räcker det att mottagaren får veta?
+  - Hur mycket data, hur ofta, och vad händer när den andra sidan är nere?
+  - Vem äger informationen, och får mottagaren se allt som skickas?
+scope: Utbyte mellan lösningar i olika verksamhetsområden, mellan IT och OT och med parter utanför organisationen.
+steps: |-
+  1. Rita flödet: avsändare, mottagare, zoner och vem som öppnar anslutningen.
+  2. Välj mönster enligt vägvalen.
+  3. Kom överens med motparten om kontrakt, ansvar och vad som händer vid fel.
+  4. Registrera beroendet i katalogen, på båda sidor.
+  5. Beställ anslutning till övergången hos det team som förvaltar den.
+  6. Finns ingen övergång som passar: ta upp det med arkitekturfunktionen innan du bygger något eget.
+leadsTo:
+  - target: RA-INT-01
+    when: Fråga och svar mellan lösningar i olika verksamhetsområden.
+  - target: RA-INT-02
+    when: Något har hänt som andra lösningar ska få veta.
+  - target: RA-INT-03
+    when: Stora datamängder, eller en motpart som bara hanterar filer.
+  - target: RA-OT-01
+    when: Mellan IT och OT, åt båda hållen.
+  - target: RA-EXP-02
+    when: Ett system på internet eller hos en partner ska anropa oss.
+  - target: RA-EXP-04
+    when: Ett system på internet eller hos en partner ska följa information som ändras löpande.
+  - target: RA-EXP-03
+    when: Vår tjänst ska anropa ett system på internet eller hos en partner.
+  - target: RA-ID-02
+    when: Anrop mellan tjänster inom samma verksamhetsområde. Ingen övergång behövs.
+motivatedBy:
+  [TP-ZON-01, TP-INT-01, TP-OT-01, TP-KRY-01, AP-SÄK-02, TP-ENK-20, TP-ENK-22]

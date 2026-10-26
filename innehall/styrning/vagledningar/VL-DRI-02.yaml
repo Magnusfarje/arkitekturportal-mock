@@ -1,0 +1,20 @@
+id: VL-DRI-02
+kind: guide
+title: Var ska min lösning köras?
+topic: Drift och plattform
+answer: Kör lösningen på containerplattformen i tjänstezonen. Allt driftas i egna datahallar, och publika molntjänster används inte för drift eller lagring. En virtuell server är ett alternativ först när lösningen inte går att köra i container.
+before: |-
+  - Går lösningen att paketera som container?
+  - Är det en anskaffad produkt, och går den att driva i egna datahallar?
+  - Vad behöver lösningen nå: databaser, plattformstjänster och andra lösningar?
+scope: Nya lösningar och lösningar som flyttas i verksamhets-IT, egenutvecklade och anskaffade.
+steps: |-
+  1. Paketera lösningen som container och beställ plats på containerplattformen hos teamet för drift och leverans.
+  2. Lägg databaser på databasplattformen i datazonen, inte i tjänstezonen. Se VL-DRI-04.
+  3. Går lösningen inte att köra i container: använd en virtuell server i tjänstezonen och beskriv den som kod i repot, enligt TP-GRU-01 och TP-GRU-03, så att den inte blir en handkonfigurerad engångsserver. Dokumentera valet som ett beslut i lösningens repo, enligt TP-SAM-26.
+  4. En anskaffad produkt som bara finns som molntjänst kräver avsteg från TP-MIL-01.
+  5. Beroenden till tjänster på internet går genom utgående proxy, enligt RA-EXP-03.
+motivatedBy: [TP-MIL-01, TP-DRI-17]
+uses:
+  - target: component:it-miljo/containerplattform
+    role: standardmiljö för att köra tjänster, med ingress, tjänsteidentitet och nätverkspolicy

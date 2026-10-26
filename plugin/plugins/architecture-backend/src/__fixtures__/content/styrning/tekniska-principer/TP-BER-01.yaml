@@ -1,0 +1,56 @@
+id: TP-BER-01
+kind: technical-principle
+title: Vet vad som är driftsatt och om det får användas
+binding: binding
+statement: För varje driftsatt lösning ska det gå att visa vilka tekniska beroenden den har, om de är tillåtna enligt teknikstyrningen och hur kända sårbarheter i dem hanteras.
+rationale: Utan en aktuell bild av vad som är driftsatt går det inte att välja teknik säkert, bedöma vad en förändring påverkar eller hantera teknikens livscykel.
+scope: Egenutvecklade och anskaffade lösningar, inklusive plattforms- och OT-beroenden.
+consequences: |-
+  - Beroendeförteckningen beskriver det som är driftsatt, inte det som står i ett repo.
+  - Tekniker och versioner stäms av mot teknikstyrningen, och okänd status utreds.
+  - Sårbarheter bedöms och hanteras inom beslutade tidsgränser.
+  - Bristande insyn i en leverantörsprodukt är inget skäl att hoppa över den.
+howTo: |-
+  Generera beroendeförteckningen i pipelinen och knyt den till det som faktiskt driftsätts. En förteckning som skapas i samma flöde som leveransen följer med varje driftsättning och behöver inte underhållas för hand.
+
+  Innan du börjar:
+
+  - Vilka pipelines och driftsättningsvägar har lösningen?
+  - Vilka beroenden syns inte i bygget: plattformstjänster, externa tjänster och leverantörens komponenter?
+
+  Gör så här:
+
+  1. Generera komponentförteckningen i pipelinen och knyt den till en oföränderlig artefaktidentitet.
+  2. Komplettera med plattforms- och externa tjänsteberoenden.
+  3. Matcha teknikerna mot ett gemensamt register och använd omatchade poster som arbetslista.
+  4. Håll isär deklarerade, byggda och driftsatta versioner.
+  5. Dokumentera för anskaffade produkter vad leverantörens underlag täcker och inte täcker.
+concretizes: [AP-SÄK-02]
+requirements:
+  - id: TP-BER-01-K01
+    title: Varje driftsättning har en beroendeförteckning
+    statement: Varje driftsättning ska ha en versionerad förteckning över sina programvaru-, plattforms- och externa tjänsteberoenden, inom den inventeringsomfattning som har beslutats. Versioner anges där de går att identifiera.
+    scope: Lösningen är driftsatt. För en planerad lösning bedöms bara designen. Bristande insyn i en leverantörsprodukt gör inte kravet otillämpligt.
+    criteria: |-
+      - Besluta inventeringsomfattning, datakällor och identifieringsmetod för varje typ av beroende.
+      - Ta fram förteckningen ur byggartefakt, driftsättningsmanifest och plattforms- eller leverantörsuppgifter, och knyt den till den driftsättning som bedöms.
+      - Redovisa täckningen, inklusive poster som har tagits bort eller inte gått att matcha.
+    notEnough: Ett utdrag ur ett repo. Det visar inte ensamt vad som är driftsatt.
+  - id: TP-BER-01-K02
+    title: Bara tillåtna tekniker och versioner är i drift
+    statement: Tekniker och versioner inom inventeringsomfattningen ska vara tillåtna enligt fastställd teknikstyrning för den användning, miljö och tidpunkt som gäller.
+    scope: Beroendet har identifierats enligt TP-BER-01-K01. Okänd teknikstatus ska utredas.
+    criteria: |-
+      - Jämför planerade teknikval med gällande teknikbeslut och deras användningsvillkor.
+      - Matcha driftsatta tekniker och versioner mot versionerade tillåtelseregler.
+      - Se till att reglerna anger om en utfasad teknik får finnas kvar i befintlig drift, vid förändring eller vid nyanskaffning.
+    notEnough: Att en post inte gick att matcha. Omatchade poster räknas inte som godkända. En känd otillåten teknik är en brist även när det finns ett avsteg; avsteget redovisas separat.
+  - id: TP-BER-01-K03
+    title: Sårbarheter bedöms och hanteras i tid
+    statement: Identifierade sårbarheter i lösningens beroenden ska inom beslutade tidsgränser ha en dokumenterad relevansbedömning. De som är relevanta ska ha en beslutad och genomförd hantering enligt risk- och sårbarhetsstyrningen.
+    scope: Lösningen ligger inom inventeringsomfattningen. Att inga sårbarheter har hittats gör inte kravet otillämpligt; täckning och aktualitet bedöms ändå.
+    criteria: |-
+      - Bestäm datakällor, ansvar, tider för bedömning och åtgärd samt tillåtna hanteringsalternativ.
+      - Dokumentera relevansbedömning, beslut och genomförd åtgärd för varje fynd.
+      - Verifiera åtgärden: en uppdaterad komponent genom ny inventering och skanning, ett tekniskt skydd genom test av dess effekt.
+    notEnough: Ett nollresultat utan uppgift om täckning och om när sårbarhetsdatabasen uppdaterades. En överskriden tidsgräns redovisas som brist.

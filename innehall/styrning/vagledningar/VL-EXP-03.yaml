@@ -1,0 +1,29 @@
+id: VL-EXP-03
+kind: guide
+title: Hur ansluter jag en leverantörs eller partners system?
+topic: Exponering
+answer: 'Leverantörens system ansluter till oss genom exponeringsplattformen och den externa API-gatewayen, med en egen klient i inloggningstjänsten. Vi öppnar inga egna vägar till eller från leverantören. Välj mönster efter vad som utbyts: frågor och svar, löpande uppdateringar eller filer.'
+before: |-
+  - Är informationen godkänd för mottagaren enligt gällande regler?
+  - Vad behöver leverantören: svar på frågor, löpande uppdateringar eller filer?
+  - Hur snabbt ska en ändring nå leverantören: sekunder, minuter eller en gång per dygn?
+  - Ska leverantören också lämna information till oss?
+scope: Lösningar som ska lämna information till, eller ta emot information från, ett system hos en leverantör, entreprenör eller annan part utanför myndigheten.
+steps: |-
+  1. Beskriv API:et med OpenAPI och registrera det i katalogen. Använd integrationsplattformens standardsätt, så att tekniken inte behöver förhandlas med varje leverantör.
+  2. Bestäm vad just den här leverantören får se, och pröva det i API:et för varje anrop.
+  3. Beställ publicering i testmiljön hos Integration, och en klient för leverantören hos Identitet och åtkomst.
+  4. Låt leverantören pröva mot testadressen, också med fel identitet, med för många anrop och efter ett avbrott.
+  5. Beställ klienten för produktion, med leverantörens kvot.
+  6. Registrera leverantören som konsument i katalogen, så att du vet vem en ändring i kontraktet påverkar.
+  7. När leverantören inte längre ska ha åtkomst: beställ att klienten spärras. Det stänger alla API:er på en gång.
+leadsTo:
+  - target: RA-EXP-02
+    when: Leverantörens system frågar och får svar, eller lämnar uppgifter till oss.
+  - target: RA-EXP-04
+    when: Leverantörens system ska följa information som ändras löpande.
+  - target: RA-INT-03
+    when: Leverantören kan bara ta emot eller lämna filer.
+  - target: RA-EXP-03
+    when: Vår tjänst ska anropa ett API hos leverantören.
+motivatedBy: [TP-EXP-01, TP-ID-02, TP-INT-01, TP-ZON-01, TP-BEH-01]

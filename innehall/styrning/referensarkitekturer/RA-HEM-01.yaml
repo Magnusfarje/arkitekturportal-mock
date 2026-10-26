@@ -1,0 +1,42 @@
+id: RA-HEM-01
+kind: reference-architecture
+title: Tjänsten hämtar hemligheter vid körning
+topic: Hemligheter och certifikat
+solution: Tjänsten autentiserar sig mot hemlighetstjänsten med sin plattformsidentitet och får de hemligheter den har rätt till. För databaser skapar hemlighetstjänsten ett konto som bara gäller en kort tid.
+rationale: Ingen hemlighet behöver finnas i kod, konfiguration eller container-image, och en hemlighet kan bytas utan ny leverans.
+fits: 'Alla tjänster som använder ett lösenord, en nyckel eller en token: databaskonton, klienthemligheter, nycklar till externa API:er och signeringsnycklar.'
+responsibilities: |-
+  - Lista lösningens hemligheter: vad de är till för, vem som äger dem och hur de byts.
+  - Ge tjänsten en policy som bara omfattar dess egna hemligheter, en per miljö.
+  - Läs hemligheten när tjänsten startar eller när den behövs, och klara att den byts under drift.
+  - Bestäm vad tjänsten gör när hemlighetstjänsten inte svarar: fortsätt med det som redan är hämtat, men starta inte utan hemligheter.
+  - Håll hemligheter borta från loggar, felsvar och spårning.
+  - Sök efter hemligheter i repon och container-images som en del av pipelinen.
+variants: |-
+  - Statisk hemlighet, till exempel nyckeln till en extern parts API: lagras i hemlighetstjänsten och byts enligt plan.
+  - Anskaffad produkt som bara läser en konfigurationsfil: plattformen skriver hemligheten till en fil i minnet när tjänsten startar.
+  - Tjänst på virtuell server: styrker sin identitet med ett certifikat från intern PKI i stället för plattformsidentitet.
+  - Signeringsnyckel: lämnas inte ut. Tjänsten ber hemlighetstjänsten att signera.
+flows:
+  - from: { name: Din tjänst, zone: tjanst }
+    to: { name: Hemlighetstjänst, zone: plattform }
+    label: autentiserar med plattformsidentitet och begär hemlighet
+  - from: { name: Hemlighetstjänst, zone: plattform }
+    to: { name: Databasplattform, zone: data }
+    label: skapar kortlivat konto
+  - from: { name: Din tjänst, zone: tjanst }
+    to: { name: Databasplattform, zone: data }
+    label: ansluter med det kortlivade kontot
+  - from: { name: Leveransplattform, zone: leverans }
+    to: { name: Hemlighetstjänst, zone: plattform }
+    label: kortlivad åtkomst för ett byggsteg, med byggjobbets identitet
+uses:
+  - target: component:it-miljo/hemlighetstjanst
+    role: lagring, utlämning och kortlivade konton
+  - target: component:it-miljo/containerplattform
+    role: tjänstens plattformsidentitet
+  - target: component:it-miljo/databasplattform
+    role: kortlivade databaskonton
+  - target: component:it-miljo/leveransplattform
+    role: kortlivad åtkomst i pipelinen, sökning efter hemligheter
+motivatedBy: [TP-HEM-01, TP-SÄK-11]

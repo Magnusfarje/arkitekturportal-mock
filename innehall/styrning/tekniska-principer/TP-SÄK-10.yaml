@@ -1,0 +1,21 @@
+id: TP-SÄK-10
+kind: technical-principle
+title: Information är skyddad under överföring
+binding: binding
+topic: Säkerhet
+statement: Information som lämnar ett system går inte att läsa eller ändra av någon på vägen. Detta gäller oavsett mottagare — webbläsare, annat system, databas, kö eller filöverföring — och oavsett om trafiken stannar inom vårt eget nät. Avslutas krypteringen i en plattformskomponent framför tjänsten uppfyller det utfallet, förutsatt att sträckan [fortsättningen är avskuren i bilden].
+rationale: 'Ett internt nät är inte ett skyddat nät: den som fått fotfäste någonstans i det läser annars all trafik som passerar, och autentiseringsuppgifter i klartext förvandlar ett litet intrång till ett stort. Vad som avgör om trafiken behöver skyddas är därför inte hur känslig den känns, utan vem som kan nå nätet den passerar. Kostnaden är nära noll — TLS är gratis, stöds överallt och kräver inget centralt beslut. De föreskrifter som är på väg under Cybersäkerhetslagen pekar särskilt ut autentiseringsuppgifter och säkerhetsloggar.'
+scope: All information som lämnar ett system, oavsett mottagare och oavsett om trafiken stannar inom vårt eget nät. Posten gäller information under överföring, inte lagrad information. Inom ERJU-profilen P-ERJU-01 gäller de protokoll som källan föreskriver, se TP-ERJU-INT-01.
+preconditions: Certifikat som går att skaffa och förnya utan manuellt arbete — annars blir utgångna certifikat en återkommande incident och avstängd validering en frestelse. Att mottagande tjänst stöder TLS (äldre system och protokoll gör inte alltid det). Att de punkter där kryptering avslutas är kända och dokumenterade.
+solutions: 'HTTPS för allt som talar HTTP, inklusive anrop mellan tjänster i samma nät; TLS även på databasanslutningar, köer och filöverföringar — det är samma data och samma risk. Lämna certifikatvalideringen påslagen: den vanligaste verkliga avvikelsen är kod som stänger av valideringen för att komma förbi ett självsignerat certifikat i test och sedan följer med till produktion — det syns i ändringen och kan fångas i granskningen (TP-FLO-04). Automatisera certifikatförnyelse. Låt plattformen avvisa okrypterade anslutningar i stället för att lita på att varje anropare väljer rätt. För godkända protokollversioner, algoritmer och nyckellängder, se tech-radarn. Obs: posten gäller information under överföring. Kryptering av lagrad information levereras i regel av plattformen eller databasen och regleras inte här.'
+ifNotMet: Obligatoriskt — inget system är undantaget. Den som inte når utfallet bär en dokumenterad brist med namngiven ägare och datum. Se Tillämpning.
+concretizes: [AP-SÄK-03]
+requirements:
+  - id: TP-SÄK-10-K01
+    title: Information är skyddad under överföring
+    statement: Information som lämnar systemet ska inte gå att läsa eller ändra av någon på vägen.
+    scope: Alltid, oavsett mottagare – webbläsare, annat system, databas, kö eller filöverföring – och oavsett om trafiken stannar inom vårt eget nät.
+    criteria: |-
+      - Trafiken ut ur systemet är skyddad, till alla mottagare.
+      - Där krypteringen avslutas i en plattformskomponent framför tjänsten är den punkten känd och dokumenterad.
+    notEnough: Att trafiken stannar inom vårt eget nät. Inte heller kryptering där certifikatvalideringen är avstängd.

@@ -1,0 +1,22 @@
+id: VL-DRI-04
+kind: guide
+title: Vad säkerhetskopierar plattformen, och vad gör jag själv?
+topic: Drift och plattform
+answer: 'Databasplattformen säkerhetskopierar och krypterar databaserna. Du ansvarar för att återställningen är prövad: att du har läst tillbaka en verklig kopia, vet hur lång tid det tar och har allt annat som behövs för att bygga upp lösningen igen.'
+before: |-
+  - Vilka avbrottstider och vilken dataförlust tål verksamheten? Finns inga mål är det något att begära av systemägaren.
+  - Vad behövs utöver databasen: konfiguration, infrastrukturdefinitioner och hemligheter?
+scope: Lösningar i verksamhets-IT som lagrar data på databasplattformen.
+steps: |-
+  1. Lägg databasen på databasplattformen, så att den säkerhetskopieras och krypteras där.
+  2. Se till att allt annat som behövs för återställning finns utanför lösningen: kod och konfiguration i repot, enligt TP-GRU-01, och hemligheter i hemlighetstjänsten.
+  3. Pröva återställningen enligt TP-DRI-14, med en verklig säkerhetskopia från databasplattformen.
+leadsTo:
+  - target: TP-DRI-14
+    when: Du ska pröva återställningen. Regeln visar hur testet läggs upp och vad som ska mätas.
+motivatedBy: [TP-DRI-14]
+uses:
+  - target: component:it-miljo/databasplattform
+    role: säkerhetskopierar och krypterar databasen
+  - target: component:it-miljo/hemlighetstjanst
+    role: hemligheter som behövs vid en återställning

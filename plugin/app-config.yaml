@@ -1,0 +1,38 @@
+# The configuration of the development harness under plugins/*/dev: a backend
+# alone with guest sign-in, and an app with the plugin's pages. The content is
+# read from a checkout of the content repository next to this one, or from
+# ARCHITECTURE_CONTENT_DIR.
+app:
+  title: Arkitekturportalen
+  baseUrl: http://localhost:3000
+
+backend:
+  baseUrl: http://localhost:7007
+  listen:
+    port: 7007
+    host: 127.0.0.1
+  cors:
+    origin: http://localhost:3000
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: better-sqlite3
+    connection: ':memory:'
+
+auth:
+  providers:
+    guest: {}
+
+permission:
+  enabled: true
+
+catalog:
+  rules:
+    - allow: [Component, System, Domain, Resource, Group]
+  locations:
+    - type: file
+      target: ${ARCHITECTURE_CONTENT_DIR:-../../../arkitekturstyrning}/it-miljo/katalog.yaml
+
+architecture:
+  content:
+    dir: ${ARCHITECTURE_CONTENT_DIR:-../../../arkitekturstyrning}

@@ -1,0 +1,14 @@
+id: TP-MIL-01
+kind: technical-principle
+title: Lösningar driftas i egna datahallar
+binding: binding
+topic: Drift och plattform
+statement: Lösningar och deras data driftas i organisationens egna datahallar, på de gemensamma plattformarna. Publika molntjänster används inte för drift eller lagring.
+rationale: 'Organisationen vill ha full rådighet över drift, data och beroenden. Gemensamma plattformar gör att skydd, övervakning och återställning byggs en gång i stället för i varje lösning. Bortvalt: publika molntjänster, och egna driftmiljöer per lösning.'
+scope: Alla lösningar i myndighetens IT-miljö, egenutvecklade och anskaffade.
+consequences: |-
+  - En ny lösning körs på containerplattformen om den inte kräver något annat.
+  - En anskaffad produkt ska gå att driva i egna datahallar. En produkt som bara finns som molntjänst kräver avsteg.
+  - Beroenden till tjänster på internet, till exempel uppdateringar och externa API:er, går genom utgående proxy, enligt RA-EXP-03.
+  - Tjänster som till sin natur finns utanför organisationen räknas inte som drift i molntjänst: publik certifikatutfärdare, identitetsförmedlare för e-legitimation och internetoperatörens skydd mot överbelastning. De nås genom utpekade byggstenar.
+motivatedBy: [AP-SÄK-02, TP-DRI-17]

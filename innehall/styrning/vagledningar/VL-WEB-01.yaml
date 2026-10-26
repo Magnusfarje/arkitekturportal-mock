@@ -1,0 +1,36 @@
+id: VL-WEB-01
+kind: guide
+title: Hur bygger jag en intern webbapplikation?
+topic: Webbapplikationer
+answer: Bygg gränssnittet i React eller Angular med komponentbiblioteket, och låt det tala med applikationens egen serverdel. Applikationen körs på containerplattformen och nås från klientzonen genom lastbalanseringen. Användarna loggar in genom inloggningstjänsten, och serverdelen prövar behörigheten.
+before: |-
+  - Vilka roller har användarna, och vad får var och en göra?
+  - Används applikationen i operativ verksamhet? Då körs den i de operativa klustren.
+  - Vilka andra system behöver applikationen underlag från, och i vilka verksamhetsområden finns de?
+  - Ska något också nås utanför myndigheten?
+scope: Egenutvecklade webbapplikationer för medarbetare och konsulter.
+steps: |-
+  1. Välj teknik enligt TP-TEK-01, och skapa projektet på leveransplattformen från en mall.
+  2. Beställ namespace och databas hos Drift och leverans. Ett operativt system beställs i de operativa klustren.
+  3. Beställ en klient per miljö och rollerna som grupper hos Identitet och åtkomst.
+  4. Bygg vyerna med komponentbiblioteket, och pröva dem med tangentbord och skärmläsare.
+  5. Pröva behörigheten i serverdelen för varje anrop, och testa den enligt TP-BEH-01.
+  6. Anslut till andra system enligt vägvalen, och registrera beroendena i katalogen.
+  7. Skicka loggar, mätvärden och spår enligt VL-DRI-01, och lägg larmregler i repot.
+  8. Driftsätt samma artefakt till varje miljö, enligt VL-DRI-03.
+leadsTo:
+  - target: RA-WEB-01
+    when: Applikationen används av medarbetare och konsulter.
+  - target: RA-EXP-01
+    when: Applikationen ska också nås från internet.
+  - target: RA-ID-01
+    when: Välj inloggning för användarna.
+  - target: RA-INT-01
+    when: Applikationen behöver underlag från ett annat verksamhetsområde och behöver svar direkt.
+  - target: RA-INT-02
+    when: Applikationen ska få veta när något ändras i ett annat system.
+  - target: RA-EXP-02
+    when: Ett system utanför myndigheten ska hämta information från applikationen.
+  - target: RA-EXP-04
+    when: Ett system utanför myndigheten ska följa information som ändras löpande.
+motivatedBy: [TP-TEK-01, TP-ID-01, TP-BEH-01, TP-IND-01, TP-KON-01]

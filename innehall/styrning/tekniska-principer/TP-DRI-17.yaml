@@ -1,0 +1,11 @@
+id: TP-DRI-17
+kind: technical-principle
+title: Applikationer körs i en standardiserad, hanterad driftmiljö
+binding: recommended
+topic: Drift och återställning
+statement: Applikationer driftsätts till och körs i en standardiserad, centralt hanterad driftmiljö snarare än på handkonfigurerade engångsservrar.
+rationale: En gemensam hanterad plattform ger konsekvent driftsättning, skalning, patchning och driftbarhet, och minskar antalet handkonfigurerade servrar, som är dyra att drifta och en säkerhets-/underhållsrisk. Den gör också flera andra poster (observabilitet, säkerhetsbaslinjer) lättare att uppfylla.
+scope: Applikationer som vi driftsätter och kör, i nätverk där den hanterade driftmiljön är tillgänglig.
+preconditions: Applikationen körs i ett nätverk där plattformen är tillgänglig — stäm av aktuell nätverkstillgänglighet med plattformsägaren; containeriserade/paketerade arbetslaster; överenskommelse om hur driftsättningar befordras.
+solutions: 'Rekommenderad plattform (golden path): använd vår on-prem containerplattform — se tech-radarn. Där den inte är tillgänglig för ert nätverk, uppfyll utfallet på annat sätt tills den är det.'
+ifNotMet: '[Fortsättningen av TP-DRI-17 är inte med i bilderna.] Nivån framgår inte av underlaget. Posten är införd som rekommenderad tills nivån är bekräftad.'

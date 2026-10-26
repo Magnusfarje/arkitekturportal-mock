@@ -1,0 +1,55 @@
+id: RA-EXP-02
+kind: reference-architecture
+title: API mot internet
+topic: Exponering
+solution: API:et körs i tjänstezonen och publiceras genom exponeringsplattformen och den externa API-gatewayen. Gatewayen identifierar konsumenten, tillämpar kvoter och släpper bara igenom publicerade operationer. API:et prövar själv behörighet till funktioner och objekt.
+rationale: Alla publika API:er får samma väg in, samma sätt att identifiera konsumenter och ett ställe att stänga av en konsument. API:ets ägare kan ägna sig åt kontraktet.
+fits: API:er som externa system, partner eller allmänheten ska anropa från internet eller partnernät, både för att hämta information och för att lämna information till oss. Information från OT-zonen publiceras av en tjänst i tjänstezonen som har hämtat den enligt RA-OT-01.
+responsibilities: |-
+  - Beskriv API:et med OpenAPI och registrera det i katalogen. Gatewayen publicerar bara operationer som finns i kontraktet.
+  - Välj hur konsumenter identifieras, och beställ publicering hos integrationsteamet. De samordnar domännamn och certifikat med teamet för nätverk och exponering.
+  - Ta bara emot anrop från gatewayen, med mTLS och nätverkspolicy.
+  - Kontrollera konsumentens token igen i API:et, och pröva behörighet till funktion, objekt och fält. Token är utfärdad för just ditt API.
+  - Validera all indata i API:et. Gatewayen kontrollerar format, inte verksamhetsregler.
+  - Versionera kontraktet, och meddela konsumenterna före en ändring som bryter det.
+  - Publicera inte dokumentations- och driftgränssnitt utan ett uttryckligt beslut.
+variants: |-
+  - Öppna data: ingen autentisering. Konsumenten registrerar sig hos gatewayen och får en API-nyckel, som används för kvoter och mätning men inte ger behörighet.
+  - Partnerns system: OAuth 2.0 client credentials med partnerns egen klient i inloggningstjänsten. Klienten läggs upp av teamet för identitet och åtkomst när partnern ansluts. Samma mönster från partnernät.
+  - Partner som kräver mTLS: exponeringsplattformen kontrollerar klientcertifikatet och lämnar dess identitet vidare till gatewayen. Certifikatet utfärdas efter partnerns certifikatbegäran när partnern ansluts.
+  - På uppdrag av en inloggad användare: konsumentens applikation skickar en åtkomsttoken som användaren har godkänt och som är utfärdad för API:et. API:et prövar användarens rättigheter.
+flows:
+  - from: { name: Konsument, zone: internet }
+    to: { name: Exponeringsplattform, zone: dmz }
+    label: HTTPS med publikt certifikat
+  - from: { name: Exponeringsplattform, zone: dmz }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: konsumenten hämtar token, bara tokenadressen är publicerad
+  - from: { name: Exponeringsplattform, zone: dmz }
+    to: { name: Extern API-gateway, zone: dmz }
+    label: anrop med token
+  - from: { name: Extern API-gateway, zone: dmz }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: nycklar för kontroll av token
+  - from: { name: Extern API-gateway, zone: dmz }
+    to: { name: Ditt API, zone: tjanst }
+    label: HTTPS med mTLS, konsumentens token följer med
+  - from: { name: Ditt API, zone: tjanst }
+    to: { name: Din databas, zone: data }
+    label: TLS med kortlivat konto
+uses:
+  - target: component:it-miljo/exponeringsplattform
+    role: tar emot trafiken, skydd mot överbelastning
+  - target: component:it-miljo/api-gateway-extern
+    role: konsumentidentitet, kvoter, publicerade operationer
+  - target: component:it-miljo/inloggningstjanst
+    role: token för konsumenter
+  - target: component:it-miljo/containerplattform
+    role: kör API:et i tjänstezonen
+  - target: component:it-miljo/databasplattform
+    role: lagring
+  - target: component:it-miljo/intern-pki
+    role: certifikat för mTLS mellan gateway och API
+  - target: component:it-miljo/hemlighetstjanst
+    role: kortlivat databaskonto
+motivatedBy: [TP-EXP-01, TP-ID-02, TP-KRY-01, TP-BEH-01, TP-IND-01, TP-KON-01]

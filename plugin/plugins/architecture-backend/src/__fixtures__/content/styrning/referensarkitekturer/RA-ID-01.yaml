@@ -1,0 +1,40 @@
+id: RA-ID-01
+kind: reference-architecture
+title: En användare loggar in i en applikation
+topic: Identitet och åtkomst
+solution: Applikationen skickar användaren till inloggningstjänsten, som autentiserar enligt den policy som gäller för applikationen och skickar tillbaka en kod. Applikationens serverdel byter koden mot token och skapar en egen session.
+rationale: Applikationen byggs på samma sätt oavsett vem som loggar in. Skillnaden mellan medarbetare, externa användare och allmänhet ligger i inloggningstjänsten.
+fits: Alla applikationer där människor loggar in. Administratörers åtkomst till system följer TP-ÅTK-01.
+responsibilities: |-
+  - Registrera applikationen som klient, en per miljö, med exakta återanropsadresser.
+  - Använd ett etablerat bibliotek för OpenID Connect. Skriv inte protokollet själv. Biblioteket ska kontrollera state och nonce.
+  - Kontrollera ID-tokenens signatur, utfärdare, mottagare och giltighetstid.
+  - Beställ de roller applikationen behöver som grupper hos teamet för identitet och åtkomst, och läs dem som claims i token.
+  - Håll token på serversidan, och klienthemligheten i hemlighetstjänsten.
+  - Avsluta sessionen vid utloggning och när inloggningstjänstens session upphör.
+variants: |-
+  - Medarbetare och konsulter: konto i katalogtjänsten. Från klientzonen sker inloggningen utan ny lösenordsfråga.
+  - Extern användare hos en partner: inloggningstjänsten litar på partnerns inloggning genom federation, eller har ett externt konto med MFA. Applikationen publiceras enligt RA-EXP-01.
+  - Allmänhet: e-legitimation genom inloggningstjänstens koppling till en identitetsförmedlare. Allmänheten har inga grupper i katalogtjänsten: applikationen får en styrkt identitet och knyter utfärdare och användar-ID till sina egna uppgifter. Applikationen publiceras enligt RA-EXP-01.
+  - Anskaffad produkt utan OpenID Connect: SAML mot inloggningstjänsten.
+flows:
+  - from: { name: Användare, zone: klient }
+    to: { name: Din applikation, zone: tjanst }
+    label: öppnar applikationen
+  - from: { name: Användare, zone: klient }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: omdirigeras och loggar in, MFA enligt policy
+  - from: { name: Inloggningstjänst, zone: plattform }
+    to: { name: Katalogtjänst, zone: plattform }
+    label: konto och grupper
+  - from: { name: Din applikation, zone: tjanst }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: byter kod mot token, Authorization Code Flow med PKCE
+uses:
+  - target: component:it-miljo/inloggningstjanst
+    role: autentisering, MFA, token
+  - target: component:it-miljo/katalogtjanst
+    role: konton och grupper
+  - target: component:it-miljo/hemlighetstjanst
+    role: klienthemlighet
+motivatedBy: [TP-ID-01, TP-BEH-01]

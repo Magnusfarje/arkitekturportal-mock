@@ -1,0 +1,11 @@
+id: TP-FLO-07
+kind: technical-principle
+title: Frekvent integration till en leveransklar huvudbranch
+binding: recommended
+topic: Flöde och kvalitet
+statement: Ändringar integreras till en gemensam huvudbranch ofta (helst dagligen) i små steg, i stället för att leva på långlivade brancher.
+rationale: Små, frekventa integrationer synliggör konflikter och integrationsproblem tidigt och samvarierar starkt med hur väl team levererar (DORA-forskningen). Långlivade brancher sparar ihop problemen till en kostsam storskalig merge.
+scope: 'System där ändringar integreras till en gemensam huvudbranch. Posten gäller integration, inte driftsättning: releaser kan fortfarande grindas av formell verifiering eller godkännande.'
+preconditions: Pålitlig CI (TP-FLO-06); feature flags / branch-by-abstraction för att kunna merga ofärdigt arbete säkert; snabba granskningar så att kortlivade brancher inte fastnar. Utan detta gör det mer skada än nytta att driva på — därför en huvudregel och inte ett krav.
+solutions: 'Trunkbaserad utveckling är den rekommenderade standarden: kortlivade brancher som mergas inom en dag eller två, feature flags för ofärdiga funktioner, och att dela upp stort arbete i små, oberoende mergebara steg. Obs: integration till en leveransklar huvudbranch är skilt från kontinuerlig driftsättning — releaser kan fortfarande grindas av formell verifiering/godkännande där det krävs.'
+ifNotMet: Huvudregel — vad det innebär.

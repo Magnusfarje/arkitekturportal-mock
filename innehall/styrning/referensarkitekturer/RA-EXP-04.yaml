@@ -1,0 +1,53 @@
+id: RA-EXP-04
+kind: reference-architecture
+title: Löpande uppdateringar till system utanför myndigheten
+topic: Exponering
+solution: 'API:et har ett ändringsflöde: konsumenten frågar efter allt som har ändrats sedan den markör den fick förra gången. Det som ska fram inom sekunder får konsumenten genom att hålla en anslutning öppen och ta emot ändringarna som Server-Sent Events. Båda går samma väg som andra API:er, genom exponeringsplattformen och den externa API-gatewayen. Vi öppnar aldrig en anslutning till konsumenten.'
+rationale: 'När konsumenten öppnar anslutningen behöver vi inte känna till dess adresser eller öppna vägar ut till varje part. Markören gör att en konsument som har varit nere kommer ikapp utan att något tappas. Identitet, kvoter och avstängning fungerar som för andra API:er. Bortvalt: att vi anropar konsumenten när något ändras (webhooks), och att öppna meddelandeplattformen mot internet.'
+fits: System utanför myndigheten ska följa information som ändras, till exempel trafikinformation till en leverantör. En konsument som bara frågar ibland följer RA-EXP-02. Stora datamängder som lämnas som filer följer RA-INT-03.
+responsibilities: |-
+  - Spara varje ändring i en ändringslogg med en markör som bara växer. Konsumenten får ändringarna i ordning och den senaste markören.
+  - Ge varje händelse ett ID, så att konsumenten kan känna igen en händelse som kommer två gånger.
+  - Låt en konsument som ansluter igen fortsätta från sin senaste markör. För Server-Sent Events är det `Last-Event-ID`.
+  - Bestäm hur långt tillbaka en markör gäller, och ge konsumenten ett sätt att hämta allt på nytt när den är äldre än så.
+  - Pröva för varje händelse att just den konsumenten får se den, enligt TP-BEH-01. Lämna bara ut information som är godkänd för mottagaren enligt gällande regler.
+  - Skicka ett livstecken på en öppen anslutning, och stäng den när konsumentens token går ut. Konsumenten ansluter igen med ny token.
+  - Använd samma händelseformat utåt som internt, CloudEvents, och beskriv flödet i OpenAPI-kontraktet.
+  - Pröva med en konsument som tappar anslutningen, är borta en timme och kommer tillbaka.
+variants: |-
+  - Bara ändringsflöde: konsumenten frågar med jämna mellanrum. Enklast, och räcker när minuter duger.
+  - Partner i partnernät: samma mönster, genom partneranslutningen.
+  - Öppna data: ingen inloggning. Konsumenten har en API-nyckel för kvot och mätning.
+flows:
+  - from: { name: Konsument, zone: internet }
+    to: { name: Exponeringsplattform, zone: dmz }
+    label: HTTPS med publikt certifikat
+  - from: { name: Exponeringsplattform, zone: dmz }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: konsumenten hämtar token, bara tokenadressen är publicerad
+  - from: { name: Exponeringsplattform, zone: dmz }
+    to: { name: Extern API-gateway, zone: dmz }
+    label: anrop med token, eller en öppen anslutning för händelser
+  - from: { name: Extern API-gateway, zone: dmz }
+    to: { name: Ditt API, zone: tjanst }
+    label: HTTPS med mTLS, konsumentens token följer med
+  - from: { name: Ditt API, zone: tjanst }
+    to: { name: Meddelandeplattform, zone: plattform }
+    label: prenumererar på de händelser som ska lämnas ut
+  - from: { name: Ditt API, zone: tjanst }
+    to: { name: Din databas, zone: data }
+    label: ändringsloggen med markörer
+uses:
+  - target: component:it-miljo/exponeringsplattform
+    role: tar emot trafiken och släpper igenom långa anslutningar
+  - target: component:it-miljo/api-gateway-extern
+    role: konsumentidentitet, kvoter och publicerade operationer
+  - target: component:it-miljo/inloggningstjanst
+    role: token för konsumenter
+  - target: component:it-miljo/meddelandeplattform
+    role: händelserna som API:et lämnar vidare
+  - target: component:it-miljo/containerplattform
+    role: kör API:et i tjänstezonen
+  - target: component:it-miljo/databasplattform
+    role: ändringsloggen
+motivatedBy: [TP-EXP-01, TP-ID-02, TP-INT-01, TP-BEH-01, TP-ENK-20]

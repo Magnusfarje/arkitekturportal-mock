@@ -1,0 +1,52 @@
+id: RA-DATA-01
+kind: reference-architecture
+title: Data till analys och rapportering
+topic: Data och analys
+solution: 'Det system som äger informationen publicerar en dataprodukt: en kopia som är avsedd för analys, med beskrivning och ägare. Analysplattformen tar emot den och gör den frågbar tillsammans med andra dataprodukter. Analytiker läser genom rapportverktyget, med sin egen identitet.'
+rationale: Analytiker får det de behöver utan att läsa i verksamhetssystemens databaser, och systemets ägare bestämmer vad som lämnas ut och till vem. En tung fråga i analysen kan inte störa ett system i drift.
+fits: Rapporter, uppföljning och analys över ett eller flera system. En lösning som behöver en annan lösnings uppgifter för sin egen funktion följer RA-INT-01 eller RA-INT-02.
+responsibilities: |-
+  - Ägare: bestäm vad dataprodukten innehåller. Lämna inte ut mer än alla som får åtkomst får se.
+  - Ägare: beskriv dataprodukten i katalogen: innehåll, vad varje fält betyder, hur ofta den uppdateras och vem som svarar på frågor.
+  - Ägare: bevilja åtkomst genom en grupp per dataprodukt, och ompröva den när någon byter uppdrag.
+  - Ägare: håll formen stabil. En ändring som bryter rapporter ger en ny version, enligt TP-ENK-20.
+  - Ägare: bestäm hur länge uppgifterna sparas i analysplattformen, enligt gällande regler.
+  - Analytiker: en rapport som lämnar rapportverktyget, till exempel med e-post, innehåller bara det mottagaren får se.
+variants: |-
+  - Filer: ägaren lämnar dataprodukten som filer i Parquet en gång per dygn, genom filöverföringstjänsten. Passar stora mängder och system som inte publicerar händelser.
+  - Mätvärden över lång tid: lösningen håller de senaste månaderna som tidsserier i sin egen databas, och lämnar allt vidare som dataprodukt.
+  - Anskaffad produkt utan händelser: ett jobb hos produktens ägare tar ut dataprodukten och lämnar den som fil.
+flows:
+  - from: { name: Ägande tjänst, zone: tjanst }
+    to: { name: Meddelandeplattform, zone: plattform }
+    label: publicerar dataprodukten som händelser
+  - from: { name: Analysplattform, zone: tjanst }
+    to: { name: Meddelandeplattform, zone: plattform }
+    label: prenumererar på dataprodukten
+  - from: { name: Analysplattform, zone: tjanst }
+    to: { name: Analyslager, zone: data }
+    label: sparar dataprodukten som tabeller
+  - from: { name: Analytiker, zone: klient }
+    to: { name: Lastbalansering, zone: tjanst }
+    label: öppnar rapportverktyget
+  - from: { name: Lastbalansering, zone: tjanst }
+    to: { name: Rapportverktyg, zone: tjanst }
+    label: HTTPS
+  - from: { name: Analytiker, zone: klient }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: loggar in
+  - from: { name: Rapportverktyg, zone: tjanst }
+    to: { name: Analysplattform, zone: tjanst }
+    label: frågor med analytikerns identitet
+uses:
+  - target: component:it-miljo/meddelandeplattform
+    role: dataprodukten som händelser
+  - target: component:it-miljo/analysplattform
+    role: lagring och frågor över flera dataprodukter
+  - target: component:it-miljo/rapportverktyg
+    role: rapporter och egna frågor
+  - target: component:it-miljo/lastbalansering
+    role: ingången från klientzonen
+  - target: component:it-miljo/inloggningstjanst
+    role: analytikerns identitet och grupper
+motivatedBy: [TP-INT-01, TP-ID-02, TP-BEH-01, TP-ENK-20]

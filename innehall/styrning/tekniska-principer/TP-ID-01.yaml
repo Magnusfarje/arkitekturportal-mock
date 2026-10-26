@@ -1,0 +1,15 @@
+id: TP-ID-01
+kind: technical-principle
+title: Användare loggar in genom inloggningstjänsten
+binding: binding
+topic: Identitet och åtkomst
+statement: Applikationer autentiserar användare genom den gemensamma inloggningstjänsten, med OpenID Connect. Applikationer hanterar inga lösenord och har inga egna användarregister för inloggning.
+rationale: 'Inloggning är svår att göra rätt och lätt att göra olika. En gemensam tjänst ger samma krav på MFA, en plats att spärra ett konto och en plats att se vem som har loggat in var. Bortvalt: egna inloggningsformulär, och katalogslagning direkt från applikationen.'
+scope: Alla applikationer där människor loggar in. En anskaffad produkt som inte stöder OpenID Connect ansluts med SAML. Kan produkten bara slå i en katalog med LDAP krävs avsteg.
+consequences: |-
+  - Webbapplikationer använder Authorization Code Flow med PKCE.
+  - Krav på MFA och typ av inloggning ställs i inloggningstjänsten per applikation. Behöver en enskild funktion starkare inloggning kontrollerar applikationen nivån i token och begär ny inloggning.
+  - Medarbetare, externa användare och allmänhet hanteras skilda från varandra i inloggningstjänsten.
+  - Roller kommer som claims i token, från grupper i katalogtjänsten. Applikationen avgör själv vad rollen får göra, enligt TP-BEH-01.
+  - Applikationens session lever inte längre än inloggningstjänstens policy tillåter.
+motivatedBy: [AP-SÄK-03]

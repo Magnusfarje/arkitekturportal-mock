@@ -1,0 +1,24 @@
+id: TP-DRI-13
+kind: technical-principle
+title: Systemet går att se i drift, och säkerhetshändelser loggas
+binding: binding
+topic: Drift och återställning
+statement: 'Ett system i drift går att förstå utifrån — ni kan se vad det gör och ta reda på varför det gör fel utan att koppla in en debugger. Säkerhetsrelevanta händelser loggas dessutom särskilt: inloggningar och misslyckade inloggningsförsök, ändrade behörigheter, administrativa åtgärder och avvisade anslutningar. Loggarna har tidsstämplar från en gemensam tidskälla, lagras utanför det system som producerade dem, och går att söka i efteråt.'
+rationale: 'Kan ni inte se ett system köra kan ni inte drifta det, och att lägga till observabilitet efter en incident är för sent — datat som skulle ha förklarat vad som hände fanns aldrig. Den andra halvan är inte vår att välja bort: de föreskrifter som är på väg under Cybersäkerhetslagen pekar särskilt ut säkerhetsloggning och namnger händelserna. Tillsammans utgör de systemets audit-logg: ett spår av vem som gjorde vad och när, som går att lita på i efterhand. Två detaljer avgör om loggen är värd något när den behövs: en logg som bara finns i det system som blev angripet är en logg angriparen kan ändra, och en logg utan pålitlig tid går inte att lägga bredvid någon annans.'
+scope: Alla system i drift.
+preconditions: Överenskomna konventioner för loggning, mätvärden och spårning; någonstans att skicka, lagra och visa datat; en pålitlig gemensam tidskälla på alla värdar; en bestämd lagringstid för säkerhetsloggarna; klarhet i om någon faktiskt bevakar dem — sker ingen bevakning ger loggningen underlag för utredning i efterhand, men ingen upptäckt.
+solutions: |-
+  - Rekommenderad plattform (golden path): använd vår observabilitetsplattform — se tech-radarn. Väljer ni annan väg äger ni att bygga och drifta något likvärdigt; dokumentera valet som en ADR.
+  - Annars: strukturerad loggning med konsekventa fält; health-endpoints; mätvärden och distribuerad spårning på nyckelflöden; korrelations-ID över integrationsgränser; säkerhetsloggarna skickade till en mottagare utanför systemet, med skyddad överföring (TP-SÄK-10).
+  - Logga inte hemligheter, personuppgifter eller innehållet i det systemet behandlar — en logg som läcker är en incident i sig.
+ifNotMet: Obligatoriskt — inget system är undantaget. Den som inte når utfallet bär en dokumenterad brist med namngiven ägare och datum. Se Tillämpning.
+requirements:
+  - id: TP-DRI-13-K01
+    title: Systemet går att se i drift, och säkerhetshändelser loggas
+    statement: Ett system i drift ska gå att förstå utifrån, och säkerhetsrelevanta händelser ska loggas särskilt.
+    scope: Systemet är i drift.
+    criteria: |-
+      - Det går att se vad systemet gör och ta reda på varför det gör fel utan att koppla in en debugger.
+      - Inloggningar och misslyckade inloggningsförsök, ändrade behörigheter, administrativa åtgärder och avvisade anslutningar loggas.
+      - Loggarna har tidsstämplar från en gemensam tidskälla, lagras utanför det system som producerade dem och går att söka i efteråt.
+    notEnough: En logg som bara finns i det system som producerade den.

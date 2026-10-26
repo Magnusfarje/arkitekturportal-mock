@@ -1,0 +1,20 @@
+id: TP-GRU-02
+kind: technical-principle
+title: Källkod och pipelines finns på en godkänd utvecklingsplattform
+binding: binding
+topic: Grunden
+statement: Repon, kodgranskning och bygg-/release-pipelines finns på den centralt tillhandahållna utvecklingsplattformen, och de automatiska grindar som de övriga posterna förutsätter — granskning före merge, kontroller före merge, tester vid varje ändring — är konfigurerade där i stället för att bero på varje teams goda vilja.
+rationale: 'Flera av posterna går bara att efterleva i plattformen där koden ligger och byggena körs: branchpolicyer är grinden för TP-FLO-04, obligatoriska kontroller för TP-FLO-06 och TP-FLO-05, skanning i pipelinen för en del av TP-SÄK-11. En gemensam plattform ger dessutom en åtkomstmodell och en spårbar historik över systemgränser, och en kontroll kan rättas centralt i stället för i varje teams egen uppsättning.'
+scope: 'Alla system med kod eller pipelines som vi förvaltar: repon, kodgranskning och bygg- och release-pipelines.'
+preconditions: Onboarding på plattformen; överenskommelse om de policyer som krävs (skyddad huvudbranch, minsta antal godkännare, obligatoriska kontroller); byggagenter som når de nätverk och den driftplattform ni driftsätter till.
+solutions: Använd vår godkända källkods- och leveransplattform — se tech-radarn.
+ifNotMet: Obligatoriskt — inget system är undantaget. Ett system vars kod eller pipelines ligger utanför en plattform där grindarna kan sitta bär en dokumenterad brist med namngiven ägare och datum. Se Tillämpning.
+requirements:
+  - id: TP-GRU-02-K01
+    title: Kod och pipelines finns på utvecklingsplattformen, med grindarna konfigurerade där
+    statement: Repon, kodgranskning och bygg- och release-pipelines ska finnas på den centralt tillhandahållna utvecklingsplattformen, och de automatiska grindarna ska vara konfigurerade där.
+    scope: Alltid.
+    criteria: |-
+      - Systemets repon och pipelines finns på den godkända utvecklingsplattformen.
+      - Granskning före merge, kontroller före merge och tester vid varje ändring är konfigurerade i plattformen.
+    notEnough: Grindar som beror på teamets goda vilja.

@@ -1,0 +1,59 @@
+id: TP-IND-01
+kind: technical-principle
+title: Data utifrån behandlas som data, aldrig som instruktioner
+binding: binding
+statement: Data som passerar en tillitsgräns ska valideras på serversidan och hanteras så att de inte kan ändra en databasfråga eller bli körbart innehåll.
+rationale: Indata som tolkas som en del av en databasfråga eller en webbsida låter avsändaren påverka vad systemet gör. Ogiltiga data som släpps igenom leder till felaktig behandling.
+scope: Webbapplikationer och API:er som tar emot data, bygger databasfrågor eller genererar webbinnehåll. Varje krav har egna villkor. Med data utifrån menas data från en källa som lösningen inte själv kontrollerar, också andra interna system. Med serversidan menas en kontrollpunkt som avsändaren inte kan påverka.
+consequences: |-
+  - Tillitsgränser och indataregler är dokumenterade, också mot andra interna system.
+  - Validering sker på serversidan innan data används.
+  - Databasfrågor är parametriserade.
+  - Utdata till webben kodas för den kontext där de hamnar.
+howTo: |-
+  Förvalta indatareglerna tillsammans med gränssnittets kontrakt och testa dem med både normala och ogiltiga värden. Regler som ligger i kontraktet ändras tillsammans med gränssnittet och kan testas automatiskt.
+
+  Innan du börjar:
+
+  - Var tar lösningen emot data: formulär, API-anrop, filer och meddelanden?
+  - Var används datat sedan: i databasfrågor, i webbinnehåll eller i anrop till andra system?
+
+  Gör så här:
+
+  1. Förvalta indatareglerna nära gränssnittets kontrakt.
+  2. Utgå från normala värden och lägg till gränsvärden, fel typer och ogiltiga fältkombinationer.
+  3. Granska dataflödet separat för validering, databasfrågor och rendering.
+  4. Använd plattformens stöd för parametriserade frågor och för rendering som är anpassad till kontexten.
+  5. Koppla automatiska testresultat till kodversion och testomfattning, och granska verksamhetsregler manuellt.
+concretizes: [AP-SÄK-05]
+requirements:
+  - id: TP-IND-01-K01
+    title: Validera indata innan de används
+    statement: Data utifrån ska valideras på serversidan innan de används i verksamhets- eller säkerhetsbeslut. Valideringen ska följa dokumenterade regler för tillåten struktur, typ, längd, intervall och samband mellan fält.
+    scope: Data passerar en identifierad tillitsgräns, även från andra interna system.
+    criteria: |-
+      - Dokumentera datakällor, tillitsgränser och valideringsregler, inklusive hur okända fält och ogiltiga kombinationer hanteras.
+      - Validera före behandlingen, i alla indataflöden som kontrollplanen pekar ut.
+      - Testa med giltiga värden, gränsvärden, fel typer och ogiltiga kombinationer direkt mot tjänsten: ogiltiga data används inte i beslutet och ger inga otillåtna sidoeffekter.
+    notEnough: Validering i klienten. Verksamhetsregler ska anges uttryckligen och kan inte härledas enbart ur datatyper.
+  - id: TP-IND-01-K02
+    title: Bygg databasfrågor med parametrar
+    statement: Värden utifrån ska föras in i databasfrågor som parametrar, eller genom ett motsvarande säkert gränssnitt. Delar av frågan som inte går att skicka som parametrar ska väljas bland fasta, godkända alternativ och aldrig byggas direkt av text utifrån.
+    scope: Indata kan påverka en databasfråga, även råfrågor genom ORM och lagrade procedurer.
+    criteria: |-
+      - Identifiera var frågor byggs och var dynamiska identifierare, sorteringsval och operatorer förekommer, och dokumentera godkända mönster.
+      - Följ datavägen till frågegränssnittet och utred relevanta fynd från statisk analys, också för råfrågor och procedurer.
+      - Pröva negativa indatafall i kontrollerad testmiljö: frågans urval och ändringar utvidgas inte, och normal funktion består.
+    notEnough: Att ett ORM används, eller att en skanner inte hittar något.
+  - id: TP-IND-01-K03
+    title: Koda utdata för den kontext där de hamnar
+    statement: Data utifrån som förs in i genererat webbinnehåll ska kodas, eller hanteras med säkra API:er, för den kontext där de hamnar, så att de inte ändrar dokumentets struktur eller blir körbara.
+    scope: Lösningen genererar HTML, attribut eller JavaScript/JSON för webben. Ren databehandling utan sådan utmatning kan undantas med motivering.
+    criteria: |-
+      - Kartlägg utmatningskontexter och välj kodnings- eller renderingsmönster för var och en.
+      - Granska mallar, renderingsfunktioner och ställen där automatisk kodning är avstängd, och hantera osäkra undantag.
+      - Mata in teststrängar för varje kontext och kontrollera det renderade resultatet i en webbläsare.
+    notEnough: En skyddspolicy i webbläsaren. Den får inte ensam dölja en osäker utmatningsmekanism.
+    limits: Avsiktligt tillåten HTML kräver en separat sanitiseringskontroll innan full täckning kan påstås.
+externalReferences:
+  - 'OWASP Top 10 A05:2025 – Injection; även A06:2025 – Insecure Design för valideringsdesign. Arbetssättet: OWASP Input Validation Cheat Sheet [S8 i paket 0.4] och kravunderlag ASVS 5.0, 1.2 [S4].'

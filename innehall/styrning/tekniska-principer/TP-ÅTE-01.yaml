@@ -1,0 +1,42 @@
+id: TP-ÅTE-01
+kind: technical-principle
+title: Återställning är testad, inte antagen
+binding: binding
+statement: Lösningen ska ha beslutade återställningsmål, skyddat återställningsunderlag och tester som visar att målen nås.
+rationale: En plan eller en säkerhetskopia visar inte att verksamhetsfunktionen går att återställa. Det visar bara ett test mot de mål verksamheten har satt.
+scope: Lösningar som verksamheten behöver kunna återställa efter störning eller förlust. RTO är den längsta accepterade tiden till återställd funktion, med definierad start- och slutpunkt. RPO är den största accepterade dataförlusten, uttryckt i tid. Verksamhetsansvarig fastställer målen.
+consequences: |-
+  - Verksamhetsansvarig beslutar RTO, RPO och övriga acceptanskriterier.
+  - Återställningsdesignen omfattar hela den beroendekedja som verksamhetsfunktionen behöver.
+  - Underlaget för återställning går att nå också när den funktion som antas utslagen saknas.
+  - Återställningen testas mot målen, och resultatet mäts.
+concretizes: [AP-SÄK-04]
+requirements:
+  - id: TP-ÅTE-01-K01
+    title: Återställningsmålen är beslutade och designen visar hur de nås
+    statement: Lösningen ska ha beslutade återställningsmål och en återställningsdesign som omfattar de beroenden verksamhetsfunktionen kräver.
+    scope: Lösningen har återställningsbehov. För en tillståndslös lösning kan RPO vara otillämpligt om det motiveras; återuppbyggnad och beroenden bedöms ändå.
+    criteria: |-
+      - Dokumentera beslutade mål, återställningsscenarier, start- och slutpunkter, beroenden och ordningsföljd.
+      - Förklara i designen hur målen ska nås.
+      - Se till att de resurser, instruktioner och åtkomster som återställningen kräver finns för den aktuella lösningsversionen.
+    notEnough: En godkänd design. Att målen nås visas genom test enligt TP-ÅTE-01-K03.
+  - id: TP-ÅTE-01-K02
+    title: Det som behövs för återställning finns kvar när det behövs
+    statement: Data, konfiguration, programvara och nyckelmaterial som återställningsmetoden kräver ska finnas tillgängliga och vara skyddade mot de förlust- och komprometteringsscenarier som återställningsdesignen ska klara.
+    scope: Underlaget är utpekat i återställningsdesignen. Återuppbyggnad från kod och artefakter får användas där det uppfyller den beslutade designen.
+    criteria: |-
+      - Förteckna allt underlag som återställningen kräver och hur det skyddas mot varje scenario.
+      - Se till att underlaget går att nå utan den funktion som antas utslagen.
+      - Kontrollera kopierings- och bevarandeflöden, åtkomstskydd och tillgång till nycklar och instruktioner, och att underlagets ålder räcker för målen.
+      - Visa att underlaget går att hämta och använda under de antagna scenarierna.
+    notEnough: Ett lyckat säkerhetskopieringsjobb. Det visar inte i sig att återställning fungerar.
+  - id: TP-ÅTE-01-K03
+    title: Återställningen är testad mot målen
+    statement: Återställningsförmågan ska verifieras mot de beslutade målen genom dokumenterade tester som täcker kontrollplanens obligatoriska scenarier.
+    scope: Lösningen har återställningsbehov. Att testning är svår eller riskfylld gör inte kravet otillämpligt.
+    criteria: |-
+      - Planera scenarier, säker testmetod och mätbara acceptanskriterier.
+      - Testa under förutsättningar som motsvarar den bedömda lösningen, eller dokumentera skillnaderna och vad de betyder.
+      - Mät återställningstid och dataförlust mot målen, och verifiera att verksamhetsfunktionen fungerar och att data är riktiga.
+    notEnough: Att systemet startar. Verksamhetsfunktion och datariktighet ska vara verifierade, och alla obligatoriska scenarier ska vara täckta.

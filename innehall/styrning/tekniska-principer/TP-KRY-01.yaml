@@ -1,0 +1,14 @@
+id: TP-KRY-01
+kind: technical-principle
+title: Trafik krypteras med TLS och certifikat från intern PKI
+binding: binding
+topic: Hemligheter och certifikat
+statement: All trafik mellan komponenter krypteras med TLS, eller med SSH för filöverföring och administration. Certifikat för interna tjänster utfärdas av intern PKI. Publikt betrodda certifikat används bara i exponeringszonen.
+rationale: 'Zonindelningen hindrar inte avlyssning eller förfalskning inom en zon. Med TLS och egna certifikat vet en tjänst vem den talar med. Automatisk utfärdning gör korta giltighetstider möjliga utan handarbete. Bortvalt: okrypterad trafik inom en zon, självsignerade certifikat, och certifikat som beställs för hand med lång giltighet.'
+scope: All trafik mellan komponenter i verksamhets-IT, exponering och gemensam infrastruktur, även inom en zon, och all trafik till OT-DMZ. Inom OT-zonen gäller ERJU-profilen där den har införts.
+consequences: |-
+  - Tjänster begär och förnyar sina certifikat automatiskt, enligt RA-HEM-02.
+  - Klienter kontrollerar serverns certifikat mot intern PKI. Certifikatkontroll stängs inte av, inte heller i test.
+  - En privat nyckel skapas där den ska användas och kopieras inte mellan komponenter eller miljöer.
+  - En anskaffad produkt eller utrustning som inte kan kryptera trafiken kräver avsteg.
+motivatedBy: [AP-SÄK-03, TP-SÄK-10]

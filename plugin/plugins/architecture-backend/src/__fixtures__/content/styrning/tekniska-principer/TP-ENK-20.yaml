@@ -1,0 +1,11 @@
+id: TP-ENK-20
+kind: technical-principle
+title: Gränssnitt mellan system följer etablerade standarder
+binding: recommended
+topic: Enkelhet och gränssnitt
+statement: Integrationer återanvänder öppna, etablerade standarder och stabila kontrakt i stället för egenpåhittade format; kontrakt utvecklas utan att bryta för konsumenter.
+rationale: Vi har många integrationer; egenpåhittade gränssnitt mångdubblar kostnad och inlåsning. Standarder och disciplinerad versionering gör ett stort system av system möjligt att ändra.
+scope: Gränssnitt och integrationer mellan system.
+preconditions: Att veta vilka standarder som gäller i domänen; ägarskap för kontrakt/scheman.
+solutions: Föredra domän- och branschstandarder framför påhittade format; explicit schemaversionering och regler för bakåtkompatibilitet; kontraktstester mellan producenter och konsumenter.
+ifNotMet: Huvudregel — vad det innebär.

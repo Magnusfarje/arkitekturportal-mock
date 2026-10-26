@@ -1,0 +1,13 @@
+id: TP-DRI-16
+kind: technical-principle
+title: Kända sårbarheter åtgärdas inom en bestämd tid
+binding: recommended
+topic: Drift och återställning
+statement: Ni får veta när något ni kör har en känd sårbarhet — beroenden, runtime och lagren under dem — och åtgärden påbörjas inom en tid som är bestämd i förväg utifrån allvarlighetsgrad och exponering. Posten gäller det som redan är i drift; att fånga sårbarheter före release är TP-SÄK-11.
+rationale: Koden behöver inte ändras för att systemet ska bli sårbart, det räcker att omvärlden gör det. TP-SÄK-11 håller grinden vid release, men ett system som inte levererat på ett år har inte passerat någon grind på ett år. Utan en tid bestämd i förväg blir svaret ”när någon hinner”, vilket i praktiken betyder efter incidenten. De föreskrifter som är på väg under Cybersäkerhetslagen ställer krav på ändringshantering, och de allmänna råden pekar på 72 timmar för att påbörja åtgärden vid allvarliga sårbarheter.
+scope: 'Det som redan är i drift: beroenden, runtime och lagren under dem. Att fånga sårbarheter före release hanteras i TP-SÄK-11.'
+preconditions: Att ni vet vad systemet faktiskt kör — beroenden, runtime-version och underliggande lager (TP-GRU-01, TP-GRU-03); en väg för larmet fram till teamet, och någon som läser det; att en rättning går att leverera utan att vänta in nästa planerade release (TP-FLO-06, TP-FLO-07), med tester (TP-FLO-05) och en väg tillbaka (TP-DRI-15); att komponenten över huvud taget får uppdateringar — annars är frågan TP-TEK-01.
+solutions: 'Låt beroendeskanningen från TP-SÄK-11 köra på schema mot den version som är driftsatt, inte bara vid ändring — annars är ett repo som ingen rör också ett repo som ingen larmar om. Låt uppdateringar komma som pull request, gärna automatiskt, så att de går samma väg som all annan kod (TP-FLO-04, TP-FLO-05). Skriv tiderna som en kort tabell: allvarlighetsgrad mot exponering. En hanterad driftmiljö (TP-DRI-17) uppdaterar lagren under er, inte era egna beroenden — vet var gränsen går. Påbörjad är inte detsamma som åtgärdad: det som inte går att rätta inom tiden får ett dokumenterat beslut med kompenserande åtgärd och ett datum, inte tystnad.'
+ifNotMet: Huvudregel — vad det innebär.
+concretizes: [AP-SÄK-05]
+motivatedBy: [TP-BER-01]

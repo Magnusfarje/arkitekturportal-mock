@@ -1,0 +1,11 @@
+id: TP-ENK-22
+kind: technical-principle
+title: System kan ändras och levereras oberoende av varandra
+binding: recommended
+topic: Enkelhet och gränssnitt
+statement: Ett team kan ändra, testa och leverera sitt system utan att behöva en synkroniserad release från ett annat team. Integrationspunkter utformas så att båda sidor kan utvecklas i sin egen takt.
+rationale: 'Conways lag — våra system tar formen av vår kommunikationsstruktur vare sig vi vill det eller inte. Koppling mellan system blir koppling mellan teams kalendrar, och i ett stort system av system är det där leveranstiden går. Det underminerar också TP-FLO-06: en huvudbranch är inte leveransklar om releasen väntar på någon annans. Felläget har ett namn — en distribuerad monolit: många separat driftsättningsbara delar som bara kan driftsättas tillsammans.'
+scope: System som integrerar med andra system, och gränssnitten mellan dem. Posten är inte vägledning för hur en domän delas upp.
+preconditions: Tydligt ägarskap för varje system och för varje gränssnitt mellan system; versionerade kontrakt (TP-ENK-20); ett sätt att verifiera mot ett kontrakt utan att motparten är igång; konsumenter som kan uppgradera enligt sin egen tidplan (TP-ENK-21).
+solutions: 'Integrera via explicita, versionerade gränssnitt — inte via ett annat systems databas eller interna tabeller; gör ändringar bakåtkompatibla (lägg till först, ta bort senare); kontraktstester mellan producent och konsument (TP-ENK-20); undvik delade bibliotek som tvingar alla att uppgradera samtidigt. Där en systemgräns verkligen skär genom teamgränser dokumentera det som en ADR (TP-SAM-26) och lyft frågan i stället för att svälja den som hårdare koppling — lösningen kan vara organisatorisk, och det beslutet ägs av den som äger teamstrukturen. Obs: detta handlar om att inte bygga in undvikbar koppling. Det är inte vägledning för hur en domän ska delas upp, vilket är en arkitekturfråga för sig.'
+ifNotMet: Huvudregel — vad det innebär.

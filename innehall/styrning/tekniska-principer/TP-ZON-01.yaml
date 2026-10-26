@@ -1,0 +1,16 @@
+id: TP-ZON-01
+kind: technical-principle
+title: Trafik mellan zoner går bara genom utpekade övergångar
+binding: binding
+topic: Integration mellan domäner
+statement: Miljön är indelad i zoner. En anslutning över en zongräns får bara öppnas i de riktningar som zonmodellen tillåter, och genom de byggstenar som är utpekade som övergångar.
+rationale: 'Zonerna är tillitsgränser. När varje gräns har få och kända övergångar går det att se vem som kan nå vad, och ett intrång i en zon ger inte fri väg till nästa. Bortvalt: ett platt internt nät, och brandväggsöppningar som beställs per lösning utan gemensam modell.'
+scope: All nätverkstrafik i myndighetens IT-miljö.
+consequences: |-
+  - Varje komponent hör hemma i en zon, och lösningens arkitektur visar vilken.
+  - Internet når bara exponeringszonen. Inget i tjänstezonen, datazonen eller OT-zonen nås direkt utifrån.
+  - En databas nås av den tjänst som äger datat. Därutöver når bara hemlighetstjänsten, säkerhetskopieringstjänsten och förvaltningszonens tjänster för administration och övervakning datazonen.
+  - Administration går från förvaltningszonen, genom privilegierad åtkomst, enligt RA-ADM-01.
+  - En öppning gäller en utpekad byggsten och port, inte en hel zon.
+  - Ett flöde som zonmodellen inte tillåter kräver avsteg. Det löses inte med en brandväggsbeställning.
+motivatedBy: [AP-SÄK-03, TP-SÄK-12]

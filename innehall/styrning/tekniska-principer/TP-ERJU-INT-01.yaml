@@ -1,0 +1,64 @@
+id: TP-ERJU-INT-01
+kind: technical-principle
+title: Kartlägg vilka gränssnitt som krävs innan du bedömer dem
+binding: binding
+statement: Den som integrerar ska för varje ändpunkt kartlägga vilka SSI som krävs och visa att de finns med föreskrivet protokoll. En SCS-implementation ska dessutom uppfylla kraven på en Secure Component.
+rationale: Ett gränssnitt som saknas syns inte i en inventering av det som finns. Därför kartläggs först vad som krävs och därefter vad som är byggt. Kartläggningen är också förutsättningen för att bedöma tjänstekraven i TP-ERJU-SCS-01.
+scope: Lösningar inom profilen P-ERJU-01 som tillhandahåller SCS eller ansluter Secure Components. Profilens omfattning och prövningsordning beskrivs i AP-ERJU-01. Riktar sig till systemintegratörer och ansvariga för komponenter och SCS.
+consequences: '- Följ det som gäller för alla regler i profilen. Det står i AP-ERJU-01.'
+notCovered: Certifikatprofiler (kapitel 14), fullständiga SCIM-scheman och tillståndsövergångar, samtliga loggformat, tokenregler och underhållsmetoder. Secure Communication Specification (E4) ingår i fortsatt konformitetsarbete.
+howTo: |-
+  Förvalta ett kontrakt för varje relation mellan två ändpunkter, tillsammans med integrationsbesluten. Kontrakten är det som gör det möjligt att se vad ett byte i ECS påverkar.
+
+  Innan du börjar:
+
+  - Vilka relationer finns mellan ändpunkter i lösningen, och är var och en SSI eller ESI?
+  - Vem ansvarar för att testa varje relation?
+
+  Gör så här:
+
+  1. Dokumentera för varje relation producent, konsument, tjänst, ändpunktsroller, SSI eller ESI, källversion, intern profil och testansvar.
+  2. Förvalta kontrakten tillsammans med integrationsbesluten.
+  3. Återanvänd komponentidentiteter från Backstage, men håll roll och relation åtskilda från teamägarskap.
+  4. Använd ett byte av ECS som återkommande scenario för att kontrollera att SCS-lagret isolerar förändringar.
+
+  Arbetssättet är ett eget förslag utifrån källarkitekturen, inte en officiell ERJU-anvisning.
+sections:
+  - title: Föreskrivna protokoll på SSI
+    text: |-
+      Enligt E1 SP-SEC-Serv-4-3, s. 14.
+
+      - STS: NTS
+      - PKI: CMP över HTTP; CRL över HTTP
+      - IAM: SCIM 2.0 (tjänstekrav 7-6 anger REST över HTTPS)
+      - NAC: IEEE 802.1X/EAP över RADIUS (tjänstekrav 8-3 anger EAP-TLS)
+      - LOG: syslog över TLS
+      - UAS: OIDC
+      - BKP: OPC UA (kapitel 11 beskriver HTTPS för överföring av säkerhetskopior)
+      - MNT: OPC UA
+      - DNS: DNS over TLS
+
+      PKI:s HTTP-profil ska inte skrivas om till ett ERJU-krav på HTTPS. Ytterligare transportskydd är ett separat internt val.
+concretizes: [AP-ERJU-01]
+requirements:
+  - id: TP-ERJU-INT-01-K01
+    title: De gränssnitt som krävs finns, med föreskrivet protokoll
+    statement: De SSI som krävs ska vara identifierade för varje ändpunkt och tillhandahållas med det protokoll källan föreskriver. Villkoren för UAS, BKP och DNS ska vara dokumenterade.
+    scope: 'Lösningen tillhandahåller SCS eller ansluter Secure Components inom P-ERJU-01. Kravet prövas också när ett gränssnitt saknas. Ansvarar: systemintegratören och den som ansvarar för respektive ändpunkt.'
+    criteria: |-
+      - Upprätta en matris över tjänster och ändpunkter, och bedöm vilka gränssnitt som krävs innan du inventerar vilka som finns.
+      - Jämför driftsatta gränssnitt och konfiguration med matrisen och med de föreskrivna protokollen.
+      - Verifiera förhandlat protokoll och avsedd kommunikation för varje obligatorisk testrelation i kontrollplanen.
+    notEnough: Att protokollnamnet stämmer. Detaljerade profiler, meddelanden och certifikat behöver egna delkontroller. En obligatorisk funktion som saknas är en brist, inte ett otillämpligt krav.
+  - id: TP-ERJU-INT-01-K02
+    title: SCS uppfyller kraven på en Secure Component
+    statement: SCS-implementationen ska uppfylla de krav i Secure Component Specification (E2) som är tillämpliga på den. Det ska finnas en fullständig, motiverad kravtäckningsmatris.
+    scope: 'Objektrollen är SCS inom P-ERJU-01. Kravet tillämpas inte automatiskt på ECS. Ansvarar: SCS-produktägare, leverantör och säkerhetsgranskare.'
+    criteria: |-
+      - Identifiera alla E2-krav, avgör för vart och ett om det är tillämpligt på implementationen och dokumentera designvalen.
+      - Koppla varje tillämpligt krav till implementation och underlag, och lista det som saknas eller inte är bedömt.
+      - Genomför de funktionskontroller som E2-matrisen kräver.
+    notEnough: De nio tjänstekontrollerna i TP-ERJU-SCS-01. De ersätter inte E2-matrisen, och kravet kan inte godkännas medan obligatoriska luckor kvarstår.
+    limits: Paketet återger inte E2:s fulla kravmängd.
+externalReferences:
+  - E1, Shared Cybersecurity Services Specification V1.1, och E2, Secure Component Specification V1.1. Se AP-ERJU-01 för fullständig källhänvisning.

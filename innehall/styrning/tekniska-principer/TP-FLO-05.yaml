@@ -1,0 +1,22 @@
+id: TP-FLO-05
+kind: technical-principle
+title: Ändringar täcks av automatiska tester i proportion till sin risk
+binding: binding
+topic: Flöde och kvalitet
+statement: Ändringar levereras med automatiska tester i proportion till vad som kan gå fel; kod med högre risk täcks bättre. Det som ska täckas är de beteenden som faktiskt spelar roll — inte antalet kodrader som råkar exekveras när testerna körs.
+rationale: 'Tester är det som gör en leveransklar huvudbranch och frekventa ändringar säkra. Utan dem är varje ändring en gissning och refaktorering blir för riskabel för att göras. Täckningsgrad är en indikator, inte ett mål: ett procenttal går att nå med tester som inte påstår någonting, och görs talet till ett krav är det precis de testerna som skrivs. Om testerna står i proportion till risken avgörs dessutom per ändring, och den bedömningen hör hemma i granskningen (TP-FLO-04). Det är där grinden för den här posten sitter, inte i en siffra.'
+scope: Alla system. Posten gäller de ändringar ni gör, inte kod ni inte rör.
+preconditions: Ett testramverk och CI som kör tester automatiskt; en gemensam förståelse i teamet av vad ”i proportion till risk” betyder för just det här systemet, så att frågan går att avgöra i en granskning utan att tas om från början varje gång.
+solutions: 'Enhetstester för logik, integrationstester för gränssnitt/kontrakt, ett tunt lager end-to-end-tester för kritiska flöden; tester körs vid varje ändring och stoppar merge när de fallerar. Mät gärna täckningsgraden och följ trenden, men gör den inte till en grind som blockerar merge — ett tröskelvärde uppfyller inte den här posten och ersätter inte granskarens bedömning. Vill ni veta om testerna är värda något är mutationstestning ett bättre svar: den inför fel i koden och kontrollerar att testerna fångar dem. Den är långsam, så kör den selektivt eller periodiskt.'
+howTo: 'Testdriven utveckling är ett sätt att nå dit, där teamet har nytta av det: testet skrivs före implementationen. Det tvingar fram vad koden ska göra innan du bestämmer hur, vilket ofta ger mindre enheter, tydligare gränssnitt och tester som beskriver beteende i stället för implementation. Tekniken passar väl specificerad logik bättre än utforskande arbete, och den förutsätter vana och en snabb test- och återkopplingsslinga. Prova red-green-refactor på väl specificerad logik, och skriv testerna efteråt för utforskande kod (spikes). Det är ett tips, inget krav: regeln kräver tester, inte en viss ordning att skriva dem i.'
+ifNotMet: Obligatoriskt — inget system är undantaget. Kravet gäller de ändringar ni gör, inte kod ni inte rör. Den som inte når utfallet bär en dokumenterad brist med namngiven ägare och datum. Se Tillämpning.
+requirements:
+  - id: TP-FLO-05-K01
+    title: Ändringar har automatiska tester i proportion till sin risk
+    statement: Ändringar ska levereras med automatiska tester i proportion till vad som kan gå fel. Kod med högre risk ska täckas bättre.
+    scope: För de ändringar ni gör, inte för kod ni inte rör.
+    criteria: |-
+      - Testerna täcker de beteenden som faktiskt spelar roll.
+      - Testerna körs vid varje ändring.
+      - Om testerna står i proportion till risken bedöms per ändring i granskningen (TP-FLO-04).
+    notEnough: Ett tröskelvärde för täckningsgrad. Det uppfyller inte posten och ersätter inte granskarens bedömning.

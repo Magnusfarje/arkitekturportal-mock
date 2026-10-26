@@ -1,0 +1,21 @@
+id: TP-SÄK-11
+kind: technical-principle
+title: Säkerhet byggs in, läggs inte till i efterhand
+binding: binding
+topic: Säkerhet
+statement: System är säkra i förval; kända sårbara beroenden och exponerade hemligheter fångas innan release.
+rationale: Lagkrav (Cybersäkerhetslagen / NIS2) och operativ nödvändighet — för integrationssystem är den exponerade gränsytan där risken koncentreras. Att bygga in säkerhet i efterhand är mycket dyrare.
+scope: Alla system, före release. Sårbarheter i det som redan är i drift hanteras i TP-DRI-16.
+preconditions: Kännedom om vilka system som omfattas; en plats att lagra hemligheter som inte är källkoden; någon ansvarig för säkerhetsbeslut.
+solutions: Följ SSDLC Playbook, som visar hur det här görs i praktiken. Hemlighetshantering (vault / hanterade identiteter) — aldrig hemligheter i kod; automatisk skanning av beroenden och statisk kodanalys (SAST) i CI; hotmodellering för gränsytesnära komponenter; säker konfiguration i förval.
+ifNotMet: Obligatoriskt, och till stor del ett lagkrav (Cybersäkerhetslagen). Den som inte når utfallet bär en dokumenterad brist med namngiven ägare och datum — här accepteras risken av systemägaren tillsammans med säkerhetsfunktionen. Se Tillämpning.
+concretizes: [AP-SÄK-05]
+requirements:
+  - id: TP-SÄK-11-K01
+    title: Sårbara beroenden och exponerade hemligheter fångas före release
+    statement: Systemet ska vara säkert i förval, och kända sårbara beroenden och exponerade hemligheter ska fångas innan release.
+    scope: Alltid.
+    criteria: |-
+      - Det finns en kontroll före release som fångar kända sårbara beroenden.
+      - Det finns en kontroll före release som fångar exponerade hemligheter.
+      - Hemligheter lagras inte i källkoden.

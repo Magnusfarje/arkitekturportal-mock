@@ -1,0 +1,12 @@
+id: AP-SÄK-04
+kind: architecture-principle
+title: Utforma för att verksamheten ska kunna fortsätta eller återupptas
+statement: Lösningen ska utformas så att verksamhetsfunktionen kan upprätthållas eller återställas enligt de behov verksamheten har beslutat.
+rationale: Att tekniken startar igen betyder inte att verksamheten fungerar. Återställning omfattar också data, beroenden, kapacitet och arbetssätt.
+scope: Lösningar där bortfall eller informationsförlust påverkar en verksamhetsfunktion – nya som befintliga, IT som OT. Verksamhetens konsekvensbedömning avgör behovet av fortsatt drift, reservförfarande och återställning.
+consequences: |-
+  - Verksamheten beslutar behoven, och arkitekturen visar hur de tillgodoses.
+  - Redundans, reservlösningar, återuppbyggnad och säkerhetskopiering väljs utifrån dokumenterade störningsscenarier.
+  - Designen tar hänsyn till beroenden och gemensamma felorsaker.
+  - Återställningsförmågan går att testa, och verifieringsplanen avser verksamhetsfunktionen.
+notCovered: TP-DRI-14 täcker återställning och har ersatt TP-ÅTE-01. TP-DRI-15 täcker att en leverans går att ta tillbaka. Kontinuerlig tillgänglighet och reservdrift har inga regler och verifieras särskilt där verksamheten behöver dem.

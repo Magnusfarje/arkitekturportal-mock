@@ -1,0 +1,346 @@
+note: Myndighetens IT-miljö driftas i två egna datahallar, utan publika molntjänster. Den omfattar verksamhets-IT, gemensam infrastruktur och OT för trafikstyrning.
+stages:
+  - id: prod
+    name: Produktion
+    purpose: Verksamheten.
+    data: Verklig information.
+    sites:
+      - dh1
+      - dh2
+  - id: test
+    name: Test
+    purpose: Acceptanstest och integrationstest före produktion. Uppbyggd som produktion, i mindre skala.
+    data: Avidentifierade eller syntetiska data.
+    sites:
+      - dh2
+  - id: utv
+    name: Utveckling
+    purpose: Utvecklarnas egna driftsättningar och tidiga tester.
+    data: Syntetiska data.
+    sites:
+      - dh2
+  - id: utb
+    name: Utbildning
+    purpose: Utbildning av användare i verksamhetssystemen.
+    data: Syntetiska data, som återställs efter varje kurs.
+    sites:
+      - dh2
+terms:
+  - term: Zon
+    meaning: En del av nätet med samma tillit och samma regler för vad som får ansluta.
+  - term: Segment
+    meaning: Ett eget nät inom en zon. Ett segment har ett VLAN och ett subnät per plats och miljö.
+  - term: Domän
+    meaning: 'En grupp zoner med gemensamt ansvar: extern, exponering, verksamhets-IT, gemensam infrastruktur och OT.'
+  - term: Miljö
+    meaning: 'En uppsättning segment, kluster och tjänster för ett ändamål: produktion, test, utveckling eller utbildning.'
+  - term: Verksamhetsområde
+    meaning: En grupp lösningar med gemensam ägare i verksamheten, till exempel trafikinformation. Motsvarar Domain i katalogen. Två verksamhetsområden kan ligga i samma zon.
+  - term: Byggsten
+    meaning: En gemensam tjänst som en lösning ansluter till eller körs på, och som mönstren i arkitekturguiden använder.
+  - term: Övergång
+    meaning: 'En byggsten som är utpekad väg över en zongräns eller mellan verksamhetsområden: exponeringsplattform, API-gateway, meddelandeplattform, filöverföringstjänst, utgående proxy och OT-relä.'
+  - term: Katalogen
+    meaning: Portalens katalog över lösningar, API:er, byggstenar och deras ägare.
+  - term: Tjänsteidentitet
+    meaning: En tjänsts egen identitet i inloggningstjänsten, en klient, som den använder för att få token.
+  - term: Plattformsidentitet
+    meaning: Den identitet containerplattformen ger varje tjänst som körs där. Tjänsten använder den för att styrka vem den är, utan lagrad hemlighet. En tjänst på en virtuell server använder ett certifikat från intern PKI på samma sätt.
+  - term: Avsteg
+    meaning: Ett beslut om att en lösning får avvika från bindande styrning, med villkor och giltighetstid.
+platforms:
+  intro: |-
+    En lösning körs på containerplattformen om den inte kräver något annat, enligt TP-MIL-01 och VL-DRI-02. En virtuell server är alternativet för det som inte går att köra i container. Data ligger på databasplattformen, i objektlagringen eller på en filyta, alltid i datazonen.
+
+    Plattformszonens egna tjänster, som inloggning, hemligheter och logg, körs inte på containerplattformen. Ett fel där ska inte ta med sig det som alla lösningar är beroende av.
+  sections:
+    - id: '7.1'
+      title: Containerplattformen
+      text: |-
+        Containerplattformen är Kubernetes, förvaltad av Drift och leverans. Varje miljö har egna kluster.
+
+        | Kluster | Miljö | Plats | Segment | Används för |
+        |---|---|---|---|---|
+        | k8s-prod-1 | prod | dh1 | tjanst-container | Produktion. Lösningen körs samtidigt här och i k8s-prod-2. |
+        | k8s-prod-2 | prod | dh2 | tjanst-container | Produktion. |
+        | k8s-drift-1 | prod | dh1 | tjanst-operativ | Operativa system i produktion. Systemet körs samtidigt här och i k8s-drift-2. |
+        | k8s-drift-2 | prod | dh2 | tjanst-operativ | Operativa system i produktion. |
+        | k8s-drift-test | test | dh2 | tjanst-operativ | Operativa system i test. Uppgraderas före produktionsklustren. |
+        | k8s-test | test | dh2 | tjanst-container | Test. |
+        | k8s-utv | utv | dh2 | tjanst-container | Utveckling. |
+        | k8s-utb | utb | dh2 | tjanst-container | Utbildning. |
+
+        Så är plattformen uppbyggd:
+
+        - **Ett namespace per lösning.** Lösningen får ett namespace i varje kluster den körs i. Ett namespace delas inte mellan lösningar.
+        - **Nätverkspolicyn nekar allt som standard**, in och ut. Du öppnar lösningens egna flöden i repot, och de granskas som annan kod.
+        - **Inkommande trafik går genom klustrets ingress**, bakom lastbalanseringen i `tjanst-lb`. Ingressen avslutar TLS med ett certifikat från intern PKI, som plattformen begär och förnyar enligt RA-HEM-02. Tjänsten får ett namn under `intern.myndigheten.example`.
+        - **Varje podd har en plattformsidentitet.** Med den hämtar tjänsten sina hemligheter enligt RA-HEM-01 och styrker vem den är mot andra tjänster.
+        - **Klustret hämtar bara container-images från artefaktregistret** på leveransplattformen, och bara sådana som pipelinen har signerat.
+        - **Det finns container-images att bygga på.** Artefaktregistret har uppdaterade images för .NET, Python och Node.js, och mallar för en ny lösning med pipeline, inloggning och observabilitet på plats. Utvecklarstöd förvaltar dem.
+        - **Utgående trafik lämnar klustret med nodens adress.** Brandväggen kan därför inte skilja två lösningar i samma kluster åt. En lösning som behöver en egen öppning över en zongräns får en egen utgående adress i `tjanst-container`.
+        - **Volymer stannar i hallen.** Lagringsklassen `standard` ger blocklagring som inte följer med till den andra datahallen. Data som ska överleva en hall läggs på databasplattformen eller i objektlagringen.
+        - **Klustren byts ut löpande.** Plattformsteamet uppgraderar Kubernetes var tredje månad och byter noder varje vecka. En tjänst i produktion har därför minst två repliker och tål att en podd startas om.
+
+        Ett nytt namespace har som standard 8 vCPU, 16 GiB minne och 50 GiB volymer. Mer beställer du hos Drift och leverans.
+
+        | Plattformen ansvarar för | Du ansvarar för |
+        |---|---|
+        | Kluster, noder och uppgraderingar | Lösningens container-images och deras uppdateringar |
+        | Ingress, certifikat och namn | Vilka sökvägar som tas emot, och behörighet i applikationen |
+        | Nätverkspolicy som nekar som standard | Att öppna lösningens egna flöden, och inte fler |
+        | Plattformsidentitet och koppling till hemlighetstjänsten | Vilka hemligheter lösningen har, och att de byts |
+        | Insamling av det som skrivs till standard output, till loggplattformen | Vad som loggas, enligt VL-DRI-01 |
+        | Mätvärden för kluster och noder | Mätvärden, health-endpoints och larm för lösningen |
+      blocks:
+        - containerplattform
+    - id: '7.2'
+      title: Virtuella servrar
+      text: |-
+        Virtualiseringsplattformen förvaltas av Datahall och infrastruktur. Ett kluster bär bara zoner med liknande tillit, så att ett fel i virtualiseringen inte blir en väg mellan exponeringszonen och det interna nätet.
+
+        | Kluster | Platser | Bär zoner | Kommentar |
+        |---|---|---|---|
+        | virt-exponering | dh1, dh2 | dmz | Bara exponeringszonen. |
+        | virt-tjanst | dh1, dh2 | tjanst, data, isolerad | Lösningarnas servrar, och noderna för containerplattform och databasplattform i produktion. |
+        | virt-operativ | dh1, dh2 | tjanst, data | De operativa systemens kluster och databaser. Delar inte värdar med övriga system. |
+        | virt-klient | dh1, dh2 | klient | Virtuella arbetsplatser. |
+        | virt-plattform | dh1, dh2 | plattform, leverans | Gemensamma tjänster och leveransplattformen. |
+        | virt-forvaltning | dh1, dh2 | forvaltning, sakerhetskopiering | Verktyg för administration och säkerhetskopiering. Skilt från allt det administrerar. |
+        | virt-otdmz | dh1, dh2 | ot-dmz | Bara OT-DMZ. |
+        | virt-miljo | dh2 | dmz, tjanst, data, plattform | Test, utveckling och utbildning. Bär aldrig produktion. |
+
+        Så beställer och använder du en virtuell server:
+
+        - **Servern skapas ur en mall och beskrivs som kod** i lösningens repo, enligt TP-GRU-01 och TP-GRU-03. Mallar finns för Linux och Windows Server, i de två senaste versionerna som stöds.
+        - **Mallen är härdad.** Onödiga tjänster är avstängda, den lokala brandväggen nekar som standard, och agenter för logg, övervakning och skydd mot skadlig kod är installerade. Tid och namn kommer från plattformszonen.
+        - **Du loggar in genom privilegierad åtkomst**, enligt RA-ADM-01. Servern har inga lokala konton för inloggning.
+        - **Säkerhetsuppdateringar installeras varje månad**, i ett servicefönster som du väljer. Kritiska uppdateringar installeras inom en vecka.
+        - **Servern körs i en datahall.** Lagringen speglas till den andra hallen, och servern startas om där när hallen faller. Behöver lösningen vara uppe under tiden bygger du den som två servrar, en i varje hall, bakom lastbalanseringen.
+        - **Tre storlekar finns:** liten (2 vCPU, 4 GiB), mellan (4 vCPU, 16 GiB) och stor (8 vCPU, 32 GiB). Större servrar beställs särskilt.
+
+        Du ansvarar för det som körs på servern: produkten eller applikationen, dess uppdateringar och dess konfiguration. Plattformen ansvarar för operativsystemet upp till och med mallen, och för att uppdateringarna finns att hämta.
+      blocks:
+        - virtuella-servrar
+        - virtualiseringsplattform
+    - id: '7.3'
+      title: Databaser och lagring
+      text: |-
+        | Tjänst | Du får | Mellan datahallarna | Säkerhetskopiering |
+        |---|---|---|---|
+        | databasplattform | En instans per lösning och miljö: PostgreSQL som standard, MongoDB för dokument och Neo4j för grafer. PostgreSQL har tilläggen TimescaleDB för tidsserier och pgvector för sökning i text. | Primär i en hall, replika i den andra. Växlar av sig själv. | Varje natt, och löpande så att du kan återställa till en tidpunkt de senaste 14 dagarna. |
+        | objektlagring | En bucket per lösning och miljö, med versioner av varje objekt. | Speglas mellan hallarna. | Varje natt. |
+        | lagringsplattform | En filyta, när en anskaffad produkt kräver det. | Speglas mellan hallarna. | Varje natt, och ögonblicksbilder varje timme. |
+
+        Databasen nås genom ett namn som följer den primära instansen. Tjänsten ansluter med ett kortlivat konto från hemlighetstjänsten, enligt RA-HEM-01. Allt som lagras är krypterat.
+
+        En databas delas inte mellan lösningar, enligt TP-INT-01. En filyta är inte en väg för integration mellan lösningar; filer mellan lösningar går genom filöverföringstjänsten, enligt RA-INT-03.
+
+        Plattformen säkerhetskopierar. Att återställningen fungerar för just din lösning prövar du själv, enligt VL-DRI-04.
+      blocks:
+        - databasplattform
+        - objektlagring
+        - lagringsplattform
+    - id: '7.4'
+      title: När en datahall faller
+      text: |-
+        Varje datahall är dimensionerad för att ensam bära produktionen.
+
+        | Del | I vanliga fall | När en hall faller |
+        |---|---|---|
+        | Publicering mot internet | Aktiv i båda hallarna. | Trafiken går till den hall som är kvar. Inget behöver göras. |
+        | Lösningar på containerplattformen | Körs i båda hallarna. | Fortsätter i den hall som är kvar. |
+        | Operativa system | Körs i båda hallarna, i egna kluster. | Fortsätter i den hall som är kvar, och har företräde till kapaciteten. |
+        | Lösningar på virtuella servrar | Körs i en hall. | Startas om i den andra hallen, inom en timme. |
+        | Databaser | Primär i en hall, replika i den andra. | Repliken tar över inom några minuter. Pågående transaktioner avbryts. |
+        | Plattformszonens tjänster | Aktiva i båda hallarna. | Fortsätter. |
+        | Leveransplattformen | Körs i datahall 1, speglad till datahall 2. | Startas i datahall 2. Under tiden går det inte att driftsätta. |
+        | Test, utveckling och utbildning | Finns bara i datahall 2. | Står stilla om datahall 2 faller. Faller datahall 1 kan de stängas av för att ge plats åt produktionen. |
+        | Säkerhetskopior | Ett lager i varje hall, och frånkopplade kopior på förvaringsplatsen. | Kopiorna i den andra hallen och på förvaringsplatsen finns kvar. |
+        | OT | Egen redundans. | Påverkas inte. Utbytet genom OT-reläet fortsätter från den hall som är kvar. |
+
+        Tiderna gäller plattformen. Vad din lösning tål avgörs av hur den är byggd och av verksamhetens mål för avbrott och dataförlust, som du prövar enligt TP-DRI-14.
+      blocks: []
+    - id: '7.5'
+      title: Vad du får, och vad du beställer
+      text: |-
+        | Du behöver | Som standard | Beställ hos |
+        |---|---|---|
+        | Köra en tjänst | Ett namespace på containerplattformen, i varje miljö | Drift och leverans |
+        | Köra en produkt som inte går i container | En virtuell server ur mall | Datahall och infrastruktur |
+        | En databas | En instans per miljö: PostgreSQL, MongoDB eller Neo4j | Drift och leverans |
+        | Lagra filer och stora objekt | En bucket i objektlagringen | Drift och leverans |
+        | Repo, pipeline och artefaktregister | Ett projekt på leveransplattformen, från en mall | Drift och leverans |
+        | Bygga ett webbgränssnitt | Komponentbiblioteket för React och Angular | Utvecklarstöd |
+        | Testdata som liknar produktionens | Ett avidentifierat urval från testdatatjänsten | Datahall och infrastruktur |
+        | Analysera data från flera system | En dataprodukt i analysplattformen | Data och AI |
+        | Skicka sms, pushnotiser eller e-post till många | Utskickstjänsten | Integration |
+        | Använda en språkmodell | En kvot i språkmodelltjänsten | Data och AI |
+        | Inloggning för användare, eller identitet för en tjänst | En klient per miljö i inloggningstjänsten | Identitet och åtkomst |
+        | Nå en annan lösning | Publicering i intern API-gateway, eller ett ämne på meddelandeplattformen | Integration |
+        | Nås från internet | Publicering i exponeringsplattformen | Nätverk och exponering |
+        | Nå något på internet | En godkänd destination i utgående proxy | Nätverk och exponering |
+        | En öppning över en zongräns som inget mönster täcker | Finns inte som standard. Ta upp det med arkitekturfunktionen, enligt VL-INT-01. | – |
+      blocks: []
+    - id: '7.6'
+      title: Operativa system
+      text: |-
+        Ett operativt system är ett system som den operativa verksamheten är beroende av i stunden: trafikledning, trafikinformation och det som försörjer dem. De operativa systemen är de som står i segmentet `tjanst-operativ`.
+
+        Operativa system ligger i tjänstezonen och datazonen som andra lösningar, och mönstren i arkitekturguiden gäller dem på samma sätt. Det som skiljer är var i zonen de står:
+
+        - **Egna segment.** Tjänsterna står i `tjanst-operativ` och deras data i `data-operativ`. Brandväggen skiljer dem från övriga lösningar i zonen, så att ett intrång i ett administrativt system inte når ett operativt.
+        - **Egna kluster.** De körs i `k8s-drift-1` och `k8s-drift-2`, på värdar som de inte delar med andra system. Klustren uppgraderas sist: först testklustren, sedan de vanliga produktionsklustren och till sist de operativa.
+        - **Alltid i båda datahallarna.** Ett operativt system körs samtidigt i båda hallarna och har företräde till kapaciteten när en hall faller.
+        - **Bara operativa system når OT-reläet.** Utbyte med OT enligt RA-OT-01 öppnas från `tjanst-operativ`. En annan lösning som behöver uppgifter från OT hämtar dem från ett operativt system, enligt RA-INT-01 eller RA-INT-02.
+        - **Egna arbetsplatser i driftcentralerna.** Trafikinformatörer och trafikledningens IT-stöd arbetar från `klient-operativ`. Systemen nås också från övriga klientzonen, genom lastbalanseringen.
+        - **Samma gemensamma tjänster.** Inloggning, hemligheter, certifikat, meddelanden och observabilitet är plattformszonens, som för alla lösningar.
+
+        I utveckling och utbildning körs operativa system i miljöns vanliga kluster.
+      blocks: []
+    - id: '7.7'
+      title: Övervakning och observabilitet
+      text: |-
+        En lösning skickar loggar, mätvärden och spår till en och samma mottagare, telemetriinsamlingen i plattformszonen. Därifrån fördelas de till loggplattformen, mätvärdeslagret och spårningen. Du ser alltsammans i driftvyerna.
+
+        | Du vill | Så gör du | Tas emot av | Lagras i | Du ser det i |
+        |---|---|---|---|---|
+        | Logga | Skriv strukturerade loggar till standard output. Containerplattformen samlar in dem. På en virtuell server gör agenten i mallen det. | telemetriinsamling | loggplattform | loggplattform, driftvyer |
+        | Mäta | Exponera mätvärden i OpenMetrics-format. Plattformens insamlare hämtar dem inom klustret. | telemetriinsamling | matvarden | driftvyer |
+        | Följa ett anrop genom flera tjänster | Instrumentera med OpenTelemetry och skicka spåren med OTLP. | telemetriinsamling | sparning | driftvyer |
+        | Veta att tjänsten svarar | Ha en health-endpoint. Övervakningen anropar den utifrån, från förvaltningszonen. | overvakning | matvarden | driftvyer |
+        | Få larm | Lägg larmreglerna i lösningens repo. Larm går till det förvaltande teamets kö i IT-ärendehanteringen och med e-post. | driftvyer | arendehantering-it | arendehantering-it |
+
+        | Tjänst | Byggd på |
+        |---|---|
+        | telemetriinsamling | OpenTelemetry Collector |
+        | loggplattform | Elasticsearch, Logstash och Kibana |
+        | matvarden | Prometheus |
+        | sparning | Jaeger |
+        | driftvyer | Grafana, med Alertmanager för larm |
+        | overvakning | Prometheus, med kontroller utifrån av att tjänster svarar |
+
+        Så fungerar det:
+
+        - **En väg in.** Lösningar skickar till `otel.intern.myndigheten.example` med OTLP. Utrustning som bara kan syslog skickar syslog över TLS till samma mottagare.
+        - **Plattformen gör grunden.** Containerplattformen samlar in standard output och mätvärden för poddar och noder, och märker dem med namespace och miljö. Det du lägger till är lösningens egna loggar, mätvärden och spår.
+        - **Ett korrelations-ID följer anropet.** Spårets ID skickas med mellan tjänster enligt W3C Trace Context, också genom API-gateways och meddelandeplattformen, så att loggar och spår från flera lösningar går att lägga bredvid varandra.
+        - **Alla miljöer skickar till samma ställe.** Allt märks med miljö, och driftvyerna visar en miljö i taget.
+        - **Lagringstid.** Loggar är sökbara i 90 dagar, säkerhetsloggar i 12 månader, mätvärden i 13 månader och spår i 14 dagar.
+        - **Säkerhetsövervakningen läser samma loggar.** Säkerhetshändelser enligt TP-DRI-13 märks som sådana och bevakas dygnet runt.
+        - **Driftvyer per lösning.** Varje namespace får en standardvy med trafik, fel, svarstider och resurser. Egna vyer läggs som kod i lösningens repo.
+      blocks:
+        - telemetriinsamling
+        - loggplattform
+        - matvarden
+        - sparning
+        - driftvyer
+        - overvakning
+    - id: '7.8'
+      title: Integrationsplattformen
+      text: |-
+        Integration mellan lösningar och med parter utanför myndigheten går genom fem byggstenar, och var och en har ett standardsätt. Väljer du standardsättet behöver du inte komma överens om tekniken med motparten, bara om innehållet.
+
+        | Du vill | Byggsten | Standardsätt | Kontrakt i katalogen | Den som ansluter styrker sig med |
+        |---|---|---|---|---|
+        | Erbjuda ett API till andra verksamhetsområden | api-gateway-intern | REST över HTTPS, JSON | OpenAPI 3.1 | Tjänsteidentitet: OAuth 2.0 client credentials |
+        | Erbjuda ett API till system utanför myndigheten | api-gateway-extern | REST över HTTPS, JSON | OpenAPI 3.1 | En klient per konsument: OAuth 2.0 client credentials, eller klientcertifikat. API-nyckel för öppna data. |
+        | Lämna löpande uppdateringar till system utanför myndigheten | api-gateway-extern | Ändringsflöde med markör, och Server-Sent Events | OpenAPI 3.1 | Som för andra API:er |
+        | Berätta för andra lösningar att något har hänt | meddelandeplattform | AMQP 1.0 över TLS. Händelser i CloudEvents-format, JSON. | AsyncAPI | Tjänsteidentitet, med rätt att läsa eller skriva per ämne |
+        | Utbyta filer | filoverforing | SFTP | Filformat och namnregler | Ett konto per motpart, med SSH-nyckel |
+        | Utbyta med OT | ot-rela | AMQP 1.0 över TLS, eller SFTP | AsyncAPI, eller filformat | Tjänstens certifikat från intern PKI |
+        | Skicka meddelanden med känsligt innehåll till andra offentliga aktörer | sdk-accesspunkt | AS4 | Meddelandetyp enligt federationen | Accesspunktens certifikat |
+
+        Så är det standardiserat:
+
+        - **Adresser.** Ett internt API nås på `api.intern.myndigheten.example/<verksamhetsområde>/<api>/v1`, ett externt på `api.myndigheten.example/<api>/v1`. Testmiljön har samma sökvägar under `api.test.intern.myndigheten.example` och `api.test.myndigheten.example`.
+        - **Versioner.** Huvudversionen står i sökvägen. En ändring som bryter kontraktet ger en ny huvudversion, och den gamla finns kvar i minst sex månader.
+        - **Format.** Tider anges i UTC enligt ISO 8601. Fel lämnas som Problem Details (RFC 9457), utan interna uppgifter.
+        - **Ämnen.** Ett ämne heter `<verksamhetsområde>.<lösning>.<händelse>.v1`. En händelse levereras minst en gång och sparas i sju dagar. Det som en prenumerant inte kan behandla hamnar i prenumerantens egen felkö.
+        - **Kvoter.** Gatewayen begränsar anrop per konsument. Standardkvoten är 600 anrop i minuten.
+        - **Långa anslutningar.** Exponeringsplattformen och den externa gatewayen släpper igenom en anslutning för Server-Sent Events i upp till en timme. Därefter ansluter konsumenten igen.
+        - **Spårning.** Gateways och meddelandeplattformen för spårets ID vidare, så att ett anrop går att följa mellan lösningar i driftvyerna.
+
+        Så ansluts en konsument utanför myndigheten:
+
+        1. Integration lägger upp konsumenten i den externa gatewayens testmiljö, och Identitet och åtkomst skapar en klient för testmiljön.
+        2. Konsumenten prövar mot `api.test.myndigheten.example`.
+        3. Klienten för produktion skapas, med rätt till de API:er konsumenten ska nå och med konsumentens kvot.
+        4. När konsumenten inte längre ska ha åtkomst spärras klienten i inloggningstjänsten. Det stänger alla API:er på en gång.
+      blocks:
+        - api-gateway-intern
+        - api-gateway-extern
+        - meddelandeplattform
+        - filoverforing
+        - ot-rela
+        - sdk-accesspunkt
+    - id: '7.9'
+      title: Kapacitet och prestanda
+      text: |-
+        Tabellen visar vad de byggstenar som en lösning går genom är dimensionerade för, och hur mycket tid de lägger till. Siffrorna gäller produktion i normal drift, med båda datahallarna uppe.
+
+        | Byggsten | Dimensionerad för | Lägger till | När du behöver mer |
+        |---|---|---|---|
+        | exponeringsplattform | 20 000 anrop i sekunden per datahall. Mellanlagrar svar som tjänsten märker som delbara. | Under 5 ms | Anmäl kända toppar till Nätverk och exponering. |
+        | api-gateway-extern | 5 000 anrop i sekunden. Standardkvot 600 anrop i minuten per konsument. | Under 10 ms | Högre kvot per konsument beställs hos Integration. |
+        | api-gateway-intern | 10 000 anrop i sekunden. | Under 5 ms | Beställs hos Integration. |
+        | lastbalansering | 50 000 samtidiga anslutningar per miljö. En anslutning får vara öppen i en timme. | Under 1 ms | Beställs hos Nätverk och exponering. |
+        | meddelandeplattform | 50 000 händelser i sekunden. En händelse är högst 1 MB. | Under 20 ms från publicering till leverans | Större innehåll läggs i objektlagringen, och händelsen pekar dit. |
+        | ot-rela | 5 000 meddelanden i sekunden. | Under en sekund från OT-system till IT-tjänst | Nya flöden beställs hos OT-infrastruktur, efter riskbedömning. |
+        | inloggningstjanst | 500 inloggningar och 5 000 token i sekunden. | Under 50 ms för en token | Återanvänd token tills den går ut. |
+        | databasplattform | Tre storlekar: liten (2 vCPU, 8 GiB, 100 GiB lagring), mellan (4 vCPU, 32 GiB, 500 GiB) och stor (16 vCPU, 128 GiB, 2 TiB). | – | Större instanser beställs särskilt hos Drift och leverans. |
+        | objektlagring | 1 TiB per bucket som standard. Ett objekt är högst 5 TiB. | – | Högre kvot beställs hos Drift och leverans. |
+        | telemetriinsamling | 500 loggrader i sekunden per namespace som standard. | – | Högre kvot beställs hos Drift och leverans. |
+
+        Så hanteras last:
+
+        - **Containerplattformen skalar av sig själv.** Antalet poddar ökar och minskar efter lasten, inom namespacets kvot. En ny podd tar emot trafik när dess health-endpoint svarar.
+        - **En förhöjd kvot finns för toppar.** En lösning med kända lasttoppar har en andra, högre kvot som bara tas i anspråk under toppen. Den beställs i förväg hos Drift och leverans. De operativa klustren håller ledig kapacitet för den.
+        - **Exponeringsplattformen svarar åt tjänsten när den kan.** Ett svar som tjänsten märker med `Cache-Control` lämnas ut igen utan att tjänsten anropas, så länge märkningen säger.
+        - **Långa anslutningar går igenom.** Lastbalanseringen och exponeringsplattformen släpper igenom Server-Sent Events, så att en tjänst kan skicka uppdateringar till en webbläsare eller en konsument.
+        - **Lasttest görs i testmiljön.** Testmiljön har en fjärdedel av produktionens kapacitet. Ett lasttest bokas hos Drift och leverans och körs från byggnoderna mot miljöns ingång.
+        - **OT-reläets fördröjning gäller normal drift.** Vid en störning på endera sidan ligger data kvar i reläet tills mottagaren hämtar dem.
+      blocks: []
+    - id: '7.10'
+      title: Data och analys
+      text: |-
+        Analys och rapporter görs inte i verksamhetssystemens databaser. Varje system lämnar en kopia som är avsedd för analys, en dataprodukt, till analysplattformen. Där står analysen skild från verksamhetssystemen, i segmenten `tjanst-analys` och `data-analys`.
+
+        | Del | Tjänst | Byggd på |
+        |---|---|---|
+        | Lagring av dataprodukter | analysplattform | Objektlagring med tabeller i Parquet och Apache Iceberg |
+        | Frågor över flera dataprodukter | analysplattform | Trino |
+        | Rapporter, vyer och egna frågor | rapportverktyg | Apache Superset |
+        | Tidsserier som en lösning använder i sin egen funktion | databasplattform | PostgreSQL med TimescaleDB |
+
+        Så fungerar det:
+
+        - **Data kommer in som dataprodukter.** Ägaren till ett verksamhetssystem publicerar kopian som händelser på meddelandeplattformen, eller som filer i Parquet genom filöverföringstjänsten. Analysplattformen hämtar aldrig i ett systems databas.
+        - **Ägaren äger också kopian.** Dataprodukten står i katalogen med ägare, innehåll och hur ofta den uppdateras. Ägaren beviljar åtkomst per dataprodukt, genom en grupp i katalogtjänsten.
+        - **Analytiker arbetar i rapportverktyget**, från klientzonen. Där ställer de egna frågor med SQL och bygger rapporter. En rapport kan skickas med e-post enligt ett schema.
+        - **Händelser är framme inom en minut.** Filer läses in en gång per dygn.
+        - **Mätvärden från anläggningen** kommer från sensorerna i `ot-sensor` genom OT-reläet till ett operativt system. Det håller de senaste månaderna i sin egen databas, som tidsserier, och lämnar allt vidare som dataprodukt. I analysplattformen sparas de i flera år.
+        - **Analysplattformen är inte ett operativt system.** Den körs i en datahall i taget och startas i den andra om hallen faller.
+      blocks:
+        - analysplattform
+        - rapportverktyg
+    - id: '7.11'
+      title: Språkmodeller
+      text: |-
+        Språkmodelltjänsten kör öppna språkmodeller på egna servrar med grafikprocessorer, i båda datahallarna. Inget anrop lämnar myndigheten, och modellerna tränas inte på det som skickas in.
+
+        | Du vill | Du använder | Byggd på |
+        |---|---|---|
+        | Skriva, sammanfatta eller klassificera text | sprakmodelltjanst | Öppna språkmodeller, körda med vLLM |
+        | Göra text sökbar efter innebörd | sprakmodelltjanst för inbäddningar, och din egen databas | PostgreSQL med pgvector |
+
+        Så fungerar det:
+
+        - **Ett API.** Lösningen anropar `ai.intern.myndigheten.example` med sin tjänsteidentitet. API:et följer samma form som OpenAI:s, så att vanliga bibliotek fungerar.
+        - **Tre modeller finns:** en större för svårare uppgifter, en mindre som svarar snabbt och en för inbäddningar. Vilka de är står i katalogen, och de byts ungefär två gånger om året. Lösningen anger modell i anropet.
+        - **Innehållet sparas inte.** Tjänsten loggar vem som anropade, när, vilken modell och hur mycket text, men inte vad som skickades eller vad modellen svarade.
+        - **Modellen når ingenting.** Tjänsten har ingen åtkomst till andra system. Allt underlag skickar lösningen med i anropet.
+        - **Kvot per lösning.** Standardkvoten är 200 000 token i minuten. De första orden i ett svar kommer inom en sekund.
+        - **Alla miljöer använder samma tjänst.**
+      blocks:
+        - sprakmodelltjanst

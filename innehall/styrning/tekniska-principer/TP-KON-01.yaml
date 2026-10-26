@@ -1,0 +1,58 @@
+id: TP-KON-01
+kind: technical-principle
+title: Produktion visar bara det som är avsett att synas
+binding: binding
+statement: Produktionsmiljöer ska köras med en kontrollerad konfiguration där felsökningslägen är avstängda, dokumentations- och övervakningsgränssnitt bara når avsedda målgrupper och felsvar inte röjer interna uppgifter.
+rationale: Felsökningslägen, öppna driftgränssnitt och utförliga felmeddelanden exponerar interna funktioner och uppgifter utan att någon har avsett det.
+scope: Webbapplikationer och API:er med sina webbservrar och applikationskomponenter. Produktionsprofilen ska också gå att verifiera i en representativ testmiljö.
+consequences: |-
+  - Varje komponenttyp har en produktionsprofil.
+  - Det är den effektiva konfigurationen som räknas, efter miljövariabler och annat som skriver över inställningarna.
+  - Varje dokumentations- och övervakningsgränssnitt har ett beslut om vem som ska nå det.
+  - Felsvar följer ett kontrakt för vad anroparen får veta.
+howTo: |-
+  Förvalta en produktionsprofil per komponenttyp och kontrollera den effektiva konfigurationen efter varje driftsättning. En profil i versionshantering gör avsedd konfiguration granskningsbar, och kontrollen i drift visar om verkligheten följer den.
+
+  Innan du börjar:
+
+  - Vilka komponenttyper har lösningen: webbserver, applikation och API?
+  - Vilka dokumentations- och övervakningsgränssnitt finns, och vem är de till för?
+
+  Gör så här:
+
+  1. Förvalta en produktionsprofil per komponenttyp.
+  2. Verifiera den effektiva konfigurationen efter driftsättning, och bevaka konfigurationsdrift.
+  3. Lista dokumentations- och övervakningsgränssnitt med avsedd målgrupp.
+  4. Kontrollera svarskontraktet med syntetiska fel i en representativ testmiljö, och knyt testerna till driftsättningens identitet.
+  5. Dokumentera hur skillnader mellan test och produktion påverkar slutsatsen.
+concretizes: [AP-SÄK-05]
+requirements:
+  - id: TP-KON-01-K01
+    title: Felsökningsläge är avstängt i produktion
+    statement: Felsökningslägen och interaktiva felsökningsfunktioner ska vara avstängda i applikationskomponenter i produktion.
+    scope: Produktionskomponenten har sådana funktioner. Är standardinställningarna okända ska det utredas. Kontrollerad diagnostisk loggning är inte automatiskt felsökningsläge, men får inte kringgå kraven på skyddad information.
+    criteria: |-
+      - Definiera en produktionsprofil med inställningarna för varje komponenttyp.
+      - Kontrollera de effektiva inställningarna i drift, efter miljövariabler och annat som skriver över dem.
+      - Visa i godkänd miljö att felsökningsgränssnitt och interaktiva felvyer inte aktiveras vid normala anrop eller kontrollerade fel.
+    notEnough: Standardfilerna i ett repo, eller en kontroll i pipelinen som inte upptäcker senare ändringar i konfigurationen.
+  - id: TP-KON-01-K02
+    title: Dokumentation och övervakning når bara avsedda målgrupper
+    statement: Dokumentations- och övervakningsgränssnitt ska bara vara exponerade för de målgrupper och nätverksvägar som uttryckligen är avsedda, enligt dokumenterad konfiguration.
+    scope: Lösningen har sådana gränssnitt, till exempel API-dokumentation, mätvärden eller driftstatus. Offentlig dokumentation kan vara avsiktlig; då ska omfattningen vara dokumenterad.
+    criteria: |-
+      - Inventera gränssnitten med målgrupp, innehåll och tillåtna vägar, och dokumentera beslutet om exponering.
+      - Jämför routing, exponering och åtkomstregler med inventeringen, även alternativa portar och interna vägar.
+      - Testa från tillåten och otillåten kontext: avsedd målgrupp når innehållet, övriga når inte begränsat innehåll.
+    notEnough: Ett test från en enda nätverksposition. Det visar inte all exponering.
+  - id: TP-KON-01-K03
+    title: Felsvar röjer inga interna uppgifter
+    statement: Oväntade eller säkerhetskänsliga fel ska ge ett kontrollerat svar som inte röjer stack traces, interna frågor, nycklar, token eller andra känsliga interna uppgifter för anroparen.
+    scope: Svar till användare och API-anropare vid sådana fel. Vanlig valideringsåterkoppling får vara specifik när den inte röjer skyddsvärd information.
+    criteria: |-
+      - Definiera ett svarskontrakt för fel: vilka uppgifter anroparen får.
+      - Granska felhanterare, ramverksinställningar och fel som passerar proxy eller andra mellanskikt.
+      - Utlös kontrollerade fel, till exempel ett otillgängligt testberoende och ett oväntat applikationsfel, och kontrollera svarskropp, headers och frontendvyer mot kontraktet.
+    notEnough: En textsökning efter stack traces. Den hittar inte alla former av läckage.
+externalReferences:
+  - 'OWASP Top 10 A02:2025 – Security Misconfiguration och A10:2025 – Mishandling of Exceptional Conditions. Arbetssättet: OWASP Error Handling Cheat Sheet [S9 i paket 0.4] och kravunderlag ASVS 5.0, 13.4 [S5].'

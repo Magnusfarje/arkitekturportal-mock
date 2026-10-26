@@ -1,0 +1,57 @@
+id: TP-DRI-14
+kind: technical-principle
+title: Systemet går att återställa, och återställningen är prövad
+binding: binding
+topic: Drift och återställning
+statement: Systemet och dess data kan återställas efter förlust, förvanskning eller otillgänglighet, och återställningen har faktiskt genomförts — inte antagits utifrån att säkerhetskopior skapas. Teamet vet vad den kräver och hur lång tid den tar, och kan ställa den siffran mot de avbrottstider som satts för systemet. Finns inga sådana tider är det något att begära av systemägaren, inte en tyst förutsättning.
+rationale: En säkerhetskopia som aldrig återlästs är en obekräftad hypotes. Incidenten är fel tillfälle att upptäcka att kopian saknar konfigurationen, att nyckeln för att läsa den bara fanns i systemet som gick förlorat, eller att återläsningen tar tre dygn när verksamheten tål fyra timmar. Att pröva i förväg kostar en planerad arbetsdag; att pröva första gången skarpt kostar hela avbrottet.
+scope: Alla system och deras data. Posten gäller den tekniska återställningsvägen, inte verksamhetens kontinuitetsplan. RTO är den längsta accepterade tiden till återställd funktion, med definierad start- och slutpunkt. RPO är den största accepterade dataförlusten, uttryckt i tid. Verksamhetsansvarig fastställer målen, och systemägaren ser till att de finns.
+preconditions: En miljö att återställa till som inte är produktion men skyddas som den, hålls isolerad och rivs efter övningen — den tar emot verklig data och är därför ingen lägre miljö i TP-SÄK-12:s mening; att allt som behövs för återställning finns utanför det som gått förlorat — konfiguration, infrastrukturdefinitioner, hemligheter (se TP-GRU-01); åtkomst till kopiorna som fungerar även när ordinarie inloggningsväg är nere. Övningen utgår från en verklig säkerhetskopia från produktion, i verklig storlek och hämtad samma väg som vid en incident — annars är den uppmätta tiden inte den ni behöver.
+solutions: 'Öva återställning återkommande och efter betydande ändringar, med varierande omfattning — enbart återläsning av data i det ena fallet, att bygga systemet från grunden i det andra; automatisera återställningen så att den är ett körbart steg snarare än ett dokument (infrastruktur som kod, TP-GRU-01), vilket gör övningen billig nog att göras ofta; skriv in datum, tidsåtgång och vad som gick fel i driftinstruktionen; minst en kopia lagrad åtskild från det system den hämtats ur; regelbunden integritetskontroll så att en trasig kopia upptäcks före incidenten. Obs: detta är inte verksamhetens kontinuitetsplan, som fastställer vilka avbrott som är acceptabla och vad som händer när de inträffar. Posten säger att den tekniska återställningsvägen ska vara prövad och dess tid känd.'
+howTo: |-
+  Utgå från en konkret verksamhetsfunktion och testa att hela kedjan bakom den går att återställa. Ett test som utgår från verksamhetsfunktionen fångar beroenden som ett test av en enskild komponent missar.
+
+  Innan du börjar:
+
+  - Vilken verksamhetsfunktion ska gå att återställa, och vad är den beroende av?
+  - Finns en isolerad miljö att testa i?
+
+  Gör så här:
+
+  1. Välj en konkret verksamhetsfunktion och identifiera hela beroendekedjan.
+  2. Pröva både återläsning av data och återuppbyggnad, där det är relevant.
+  3. Registrera starttid, återställd datapunkt och tidpunkten då verksamhetsfunktionen verifierades.
+  4. Testa om möjligt utan åtkomst till den primära miljö som antas utslagen.
+  5. Använd en isolerad miljö och redovisa skillnaderna mot produktion.
+ifNotMet: Obligatoriskt — inget system är undantaget. Att säkerhetskopior skapas räcker inte; det är återläsningen som ska ha genomförts. Den som inte når utfallet bär en dokumenterad brist med namngiven ägare och datum. Se Tillämpning.
+concretizes: [AP-SÄK-04]
+replaces: [TP-ÅTE-01]
+requirements:
+  - id: TP-DRI-14-K01
+    title: Återställningsmålen är beslutade och designen visar hur de nås
+    statement: Lösningen ska ha beslutade återställningsmål och en återställningsdesign som omfattar de beroenden verksamhetsfunktionen kräver.
+    scope: Alltid. För ett tillståndslöst system kan RPO vara otillämpligt om det motiveras; återuppbyggnad och beroenden bedöms ändå.
+    criteria: |-
+      - Dokumentera beslutade mål, återställningsscenarier, start- och slutpunkter, beroenden och ordningsföljd.
+      - Förklara i designen hur målen ska nås.
+      - Se till att de resurser, instruktioner och åtkomster som återställningen kräver finns för den aktuella lösningsversionen.
+    notEnough: En godkänd design. Att målen nås visas genom test enligt TP-DRI-14-K03.
+  - id: TP-DRI-14-K02
+    title: Det som behövs för återställning finns kvar när det behövs
+    statement: Data, konfiguration, programvara och nyckelmaterial som återställningsmetoden kräver ska finnas tillgängliga och vara skyddade mot de förlust- och komprometteringsscenarier som återställningsdesignen ska klara.
+    scope: Underlaget är utpekat i återställningsdesignen. Återuppbyggnad från kod och artefakter får användas där det uppfyller den beslutade designen.
+    criteria: |-
+      - Förteckna allt underlag som återställningen kräver och hur det skyddas mot varje scenario.
+      - Se till att underlaget går att nå utan den funktion som antas utslagen.
+      - Kontrollera kopierings- och bevarandeflöden, åtkomstskydd och tillgång till nycklar och instruktioner, och att underlagets ålder räcker för målen.
+      - Visa att underlaget går att hämta och använda under de antagna scenarierna.
+    notEnough: Ett lyckat säkerhetskopieringsjobb. Det visar inte i sig att återställning fungerar.
+  - id: TP-DRI-14-K03
+    title: Återställningen är testad mot målen
+    statement: Återställningsförmågan ska verifieras mot de beslutade målen genom dokumenterade tester som täcker kontrollplanens obligatoriska scenarier.
+    scope: Alltid. Att testning är svår eller riskfylld gör inte kravet otillämpligt.
+    criteria: |-
+      - Planera scenarier, säker testmetod och mätbara acceptanskriterier.
+      - Testa under förutsättningar som motsvarar den bedömda lösningen, eller dokumentera skillnaderna och vad de betyder.
+      - Mät återställningstid och dataförlust mot målen, och verifiera att verksamhetsfunktionen fungerar och att data är riktiga.
+    notEnough: Att systemet startar. Verksamhetsfunktion och datariktighet ska vara verifierade, och alla obligatoriska scenarier ska vara täckta.

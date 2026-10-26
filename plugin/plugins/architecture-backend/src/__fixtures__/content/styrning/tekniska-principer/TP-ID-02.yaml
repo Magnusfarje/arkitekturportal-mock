@@ -1,0 +1,15 @@
+id: TP-ID-02
+kind: technical-principle
+title: Tjänster identifierar sig med kortlivade token eller certifikat
+binding: binding
+topic: Identitet och åtkomst
+statement: En tjänst som anropar en annan tjänst identifierar sig med en kortlivad token från inloggningstjänsten eller med ett klientcertifikat från intern PKI. Delade statiska nycklar och lösenord används inte som autentisering.
+rationale: 'En statisk nyckel som läcker gäller tills någon upptäcker det och byter den. En token som gäller i minuter och ett certifikat som förnyas automatiskt begränsar skadan, och det går att se vilken tjänst som anropade. Bortvalt: API-nycklar som autentisering, Basic-autentisering, och tillit grundad på IP-adress.'
+scope: Anrop mellan tjänster, och externa systems anrop till våra API:er. En nyckel som en extern part kräver för sitt eget API omfattas inte; den hanteras som hemlighet enligt TP-HEM-01.
+consequences: |-
+  - Varje tjänst har en egen identitet i inloggningstjänsten. Identiteter delas inte mellan tjänster eller miljöer.
+  - Den anropade tjänsten kontrollerar tokenens signatur, utfärdare, mottagare och giltighetstid, och avgör behörighet utifrån vilken tjänst som anropar.
+  - Att ett anrop kommer från det interna nätet ger ingen behörighet.
+  - En API-nyckel får användas för att mäta och begränsa användning av öppna data. Den ger ingen behörighet.
+  - En anskaffad produkt som bara kan ta emot lösenord eller API-nyckel kräver avsteg. Under avsteget anropas den genom intern API-gateway, som kontrollerar token, och produktens egen nyckel ligger i hemlighetstjänsten.
+motivatedBy: [AP-SÄK-03]

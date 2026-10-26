@@ -1,0 +1,28 @@
+id: VL-DRI-03
+kind: guide
+title: Hur driftsätter jag, och hur hålls miljöerna isär?
+topic: Drift och plattform
+answer: Kod, pipeline och artefakter finns på leveransplattformen, och samma versionsmärkta artefakt driftsätts till varje miljö på containerplattformen. Miljöerna hålls isär med egna hemligheter per miljö och med nätverkspolicy, och du prövar att separationen håller.
+before: |-
+  - Vilka miljöer har lösningen vid sidan av produktion?
+  - Vad går inte att skripta, till exempel konton, brandväggsöppningar och certifikat, och vem utför det?
+  - Kan föregående version fortfarande läsa datat efter en databasändring?
+scope: Lösningar i verksamhets-IT som byggs och driftsätts genom leveransplattformen.
+steps: |-
+  1. Lägg kod, konfiguration och pipeline i ett repo på leveransplattformen, med skyddad huvudbranch och obligatoriska kontroller, enligt TP-GRU-02.
+  2. Beskriv bygget och driftsättningen som filer i repot, med logiken i skript som pipelinen anropar. Lista det som inte går att skripta, med vem som utför det, enligt TP-GRU-03.
+  3. Bygg en versionsmärkt artefakt en gång, lägg den i artefaktregistret och driftsätt samma artefakt till varje miljö.
+  4. Ge varje miljö egna hemligheter i hemlighetstjänsten, enligt RA-HEM-01, så att en lägre miljö aldrig kan läsa produktionens.
+  5. Pröva separationen enligt TP-SÄK-12: försök ansluta till produktion från en testmiljö. Det ska misslyckas.
+  6. Använd avidentifierade eller syntetiska testdata. Avidentifierade data beställer du från testdatatjänsten. Kopiera aldrig själv från produktion.
+  7. Logga varje driftsättning med version, miljö och tidpunkt, och pröva vägen tillbaka till föregående version, enligt TP-DRI-15.
+motivatedBy: [TP-GRU-02, TP-GRU-03, TP-SÄK-12, TP-DRI-15]
+uses:
+  - target: component:it-miljo/leveransplattform
+    role: repon, pipelines och artefaktregister
+  - target: component:it-miljo/containerplattform
+    role: kör tjänsten i varje miljö, med nätverkspolicy
+  - target: component:it-miljo/hemlighetstjanst
+    role: egna hemligheter per miljö
+  - target: component:it-miljo/testdatatjanst
+    role: avidentifierade testdata till testmiljön

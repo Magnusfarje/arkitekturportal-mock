@@ -1,0 +1,29 @@
+id: RA-INT-01
+kind: reference-architecture
+title: API mellan verksamhetsområden genom intern API-gateway
+topic: Integration mellan domäner
+solution: Den lösning som äger informationen publicerar ett API i den interna API-gatewayen. Konsumenter i andra verksamhetsområden anropar gatewayen med sin tjänsteidentitet.
+rationale: Gatewayen visar vilka API:er som finns och vem som använder dem. Det gör beroendena mellan verksamhetsområden synliga, och ägaren vet vem en ändring påverkar.
+fits: En lösning behöver fråga en lösning i ett annat verksamhetsområde och få svar direkt. Inom samma verksamhetsområde räcker RA-ID-02.
+responsibilities: |-
+  - Ägare: beskriv API:et med OpenAPI, registrera det i katalogen och godkänn varje konsument.
+  - Ägare: kontrollera konsumentens token och pröva behörigheten i tjänsten.
+  - Konsument: registrera beroendet i katalogen.
+  - Konsument: hantera att API:et är långsamt eller nere. Sätt en tidsgräns, gör nya försök med växande väntetid och bestäm vad tjänsten gör utan svar.
+  - Båda: kom överens om versionering och om hur ändringar aviseras.
+flows:
+  - from: { name: Konsumerande tjänst, zone: tjanst }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: hämtar token för det API som ska anropas
+  - from: { name: Konsumerande tjänst, zone: tjanst }
+    to: { name: Intern API-gateway, zone: tjanst }
+    label: HTTPS med token
+  - from: { name: Intern API-gateway, zone: tjanst }
+    to: { name: Ägande tjänst, zone: tjanst }
+    label: HTTPS, konsumentens token följer med
+uses:
+  - target: component:it-miljo/api-gateway-intern
+    role: publicering, åtkomst per konsument, spårbarhet
+  - target: component:it-miljo/inloggningstjanst
+    role: tjänsteidentitet och token
+motivatedBy: [TP-INT-01, TP-ID-02, AP-SÄK-02]

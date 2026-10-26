@@ -1,0 +1,31 @@
+id: VL-EXP-01
+kind: guide
+title: Hur publicerar jag ett API mot internet?
+topic: Exponering
+answer: API:et körs i tjänstezonen och publiceras genom exponeringsplattformen och den externa API-gatewayen. Du beställer publiceringen; du öppnar ingen egen väg mot internet. Finns informationen i en annan domän än verksamhets-IT förs den först dit.
+before: |-
+  - Får informationen lämna organisationen? Bara information som är godkänd för mottagarna publiceras.
+  - Vilka är konsumenterna: vem som helst, kända partner eller inloggade användare?
+  - I vilken zon finns informationen i dag?
+scope: Lösningar som ska erbjuda ett API till system utanför organisationen.
+steps: |-
+  1. Beskriv API:et med OpenAPI och registrera det i katalogen.
+  2. Bestäm hur konsumenter identifieras: öppet med kvot, tjänsteidentitet eller användarens token.
+  3. Driftsätt API:et i tjänstezonen, och låt det bara ta emot anrop från gatewayen.
+  4. Beställ publicering hos integrationsteamet: domännamn, operationer, kvoter och konsumenter.
+  5. Pröva behörighet och validera indata i API:et.
+  6. Testa utifrån: utan identitet, som fel konsument, med för många anrop och mot sökvägar som inte är publicerade.
+  7. Bestäm hur kontraktet versioneras och hur konsumenterna får veta om ändringar.
+leadsTo:
+  - target: RA-EXP-02
+    when: API:et och dess data finns i verksamhets-IT.
+  - target: RA-EXP-04
+    when: Konsumenten behöver följa information som ändras löpande.
+  - target: RA-OT-01
+    when: Informationen finns i OT-zonen. Hämta den till en tjänst i tjänstezonen först, och publicera därifrån.
+  - target: RA-INT-03
+    when: Partnern kan inte anropa ett API utan vill ha filer.
+  - target: RA-EXP-01
+    when: Det är en webbapplikation för människor, inte ett API för system.
+motivatedBy:
+  [TP-EXP-01, TP-ZON-01, TP-ID-02, TP-OT-01, TP-BEH-01, TP-IND-01, TP-KON-01]

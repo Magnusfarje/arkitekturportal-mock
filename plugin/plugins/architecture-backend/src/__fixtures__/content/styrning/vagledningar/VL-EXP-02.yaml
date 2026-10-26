@@ -1,0 +1,27 @@
+id: VL-EXP-02
+kind: guide
+title: Hur publicerar jag en webbapplikation mot internet?
+topic: Exponering
+answer: Webbapplikationen körs i tjänstezonen och publiceras genom exponeringsplattformen, som sköter publikt certifikat, webbskydd och skydd mot överbelastning. Inloggning går genom inloggningstjänsten. Du publicerar bara de sökvägar som är till för användarna.
+before: |-
+  - Vilka ska använda applikationen: allmänhet, externa användare eller medarbetare på distans?
+  - Behövs inloggning, och hur stark?
+  - Vilka delar ska inte synas utåt: administration, dokumentation och driftgränssnitt?
+scope: Webbapplikationer och webbplatser som ska nås från internet.
+steps: |-
+  1. Bestäm målgrupp, domännamn och vilka sökvägar som ska publiceras.
+  2. Driftsätt applikationen i tjänstezonen med internt certifikat.
+  3. Registrera applikationen i inloggningstjänsten med rätt inloggningssätt för målgruppen.
+  4. Beställ publicering hos teamet för nätverk och exponering.
+  5. Håll administration och driftgränssnitt utanför det publicerade, och nå dem från förvaltningszonen.
+  6. Testa utifrån: sökvägar som inte är publicerade, felsvar och åtkomst utan inloggning.
+leadsTo:
+  - target: RA-EXP-01
+    when: En webbapplikation eller webbplats för användare på internet.
+  - target: RA-ID-01
+    when: Välj inloggning för målgruppen.
+  - target: RA-EXP-02
+    when: Applikationen har också ett API som andra system ska anropa.
+  - target: TP-KON-01
+    when: Bestäm vad som exponeras, och kontrollera felsvaren.
+motivatedBy: [TP-EXP-01, TP-ID-01, TP-KRY-01, TP-BEH-01, TP-IND-01, TP-KON-01]

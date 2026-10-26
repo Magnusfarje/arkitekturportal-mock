@@ -1,0 +1,15 @@
+id: TP-EXP-01
+kind: technical-principle
+title: Allt som nås från internet publiceras genom exponeringsplattformen
+binding: binding
+topic: Exponering
+statement: Webbapplikationer och API:er som ska nås från internet eller partnernät publiceras genom exponeringsplattformen. API:er som andra system anropar publiceras dessutom genom den externa API-gatewayen. Filer tas emot och lämnas ut genom filöverföringstjänsten.
+rationale: 'En gemensam väg in ger ett ställe för TLS, webbskydd, skydd mot överbelastning och loggning. Varje lösning slipper bygga och förvalta sitt eget skydd mot internet. Bortvalt: egna internetanslutningar och egna omvända proxyer per lösning.'
+scope: Allt som ska nås från internet eller från partnernät.
+consequences: |-
+  - Lösningen körs i tjänstezonen och har ingen egen adress mot internet.
+  - En webbapplikations eget API publiceras tillsammans med applikationen och behöver inte gå genom gatewayen.
+  - Publika certifikat och domännamn hanteras i exponeringsplattformen, inte i lösningen.
+  - Trafik från internet och partnernät når lösningen bara genom exponeringsplattformen eller gatewayen. Lösningen kontrollerar det med mTLS och nätverkspolicy.
+  - Bara de sökvägar och operationer som uttryckligen publiceras går att nå. Administration, felsökningsgränssnitt och intern dokumentation publiceras inte.
+motivatedBy: [AP-SÄK-03, TP-ZON-01]

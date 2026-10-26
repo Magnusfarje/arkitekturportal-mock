@@ -1,0 +1,56 @@
+id: TP-ÅTK-01
+kind: technical-principle
+title: Administratörer använder godkända vägar och personliga identiteter
+binding: binding
+statement: Administratörer ska nå lösningen genom godkända åtkomstvägar, med en identitet som går att knyta till en person. Åtkomsten ska kunna dras in inom beslutad tid.
+rationale: Administrativ åtkomst ger rätt att ändra system, säkerhetsinställningar och behörigheter. Den behöver därför vara avgränsad, och privilegierade åtgärder behöver gå att kontrollera i efterhand.
+scope: Lösningar med administrativa gränssnitt, även när en leverantör administrerar. Med administrativ åtkomst menas mänsklig åtkomst med rätt att ändra system, säkerhetsinställningar eller behörigheter. Maskinidentiteter redovisas separat och bedöms inte som personkonton.
+consequences: |-
+  - Lösningen har en definierad administrationszon och en godkänd åtkomstfunktion för åtkomst utifrån.
+  - Varje administratör har en personlig identitet. Ett delat konto kräver en mekanism som bevarar kopplingen till person.
+  - Varje administrativ behörighet har en ansvarig och en beslutad tidsgräns för återkallelse.
+  - Leverantörsåtkomst och nödåtkomst följer samma regler.
+howTo: |-
+  Samla all administrativ åtkomst i en matris och verifiera den med särskilda testidentiteter. Matrisen är underlaget för alla tre kraven i TP-ÅTK-01: den visar vägarna, kopplingen till person och vad som ska kunna återkallas.
+
+  Innan du börjar:
+
+  - Vilka kan administrera lösningen: egen personal, leverantörer, lokal administration och nödåtkomst?
+  - Vilka vägar går åtkomsten, och var loggas den?
+
+  Gör så här:
+
+  1. Upprätta en åtkomstmatris med personkategori, källa, mål, protokoll, privilegienivå, åtkomstfunktion och loggkälla.
+  2. Ta med leverantörer, lokal administration och nödåtkomst.
+  3. Verifiera spårbarhet och återkallelse med särskilda testidentiteter.
+  4. Dokumentera förväntat och faktiskt resultat för varje åtkomstväg.
+concretizes: [AP-SÄK-03]
+requirements:
+  - id: TP-ÅTK-01-K01
+    title: Administration utifrån går genom en godkänd åtkomstfunktion
+    statement: Administrativ nätverksåtkomst från utanför lösningens administrationszon ska passera en godkänd åtkomstfunktion. Vägar som kringgår funktionen ska vara blockerade.
+    scope: Lösningen kan administreras över nätverk från utanför administrationszonen. Är åtkomstvägarna eller zongränsen okända ska tillämpligheten utredas.
+    criteria: |-
+      - Dokumentera gränssnitt, zoner och alla kända administrativa flöden i en versionerad flödesmodell.
+      - Låt varje flöde utifrån passera en åtkomstfunktion som är godkänd för användningen.
+      - Se till att routning, brandväggsregler och exponerade gränssnitt inte tillåter någon annan väg.
+      - Visa med test att tillåten åtkomst fungerar och att försök att kringgå åtkomstfunktionen blockeras.
+    notEnough: En regel- eller konfigurationsanalys utan granskning av att flödesmodellen täcker åtkomstvägarna.
+  - id: TP-ÅTK-01-K02
+    title: Varje administrativ åtgärd går att knyta till en person
+    statement: Mänsklig administrativ åtkomst ska gå att knyta till en unik person. Ett delat tekniskt konto får bara användas om en godkänd mekanism kopplar användningen till en unik person och bevarar spårbarheten.
+    scope: All mänsklig administrativ åtkomst, även leverantörers åtkomst och nödåtkomst.
+    criteria: |-
+      - Beskriv identitetsmodell, kontotyper och loggflöde så att kopplingen till person framgår för varje åtkomstväg.
+      - Håll en fullständig förteckning över administratörer och konton.
+      - Visa med kontrollerade inloggningar att en session eller åtgärd entydigt går att knyta till en person.
+    notEnough: Att de förväntade loggfälten finns. Personkopplingens riktighet stäms av mot den källa som ansvarar för identiteterna.
+  - id: TP-ÅTK-01-K03
+    title: Administrativ åtkomst går att dra in inom beslutad tid
+    statement: Varje administrativ behörighet ska ha en utsedd ansvarig och kunna återkallas inom den tidsgräns som har beslutats för lösningskategorin. Återkallelsen ska omfatta konton, token och aktiva sessioner.
+    scope: Lösningen har mänsklig administrativ åtkomst. Nödåtkomst ska ha en uttrycklig hantering.
+    criteria: |-
+      - Utse ansvarig och dokumentera tidsgräns och mekanism för återkallelse för varje åtkomsttyp.
+      - Konfigurera mekanismerna så att de omfattar alla identifierade åtkomsttyper.
+      - Återkalla ett testkontos behörighet och visa att både ny och pågående åtkomst, inklusive token, upphör inom tidsgränsen.
+    notEnough: Att ny inloggning stoppas medan pågående sessioner eller token fortsätter att gälla.

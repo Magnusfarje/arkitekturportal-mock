@@ -1,0 +1,43 @@
+{
+  "name": "@myndigheten/backstage-plugin-architecture-common",
+  "version": "0.2.0",
+  "description": "Artefaktmodellen, miljömodellen och behörigheten som portalens paket delar",
+  "license": "UNLICENSED",
+  "publishConfig": {
+    "access": "restricted",
+    "main": "dist/index.cjs.js",
+    "module": "dist/index.esm.js",
+    "types": "dist/index.d.ts"
+  },
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "backstage": {
+    "role": "common-library",
+    "pluginId": "architecture",
+    "pluginPackages": [
+      "@myndigheten/backstage-plugin-architecture",
+      "@myndigheten/backstage-plugin-architecture-backend",
+      "@myndigheten/backstage-plugin-architecture-common"
+    ]
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "backstage-cli package build",
+    "test": "backstage-cli package test",
+    "lint": "backstage-cli package lint",
+    "prepack": "backstage-cli package prepack",
+    "postpack": "backstage-cli package postpack"
+  },
+  "dependencies": {
+    "@backstage/plugin-permission-common": "^0.9.11",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@backstage/cli": "^0.36.6",
+    "jest": "~30.2.0"
+  },
+  "files": [
+    "dist"
+  ]
+}

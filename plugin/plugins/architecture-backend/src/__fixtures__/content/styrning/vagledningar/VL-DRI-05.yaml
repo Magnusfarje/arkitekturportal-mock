@@ -1,0 +1,32 @@
+id: VL-DRI-05
+kind: guide
+title: Hur klarar min tjänst en lasttopp?
+topic: Drift och plattform
+answer: Låt exponeringsplattformen svara med mellanlagrade svar där det går, låt containerplattformen skala tjänsten och lägg det som inte måste göras direkt på en kö. Beställ den förhöjda kvoten i förväg, och pröva med ett lasttest att det håller.
+before: |-
+  - Hur stor är toppen, och hur fort kommer den?
+  - Vilka svar är lika för alla och går att mellanlagra, och vilka är personliga?
+  - Vad måste göras direkt, och vad kan vänta några minuter?
+  - Vad är viktigast att hålla uppe när allt inte går?
+scope: Tjänster vars last kan mångdubblas på minuter, till exempel information vid en trafikstörning.
+steps: |-
+  1. Märk de svar som är lika för alla med hur länge de gäller, så att exponeringsplattformen kan lämna ut dem utan att anropa tjänsten.
+  2. Kör minst två repliker, och se till att en ny replik startar på några sekunder och tar emot trafik först när den är redo.
+  3. Beställ en förhöjd kvot hos Drift och leverans, dimensionerad för toppen.
+  4. Lägg utskick, sammanställningar och annat som kan vänta på meddelandeplattformen, enligt RA-INT-02, och behandla det i den takt tjänsten klarar.
+  5. Skydda databasen: begränsa antalet anslutningar per replik, och läs det som ofta efterfrågas ur minnet.
+  6. Bestäm vad tjänsten gör när den inte hinner: ett enklare svar, eller ett tydligt besked om att försöka igen. Ett långsamt svar till alla är sämre än ett snabbt till de flesta.
+  7. Boka ett lasttest i testmiljön, och pröva både toppen och vad som händer efter den.
+  8. Lägg larm på svarstid och fel i driftvyerna, enligt VL-DRI-01.
+motivatedBy: [AP-SÄK-04, TP-DRI-17]
+uses:
+  - target: component:it-miljo/exponeringsplattform
+    role: mellanlagrar svar och skyddar mot överbelastning
+  - target: component:it-miljo/containerplattform
+    role: skalar tjänsten inom kvoten
+  - target: component:it-miljo/meddelandeplattform
+    role: kö för det som kan vänta
+  - target: component:it-miljo/databasplattform
+    role: lagring
+  - target: component:it-miljo/driftvyer
+    role: visar lasten och larmar

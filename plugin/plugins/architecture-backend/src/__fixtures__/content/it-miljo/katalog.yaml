@@ -1,0 +1,4098 @@
+# IT-miljön som Backstage-entiteter, alla i namespace it-miljo. Ändra här; se README.md.
+# Every entity stands in the namespace it-miljo. A system of your own names its segment and what it builds on; see README.md.
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: anlaggningsavdelningen
+  namespace: it-miljo
+  title: "Anläggningsavdelningen"
+  description: "Avdelning med 1 förvaltande team."
+  annotations:
+spec:
+  type: department
+  children:
+    - team-forvaltning-anlaggning-och-underhall
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: avdelningen-for-verksamhetsstod
+  namespace: it-miljo
+  title: "Avdelningen för verksamhetsstöd"
+  description: "Avdelning med 2 förvaltande team."
+  annotations:
+spec:
+  type: department
+  children:
+    - team-forvaltning-arenden-och-dokument
+    - team-forvaltning-ekonomi-och-personal
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: it-avdelningen
+  namespace: it-miljo
+  title: "IT-avdelningen"
+  description: "Avdelning med 12 förvaltande team."
+  annotations:
+spec:
+  type: department
+  children:
+    - team-identitet-och-atkomst
+    - team-sakerhetstjanster
+    - team-sakerhetsovervakning
+    - team-natverk-och-exponering
+    - team-integration
+    - team-drift-och-leverans
+    - team-datahall-och-infrastruktur
+    - team-arbetsplats-och-samarbete
+    - team-servicedesk
+    - team-geodata
+    - team-utvecklarstod
+    - team-data-och-ai
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: trafikavdelningen
+  namespace: it-miljo
+  title: "Trafikavdelningen"
+  description: "Avdelning med 4 förvaltande team."
+  annotations:
+spec:
+  type: department
+  children:
+    - team-ot-infrastruktur
+    - team-forvaltning-trafikledning
+    - team-forvaltning-trafikinformation
+    - team-forvaltning-planering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-identitet-och-atkomst
+  namespace: it-miljo
+  title: "Identitet och åtkomst"
+  description: "Inloggning, katalog, konton, roller och nätåtkomstkontroll. Beställning: Kategori Identitet. Klient eller roll: 3 arbetsdagar. Ny partner: 10 arbetsdagar."
+  annotations:
+spec:
+  type: team
+  parent: it-avdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-sakerhetstjanster
+  namespace: it-miljo
+  title: "Säkerhetstjänster"
+  description: "Privilegierad åtkomst, hemligheter, certifikat, logg och skydd mot skadlig kod. Beställning: Kategori Säkerhetstjänster. Administrativ behörighet: 3 arbetsdagar."
+  annotations:
+spec:
+  type: team
+  parent: it-avdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-sakerhetsovervakning
+  namespace: it-miljo
+  title: "Säkerhetsövervakning"
+  description: "Bevakar loggar och larm dygnet runt. Intrångsdetektering och sårbarhetsskanning. Beställning: Kategori Säkerhetsövervakning. Ny loggkälla i bevakningen: 10 arbetsdagar."
+  annotations:
+spec:
+  type: team
+  parent: it-avdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-natverk-och-exponering
+  namespace: it-miljo
+  title: "Nätverk och exponering"
+  description: "Nät, brandväggar, zoner, publicering mot internet, utgående proxy, namn och tid. Beställning: Kategori Nät. Publicering eller destination i proxyn: 5 arbetsdagar. Ny brandväggsöppning: 5 arbetsdagar."
+  annotations:
+spec:
+  type: team
+  parent: it-avdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-integration
+  namespace: it-miljo
+  title: "Integration"
+  description: "API-gateways, meddelandeplattform, filöverföring, säker digital kommunikation och digital post. Beställning: Kategori Integration. Publicering av API, ämne eller filflöde: 5 arbetsdagar."
+  annotations:
+spec:
+  type: team
+  parent: it-avdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-drift-och-leverans
+  namespace: it-miljo
+  title: "Drift och leverans"
+  description: "Containerplattform, leveransplattform, databaser, objektlagring, övervakning, observabilitet och uppdateringar. Beställning: Kategori Plattform. Namespace, databas eller repo: 2 arbetsdagar."
+  annotations:
+spec:
+  type: team
+  parent: it-avdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-datahall-och-infrastruktur
+  namespace: it-miljo
+  title: "Datahall och infrastruktur"
+  description: "Datahallar, virtualisering, lagring och säkerhetskopiering. Beställning: Kategori Infrastruktur. Virtuell server: 5 arbetsdagar. Återläsning: samma dag."
+  annotations:
+spec:
+  type: team
+  parent: it-avdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-arbetsplats-och-samarbete
+  namespace: it-miljo
+  title: "Arbetsplats och samarbete"
+  description: "Arbetsplatser, e-post, möten, telefoni, utskrift och kontorens utrustning. Beställning: Kategori Arbetsplats."
+  annotations:
+spec:
+  type: team
+  parent: it-avdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-servicedesk
+  namespace: it-miljo
+  title: "Servicedesk"
+  description: "Första linjen, IT-ärendehanteringen och konfigurationsdatabasen. Beställning: Telefon eller ärende, dygnet runt för driftstörningar."
+  annotations:
+spec:
+  type: team
+  parent: it-avdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-geodata
+  namespace: it-miljo
+  title: "Geodata"
+  description: "Kartor och geodata som tjänst. Beställning: Kategori Geodata."
+  annotations:
+spec:
+  type: team
+  parent: it-avdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-utvecklarstod
+  namespace: it-miljo
+  title: "Utvecklarstöd"
+  description: "Komponentbibliotek, mallar för nya lösningar och container-images att bygga på. Beställning: Kategori Utvecklarstöd."
+  annotations:
+spec:
+  type: team
+  parent: it-avdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-data-och-ai
+  namespace: it-miljo
+  title: "Data och AI"
+  description: "Analysplattformen, rapportverktyget och språkmodelltjänsten. Beställning: Kategori Data och AI. Dataprodukt eller kvot för språkmodeller: 5 arbetsdagar."
+  annotations:
+spec:
+  type: team
+  parent: it-avdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-ot-infrastruktur
+  namespace: it-miljo
+  title: "OT-infrastruktur"
+  description: "OT-nät, OT-DMZ och OT:s egna säkerhetstjänster. Beställning: Kategori OT. Utbyte genom OT-reläet: 20 arbetsdagar, efter riskbedömning."
+  annotations:
+spec:
+  type: team
+  parent: trafikavdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-forvaltning-trafikledning
+  namespace: it-miljo
+  title: "Förvaltning trafikledning"
+  description: "Trafikledningssystemet, anläggningsövervakningen och tågläget. Beställning: Kategori Trafikledning."
+  annotations:
+spec:
+  type: team
+  parent: trafikavdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-forvaltning-trafikinformation
+  namespace: it-miljo
+  title: "Förvaltning trafikinformation"
+  description: "Planerad annonsering, trafikinformationen och det öppna trafik-API:et. Beställning: Kategori Trafikinformation."
+  annotations:
+spec:
+  type: team
+  parent: trafikavdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-forvaltning-planering
+  namespace: it-miljo
+  title: "Förvaltning planering"
+  description: "Tågplanen. Beställning: Kategori Planering."
+  annotations:
+spec:
+  type: team
+  parent: trafikavdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-forvaltning-anlaggning-och-underhall
+  namespace: it-miljo
+  title: "Förvaltning anläggning och underhåll"
+  description: "Anläggningsregistret, underhållssystemet, felanmälan och ritningsarkivet. Beställning: Kategori Anläggning."
+  annotations:
+spec:
+  type: team
+  parent: anlaggningsavdelningen
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-forvaltning-arenden-och-dokument
+  namespace: it-miljo
+  title: "Förvaltning ärenden och dokument"
+  description: "Diarium, e-arkiv, e-tjänster, webbplatsen och tillståndsärenden. Beställning: Kategori Ärenden och dokument."
+  annotations:
+spec:
+  type: team
+  parent: avdelningen-for-verksamhetsstod
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-forvaltning-ekonomi-och-personal
+  namespace: it-miljo
+  title: "Förvaltning ekonomi och personal"
+  description: "Ekonomi, personal, inköp och lärplattformen. Beställning: Kategori Ekonomi och personal."
+  annotations:
+spec:
+  type: team
+  parent: avdelningen-for-verksamhetsstod
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: trafikledning
+  namespace: it-miljo
+  title: "Trafikledning"
+  description: "Leda trafiken och styra anläggningen från driftcentralerna. Här finns OT-systemen."
+  tags: [referensmiljo, verksamhetsomrade]
+  annotations:
+spec:
+  owner: trafikavdelningen
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: trafikinformation
+  namespace: it-miljo
+  title: "Trafikinformation"
+  description: "Information om trafikläget till resenärer, transportörer och andra system."
+  tags: [referensmiljo, verksamhetsomrade]
+  annotations:
+spec:
+  owner: trafikavdelningen
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: planering
+  namespace: it-miljo
+  title: "Planering"
+  description: "Planera kapacitet och trafik på anläggningen."
+  tags: [referensmiljo, verksamhetsomrade]
+  annotations:
+spec:
+  owner: trafikavdelningen
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: anlaggning-och-underhall
+  namespace: it-miljo
+  title: "Anläggning och underhåll"
+  description: "Veta vad anläggningen består av, ta emot fel och styra underhållet."
+  tags: [referensmiljo, verksamhetsomrade]
+  annotations:
+spec:
+  owner: anlaggningsavdelningen
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: tillstand-och-arenden
+  namespace: it-miljo
+  title: "Tillstånd och ärenden"
+  description: "Handlägga ärenden, diarieföra, arkivera och möta allmänheten digitalt."
+  tags: [referensmiljo, verksamhetsomrade]
+  annotations:
+spec:
+  owner: avdelningen-for-verksamhetsstod
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: verksamhetsstod
+  namespace: it-miljo
+  title: "Verksamhetsstöd"
+  description: "Ekonomi, personal, inköp och utbildning."
+  tags: [referensmiljo, verksamhetsomrade]
+  annotations:
+spec:
+  owner: avdelningen-for-verksamhetsstod
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: gemensam-it
+  namespace: it-miljo
+  title: "Gemensam IT"
+  description: "Plattformar, infrastruktur, arbetsplats och samarbete som alla verksamhetsområden använder."
+  tags: [referensmiljo, verksamhetsomrade]
+  annotations:
+spec:
+  owner: it-avdelningen
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: plattform-identitet-och-atkomst
+  namespace: it-miljo
+  title: "Plattform: Identitet och åtkomst"
+  description: "Gemensamma plattformstjänster som förvaltas av Identitet och åtkomst."
+  annotations:
+spec:
+  owner: team-identitet-och-atkomst
+  domain: gemensam-it
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: plattform-sakerhetstjanster
+  namespace: it-miljo
+  title: "Plattform: Säkerhetstjänster"
+  description: "Gemensamma plattformstjänster som förvaltas av Säkerhetstjänster."
+  annotations:
+spec:
+  owner: team-sakerhetstjanster
+  domain: gemensam-it
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: plattform-sakerhetsovervakning
+  namespace: it-miljo
+  title: "Plattform: Säkerhetsövervakning"
+  description: "Gemensamma plattformstjänster som förvaltas av Säkerhetsövervakning."
+  annotations:
+spec:
+  owner: team-sakerhetsovervakning
+  domain: gemensam-it
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: plattform-natverk-och-exponering
+  namespace: it-miljo
+  title: "Plattform: Nätverk och exponering"
+  description: "Gemensamma plattformstjänster som förvaltas av Nätverk och exponering."
+  annotations:
+spec:
+  owner: team-natverk-och-exponering
+  domain: gemensam-it
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: plattform-integration
+  namespace: it-miljo
+  title: "Plattform: Integration"
+  description: "Gemensamma plattformstjänster som förvaltas av Integration."
+  annotations:
+spec:
+  owner: team-integration
+  domain: gemensam-it
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: plattform-drift-och-leverans
+  namespace: it-miljo
+  title: "Plattform: Drift och leverans"
+  description: "Gemensamma plattformstjänster som förvaltas av Drift och leverans."
+  annotations:
+spec:
+  owner: team-drift-och-leverans
+  domain: gemensam-it
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: plattform-datahall-och-infrastruktur
+  namespace: it-miljo
+  title: "Plattform: Datahall och infrastruktur"
+  description: "Gemensamma plattformstjänster som förvaltas av Datahall och infrastruktur."
+  annotations:
+spec:
+  owner: team-datahall-och-infrastruktur
+  domain: gemensam-it
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: plattform-arbetsplats-och-samarbete
+  namespace: it-miljo
+  title: "Plattform: Arbetsplats och samarbete"
+  description: "Gemensamma plattformstjänster som förvaltas av Arbetsplats och samarbete."
+  annotations:
+spec:
+  owner: team-arbetsplats-och-samarbete
+  domain: gemensam-it
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: plattform-geodata
+  namespace: it-miljo
+  title: "Plattform: Geodata"
+  description: "Gemensamma plattformstjänster som förvaltas av Geodata."
+  annotations:
+spec:
+  owner: team-geodata
+  domain: gemensam-it
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: plattform-utvecklarstod
+  namespace: it-miljo
+  title: "Plattform: Utvecklarstöd"
+  description: "Gemensamma plattformstjänster som förvaltas av Utvecklarstöd."
+  annotations:
+spec:
+  owner: team-utvecklarstod
+  domain: gemensam-it
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: plattform-data-och-ai
+  namespace: it-miljo
+  title: "Plattform: Data och AI"
+  description: "Gemensamma plattformstjänster som förvaltas av Data och AI."
+  annotations:
+spec:
+  owner: team-data-och-ai
+  domain: gemensam-it
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: plattform-ot-infrastruktur
+  namespace: it-miljo
+  title: "Plattform: OT-infrastruktur"
+  description: "Gemensamma plattformstjänster som förvaltas av OT-infrastruktur."
+  annotations:
+spec:
+  owner: team-ot-infrastruktur
+  domain: trafikledning
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: tjanster-arbetsplats-och-samarbete
+  namespace: it-miljo
+  title: "Tjänster: Arbetsplats och samarbete"
+  description: "Gemensamma tjänster som förvaltas av Arbetsplats och samarbete."
+  annotations:
+spec:
+  owner: team-arbetsplats-och-samarbete
+  domain: gemensam-it
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: tjanster-servicedesk
+  namespace: it-miljo
+  title: "Tjänster: Servicedesk"
+  description: "Gemensamma tjänster som förvaltas av Servicedesk."
+  annotations:
+spec:
+  owner: team-servicedesk
+  domain: gemensam-it
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: tjanster-forvaltning-arenden-och-dokument
+  namespace: it-miljo
+  title: "Tjänster: Förvaltning ärenden och dokument"
+  description: "Gemensamma tjänster som förvaltas av Förvaltning ärenden och dokument."
+  annotations:
+spec:
+  owner: team-forvaltning-arenden-och-dokument
+  domain: tillstand-och-arenden
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: tjanster-forvaltning-ekonomi-och-personal
+  namespace: it-miljo
+  title: "Tjänster: Förvaltning ekonomi och personal"
+  description: "Gemensamma tjänster som förvaltas av Förvaltning ekonomi och personal."
+  annotations:
+spec:
+  owner: team-forvaltning-ekonomi-och-personal
+  domain: verksamhetsstod
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: trafikledningssystem
+  namespace: it-miljo
+  title: "Trafikledningssystem"
+  description: "Styr och övervakar trafiken från driftcentralerna."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+spec:
+  owner: team-forvaltning-trafikledning
+  domain: trafikledning
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: anlaggningsovervakning
+  namespace: it-miljo
+  title: "Anläggningsövervakning"
+  description: "Övervakar och styr kraftförsörjning, detektorer och teknikhus längs anläggningen."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+spec:
+  owner: team-forvaltning-trafikledning
+  domain: trafikledning
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: anlaggningsregister
+  namespace: it-miljo
+  title: "Anläggningsregister"
+  description: "Register över anläggningens delar, deras läge och skick."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+spec:
+  owner: team-forvaltning-anlaggning-och-underhall
+  domain: anlaggning-och-underhall
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: underhallssystem
+  namespace: it-miljo
+  title: "Underhåll och arbetsorder"
+  description: "Planerar underhåll och utbyter arbetsorder med entreprenörerna. Anskaffad produkt."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+spec:
+  owner: team-forvaltning-anlaggning-och-underhall
+  domain: anlaggning-och-underhall
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: felanmalan
+  namespace: it-miljo
+  title: "Felanmälan"
+  description: "Tar emot anmälningar om fel på anläggningen från allmänhet, entreprenörer och driftcentraler."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+spec:
+  owner: team-forvaltning-anlaggning-och-underhall
+  domain: anlaggning-och-underhall
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: tillstandsarenden
+  namespace: it-miljo
+  title: "Tillstånd och dispenser"
+  description: "Handlägger ansökningar om tillstånd och dispenser, från ansökan till beslut."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+spec:
+  owner: team-forvaltning-arenden-och-dokument
+  domain: tillstand-och-arenden
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: ritningsarkiv
+  namespace: it-miljo
+  title: "Ritningsarkiv"
+  description: "Äldre arkiv över ritningar. Produkten får inga säkerhetsuppdateringar och står därför i isoleringszonen."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+spec:
+  owner: team-forvaltning-anlaggning-och-underhall
+  domain: anlaggning-och-underhall
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dh1
+  namespace: it-miljo
+  title: "Datahall 1"
+  description: "Produktion. Egen byggnad med två kraftmatningar, reservkraft och två skilda fibervägar."
+  tags: [referensmiljo, plats]
+  annotations:
+    architecture.portal/site-type: "datahall"
+    architecture.portal/order: "1"
+spec:
+  type: site
+  owner: group:it-miljo/team-datahall-och-infrastruktur
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dh2
+  namespace: it-miljo
+  title: "Datahall 2"
+  description: "Produktion, och miljöerna för test, utveckling och utbildning. Ligger på en annan ort än datahall 1, nära nog för synkron replikering."
+  tags: [referensmiljo, plats]
+  annotations:
+    architecture.portal/site-type: "datahall"
+    architecture.portal/order: "2"
+spec:
+  type: site
+  owner: group:it-miljo/team-datahall-och-infrastruktur
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: hk
+  namespace: it-miljo
+  title: "Huvudkontor"
+  description: "Arbetsplatser, mötesrum och utbildningssal."
+  tags: [referensmiljo, plats]
+  annotations:
+    architecture.portal/site-type: "kontor"
+    architecture.portal/order: "3"
+spec:
+  type: site
+  owner: group:it-miljo/team-arbetsplats-och-samarbete
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dc-nord
+  namespace: it-miljo
+  title: "Driftcentral nord"
+  description: "Trafikledning. Operatörsplatser i OT-nätet och vanliga arbetsplatser i klientzonen, i skilda nät."
+  tags: [referensmiljo, plats]
+  annotations:
+    architecture.portal/site-type: "driftcentral"
+    architecture.portal/order: "4"
+spec:
+  type: site
+  owner: group:it-miljo/team-ot-infrastruktur
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dc-syd
+  namespace: it-miljo
+  title: "Driftcentral syd"
+  description: "Som driftcentral nord. Driftcentralerna kan ta över varandras områden."
+  tags: [referensmiljo, plats]
+  annotations:
+    architecture.portal/site-type: "driftcentral"
+    architecture.portal/order: "5"
+spec:
+  type: site
+  owner: group:it-miljo/team-ot-infrastruktur
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: rk-nord
+  namespace: it-miljo
+  title: "Regionkontor nord"
+  description: "Arbetsplatser och mötesrum."
+  tags: [referensmiljo, plats]
+  annotations:
+    architecture.portal/site-type: "kontor"
+    architecture.portal/order: "6"
+spec:
+  type: site
+  owner: group:it-miljo/team-arbetsplats-och-samarbete
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: rk-mitt
+  namespace: it-miljo
+  title: "Regionkontor mitt"
+  description: "Arbetsplatser och mötesrum."
+  tags: [referensmiljo, plats]
+  annotations:
+    architecture.portal/site-type: "kontor"
+    architecture.portal/order: "7"
+spec:
+  type: site
+  owner: group:it-miljo/team-arbetsplats-och-samarbete
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: rk-ost
+  namespace: it-miljo
+  title: "Regionkontor öst"
+  description: "Arbetsplatser och mötesrum."
+  tags: [referensmiljo, plats]
+  annotations:
+    architecture.portal/site-type: "kontor"
+    architecture.portal/order: "8"
+spec:
+  type: site
+  owner: group:it-miljo/team-arbetsplats-och-samarbete
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: rk-vast
+  namespace: it-miljo
+  title: "Regionkontor väst"
+  description: "Arbetsplatser och mötesrum."
+  tags: [referensmiljo, plats]
+  annotations:
+    architecture.portal/site-type: "kontor"
+    architecture.portal/order: "9"
+spec:
+  type: site
+  owner: group:it-miljo/team-arbetsplats-och-samarbete
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: rk-syd
+  namespace: it-miljo
+  title: "Regionkontor syd"
+  description: "Arbetsplatser och mötesrum."
+  tags: [referensmiljo, plats]
+  annotations:
+    architecture.portal/site-type: "kontor"
+    architecture.portal/order: "10"
+spec:
+  type: site
+  owner: group:it-miljo/team-arbetsplats-och-samarbete
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: forvar
+  namespace: it-miljo
+  title: "Förvaringsplats"
+  description: "Frånkopplade säkerhetskopior, i en lokal skild från båda datahallarna. Platsen har inget nät."
+  tags: [referensmiljo, plats]
+  annotations:
+    architecture.portal/site-type: "förvaring"
+    architecture.portal/order: "11"
+spec:
+  type: site
+  owner: group:it-miljo/team-datahall-och-infrastruktur
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: falt
+  namespace: it-miljo
+  title: "Anläggningar i fält"
+  description: "Teknikhus och utrustning längs anläggningen, anslutna till OT-nätet. Beskrivs som en klass, inte per anläggning."
+  tags: [referensmiljo, plats]
+  annotations:
+    architecture.portal/site-type: "fält"
+    architecture.portal/order: "12"
+spec:
+  type: site
+  owner: group:it-miljo/team-ot-infrastruktur
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: internet
+  namespace: it-miljo
+  title: "Internet"
+  description: "Allmänhet och externa konsumenter. Ett nät vi inte litar på."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "Extern"
+    architecture.portal/accepts-from: "dmz, gast"
+    architecture.portal/order: "1"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-natverk-och-exponering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: partner
+  namespace: it-miljo
+  title: "Partnernät"
+  description: "Anslutna organisationers nät, genom fast förbindelse eller VPN, och det myndighetsgemensamma nätet. Känd motpart, men ett nät vi inte litar på."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "Extern"
+    architecture.portal/accepts-from: "dmz"
+    architecture.portal/order: "2"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-natverk-och-exponering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: gast
+  namespace: it-miljo
+  title: "Gästnät"
+  description: "Besökares utrustning och medarbetares privata utrustning på kontoren. Når bara internet, och behandlas som ett nät vi inte litar på."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "Extern"
+    architecture.portal/order: "3"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-natverk-och-exponering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dmz
+  namespace: it-miljo
+  title: "Exponeringszon"
+  description: "Exponeringsplattform, extern API-gateway, filöverföringstjänstens yttre nod, fjärråtkomst, utgående proxy, e-postgateway och extern namntjänst. Verksamhetsdata lagras inte här."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "Exponering"
+    architecture.portal/accepts-from: "internet, partner, klient, tjanst, plattform, leverans, forvaltning"
+    architecture.portal/order: "4"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-natverk-och-exponering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: klient
+  namespace: it-miljo
+  title: "Klientzon"
+  description: "Hanterade arbetsplatser för medarbetare, konsulter och leverantörer."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "Verksamhets-IT"
+    architecture.portal/accepts-from: "dmz, forvaltning"
+    architecture.portal/order: "5"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-natverk-och-exponering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: kontorsteknik
+  namespace: it-miljo
+  title: "Kontorsteknikzon"
+  description: "Skrivare, skannrar och mötesrumsutrustning. Utrustning som inte går att hantera som en arbetsplats."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "Verksamhets-IT"
+    architecture.portal/accepts-from: "tjanst, forvaltning"
+    architecture.portal/order: "6"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-natverk-och-exponering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: tjanst
+  namespace: it-miljo
+  title: "Tjänstezon"
+  description: "Applikationer och API:er, på containerplattformen eller virtuella servrar."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "Verksamhets-IT"
+    architecture.portal/accepts-from: "dmz, klient, kontorsteknik, plattform, leverans, forvaltning, sakerhetskopiering"
+    architecture.portal/order: "7"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-natverk-och-exponering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: data
+  namespace: it-miljo
+  title: "Datazon"
+  description: "Databaser, objektlagring och fillagring."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "Verksamhets-IT"
+    architecture.portal/accepts-from: "tjanst, plattform, forvaltning, sakerhetskopiering"
+    architecture.portal/order: "8"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-natverk-och-exponering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: isolerad
+  namespace: it-miljo
+  title: "Isoleringszon"
+  description: "System med kända sårbarheter som inte kan åtgärdas, och fastighetssystem. Ett segment per system."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "Verksamhets-IT"
+    architecture.portal/accepts-from: "tjanst, forvaltning, sakerhetskopiering"
+    architecture.portal/order: "9"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-natverk-och-exponering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: plattform
+  namespace: it-miljo
+  title: "Plattformszon"
+  description: "Gemensamma tjänster för inloggning, katalog, certifikat, hemligheter, meddelanden, logg, namn, tid och uppdateringar."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "Gemensam infrastruktur"
+    architecture.portal/accepts-from: "dmz, klient, kontorsteknik, tjanst, data, isolerad, leverans, forvaltning, sakerhetskopiering, ot-dmz"
+    architecture.portal/order: "10"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-natverk-och-exponering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: leverans
+  namespace: it-miljo
+  title: "Leveranszon"
+  description: "Repon, pipelines och artefaktregister."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "Gemensam infrastruktur"
+    architecture.portal/accepts-from: "klient, tjanst, forvaltning, sakerhetskopiering"
+    architecture.portal/order: "11"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-natverk-och-exponering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: forvaltning
+  namespace: it-miljo
+  title: "Förvaltningszon"
+  description: "Privilegierad åtkomst, administrationsarbetsplatser, övervakning och utrustningens hanteringsgränssnitt. Enda vägen för administration."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "Gemensam infrastruktur"
+    architecture.portal/accepts-from: "klient"
+    architecture.portal/order: "12"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-natverk-och-exponering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: sakerhetskopiering
+  namespace: it-miljo
+  title: "Säkerhetskopieringszon"
+  description: "Säkerhetskopieringstjänsten och dess lager. Zonen hämtar själv kopiorna. Inget i produktionen kan öppna en anslutning hit."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "Gemensam infrastruktur"
+    architecture.portal/accepts-from: "forvaltning"
+    architecture.portal/order: "13"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-natverk-och-exponering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ot-dmz
+  namespace: it-miljo
+  title: "OT-DMZ"
+  description: "Relä och hoppserver mellan IT och OT. Ingen anslutning går rakt igenom."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "OT"
+    architecture.portal/accepts-from: "tjanst, forvaltning, ot"
+    architecture.portal/order: "14"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-ot-infrastruktur
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ot
+  namespace: it-miljo
+  title: "OT-zon"
+  description: "Trafikstyrning och järnvägsautomation, med egna delade säkerhetstjänster."
+  tags: [referensmiljo, zon]
+  annotations:
+    architecture.portal/domain: "OT"
+    architecture.portal/accepts-from: "ot-dmz"
+    architecture.portal/order: "15"
+spec:
+  type: network-zone
+  owner: group:it-miljo/team-ot-infrastruktur
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dmz-webb
+  namespace: it-miljo
+  title: "Publicering"
+  description: "Exponeringsplattformen."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "dmz"
+    architecture.portal/stages: "prod, test"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "1"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/dmz
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dmz-api
+  namespace: it-miljo
+  title: "API och meddelanden"
+  description: "Extern API-gateway och accesspunkten för säker digital kommunikation."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "dmz"
+    architecture.portal/stages: "prod, test"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "2"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/dmz
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dmz-fil
+  namespace: it-miljo
+  title: "Filöverföring"
+  description: "Filöverföringstjänstens yttre nod."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "dmz"
+    architecture.portal/stages: "prod, test"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "3"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/dmz
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dmz-atkomst
+  namespace: it-miljo
+  title: "Fjärråtkomst"
+  description: "Fjärråtkomst för medarbetare och leverantörer."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "dmz"
+    architecture.portal/stages: "prod"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "4"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/dmz
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dmz-ut
+  namespace: it-miljo
+  title: "Utgående trafik"
+  description: "Utgående proxy. Används av alla miljöer."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "dmz"
+    architecture.portal/stages: "prod"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "5"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/dmz
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dmz-epost
+  namespace: it-miljo
+  title: "E-post"
+  description: "E-postgatewayen."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "dmz"
+    architecture.portal/stages: "prod"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "6"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/dmz
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dmz-namn
+  namespace: it-miljo
+  title: "Namn och tid"
+  description: "Extern namntjänst, och noderna som hämtar namn och tid från internet åt plattformszonen."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "dmz"
+    architecture.portal/stages: "prod"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "7"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/dmz
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dmz-partner
+  namespace: it-miljo
+  title: "Partneranslutning"
+  description: "Här avslutas förbindelserna från partner och från det myndighetsgemensamma nätet."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "dmz"
+    architecture.portal/stages: "prod"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "8"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/dmz
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dmz-mote
+  namespace: it-miljo
+  title: "Möten"
+  description: "Mötestjänstens yttre nod, för deltagare utanför myndigheten."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "dmz"
+    architecture.portal/stages: "prod"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "9"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/dmz
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: klient-kontor
+  namespace: it-miljo
+  title: "Trådbundna arbetsplatser"
+  description: "Hanterade arbetsplatser i nätuttag, efter kontroll av arbetsplatsens certifikat."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "klient"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "hk, rk-nord, rk-mitt, rk-ost, rk-vast, rk-syd, dc-nord, dc-syd"
+    architecture.portal/order: "10"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/klient
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: klient-tradlost
+  namespace: it-miljo
+  title: "Trådlösa arbetsplatser"
+  description: "Hanterade arbetsplatser på trådlöst nät, efter samma kontroll."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "klient"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "hk, rk-nord, rk-mitt, rk-ost, rk-vast, rk-syd, dc-nord, dc-syd"
+    architecture.portal/order: "11"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/klient
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: klient-virtuell
+  namespace: it-miljo
+  title: "Virtuella arbetsplatser"
+  description: "Arbetsplatser som nås genom fjärråtkomst: leverantörers tekniker och medarbetare utan myndighetens dator."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "klient"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "12"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/klient
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: klient-utbildning
+  namespace: it-miljo
+  title: "Utbildningssal"
+  description: "Utbildningssalens arbetsplatser. Når bara utbildningsmiljön."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "klient"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "hk"
+    architecture.portal/order: "13"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/klient
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: klient-operativ
+  namespace: it-miljo
+  title: "Operativa arbetsplatser"
+  description: "Arbetsplatser för trafikinformatörer och för trafikledningens IT-stöd. Skilda från driftcentralens övriga arbetsplatser."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "klient"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dc-nord, dc-syd"
+    architecture.portal/order: "14"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/klient
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: kt-utskrift
+  namespace: it-miljo
+  title: "Skrivare och skannrar"
+  description: "Skrivare och skannrar. Nås bara från utskriftstjänsten."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "kontorsteknik"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "hk, rk-nord, rk-mitt, rk-ost, rk-vast, rk-syd, dc-nord, dc-syd"
+    architecture.portal/order: "15"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/kontorsteknik
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: kt-motesrum
+  namespace: it-miljo
+  title: "Mötesrum"
+  description: "Skärmar, kameror och bokningstavlor. Nås bara från mötestjänsten."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "kontorsteknik"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "hk, rk-nord, rk-mitt, rk-ost, rk-vast, rk-syd, dc-nord, dc-syd"
+    architecture.portal/order: "16"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/kontorsteknik
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: tjanst-lb
+  namespace: it-miljo
+  title: "Ingång"
+  description: "Lastbalanseringen, som är miljöns ingång för användare och för exponeringszonen."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "tjanst"
+    architecture.portal/stages: "prod, test, utv, utb"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "17"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/tjanst
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: tjanst-vm
+  namespace: it-miljo
+  title: "Virtuella servrar"
+  description: "Lösningar som inte körs i container, till exempel anskaffade produkter."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "tjanst"
+    architecture.portal/stages: "prod, test, utv, utb"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "18"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/tjanst
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: tjanst-integration
+  namespace: it-miljo
+  title: "Integration"
+  description: "Intern API-gateway, filöverföringstjänstens inkorgar och avsändartjänsten för digital post."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "tjanst"
+    architecture.portal/stages: "prod, test, utv"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "19"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/tjanst
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: tjanst-samarbete
+  namespace: it-miljo
+  title: "Samarbete"
+  description: "E-post, möten, telefoni, utskrift och samarbetsytor."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "tjanst"
+    architecture.portal/stages: "prod, test"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "20"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/tjanst
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: tjanst-container
+  namespace: it-miljo
+  title: "Containerplattform"
+  description: "Containerplattformens noder."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "tjanst"
+    architecture.portal/stages: "prod, test, utv, utb"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "21"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/tjanst
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: tjanst-operativ
+  namespace: it-miljo
+  title: "Operativa system"
+  description: "De operativa systemens egna kluster. Det enda segment som når OT-reläet."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "tjanst"
+    architecture.portal/stages: "prod, test"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "22"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/tjanst
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: tjanst-analys
+  namespace: it-miljo
+  title: "Analys"
+  description: "Analysplattformens frågemotor och rapportverktyget."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "tjanst"
+    architecture.portal/stages: "prod"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "23"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/tjanst
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: data-databas
+  namespace: it-miljo
+  title: "Databaser"
+  description: "Databasplattformens instanser."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "data"
+    architecture.portal/stages: "prod, test, utv, utb"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "24"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/data
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: data-objekt
+  namespace: it-miljo
+  title: "Objektlagring"
+  description: "Objektlagringen."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "data"
+    architecture.portal/stages: "prod, test, utv"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "25"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/data
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: data-fil
+  namespace: it-miljo
+  title: "Fillagring"
+  description: "Filytor för produkter som kräver det."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "data"
+    architecture.portal/stages: "prod, test"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "26"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/data
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: data-operativ
+  namespace: it-miljo
+  title: "Operativa systems data"
+  description: "Databaser och objektlagring för de operativa systemen."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "data"
+    architecture.portal/stages: "prod, test"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "27"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/data
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: data-analys
+  namespace: it-miljo
+  title: "Analyslager"
+  description: "Kopior av verksamhetssystemens data, för analys."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "data"
+    architecture.portal/stages: "prod"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "28"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/data
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: iso-fastighet
+  namespace: it-miljo
+  title: "Fastighetssystem"
+  description: "Passersystem, larm, kyla och kraftövervakning."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "isolerad"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2, hk, dc-nord, dc-syd"
+    architecture.portal/order: "29"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/isolerad
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: iso-ritningsarkiv
+  namespace: it-miljo
+  title: "Ritningsarkivet"
+  description: "Det äldre ritningsarkivet, som inte längre får säkerhetsuppdateringar."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "isolerad"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1"
+    architecture.portal/order: "30"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/isolerad
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: plf-identitet
+  namespace: it-miljo
+  title: "Identitet"
+  description: "Inloggningstjänst, katalogtjänst och nätåtkomstkontroll."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "plattform"
+    architecture.portal/stages: "prod, test, utv, utb"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "31"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/plattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: plf-sakerhet
+  namespace: it-miljo
+  title: "Hemligheter och certifikat"
+  description: "Hemlighetstjänst, intern PKI och nyckelskydd."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "plattform"
+    architecture.portal/stages: "prod, test, utv, utb"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "32"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/plattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: plf-logg
+  namespace: it-miljo
+  title: "Logg och observabilitet"
+  description: "Telemetriinsamling, loggplattform, mätvärden, spårning och driftvyer. Tar emot från alla miljöer."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "plattform"
+    architecture.portal/stages: "prod"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "33"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/plattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: plf-meddelande
+  namespace: it-miljo
+  title: "Meddelanden"
+  description: "Meddelandeplattformen och e-postreläet."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "plattform"
+    architecture.portal/stages: "prod, test, utv"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "34"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/plattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: plf-nat
+  namespace: it-miljo
+  title: "Namn, tid och adresser"
+  description: "Intern namntjänst, namnuppslagning, tidstjänst och adresstilldelning."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "plattform"
+    architecture.portal/stages: "prod"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "35"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/plattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: plf-drift
+  namespace: it-miljo
+  title: "Uppdateringar och klienthantering"
+  description: "Uppdateringsdistribution, klienthantering och den centrala delen av skyddet mot skadlig kod. Arbetsplatser och servrar hämtar härifrån."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "plattform"
+    architecture.portal/stages: "prod"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "36"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/plattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: plf-ai
+  namespace: it-miljo
+  title: "Språkmodeller"
+  description: "Språkmodelltjänstens servrar med grafikprocessorer."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "plattform"
+    architecture.portal/stages: "prod"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "37"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/plattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: lev-plattform
+  namespace: it-miljo
+  title: "Repon och register"
+  description: "Repon, pipelines och artefaktregister."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "leverans"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "38"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/leverans
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: lev-byggnoder
+  namespace: it-miljo
+  title: "Byggnoder"
+  description: "Noderna som kör pipelines. Skapas för ett jobb och tas sedan bort."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "leverans"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "39"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/leverans
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: adm-klient
+  namespace: it-miljo
+  title: "Administrationsarbetsplatser"
+  description: "Virtuella arbetsplatser för administration, nådda genom privilegierad åtkomst. Saknar väg till internet och e-post."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "forvaltning"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "40"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/forvaltning
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: adm-pam
+  namespace: it-miljo
+  title: "Privilegierad åtkomst"
+  description: "Privilegierad åtkomst."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "forvaltning"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "41"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/forvaltning
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: adm-verktyg
+  namespace: it-miljo
+  title: "Verktyg för drift och säkerhet"
+  description: "Övervakning, sårbarhetsskanning och intrångsdetekteringens analysdel."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "forvaltning"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "42"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/forvaltning
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: adm-oob
+  namespace: it-miljo
+  title: "Hanteringsnät"
+  description: "Hanteringsgränssnitt på nätutrustning, servrar och lagring, och intrångsdetekteringens sensorer."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "forvaltning"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2, hk, rk-nord, rk-mitt, rk-ost, rk-vast, rk-syd, dc-nord, dc-syd"
+    architecture.portal/order: "43"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/forvaltning
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: adm-virtualisering
+  namespace: it-miljo
+  title: "Virtualisering och lagring"
+  description: "Hanteringen av virtualiseringsplattformen och lagringsplattformen."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "forvaltning"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "44"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/forvaltning
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: kopia-tjanst
+  namespace: it-miljo
+  title: "Säkerhetskopieringstjänst"
+  description: "Tjänsten som hämtar och återläser kopior."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "sakerhetskopiering"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "45"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/sakerhetskopiering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: kopia-lager
+  namespace: it-miljo
+  title: "Kopielager"
+  description: "Lager där en kopia inte kan ändras eller tas bort under sin lagringstid."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "sakerhetskopiering"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "46"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/sakerhetskopiering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: otdmz-rela
+  namespace: it-miljo
+  title: "OT-relä"
+  description: "OT-reläet."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "ot-dmz"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "47"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-ot-infrastruktur
+  dependsOn:
+    - resource:it-miljo/ot-dmz
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: otdmz-hopp
+  namespace: it-miljo
+  title: "OT-hoppserver"
+  description: "OT-hoppservern."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "ot-dmz"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "48"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-ot-infrastruktur
+  dependsOn:
+    - resource:it-miljo/ot-dmz
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: otdmz-tjanster
+  namespace: it-miljo
+  title: "Tjänster till OT"
+  description: "Speglar av uppdateringar och signaturer som OT hämtar, och tid till OT."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "ot-dmz"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dh1, dh2"
+    architecture.portal/order: "49"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-ot-infrastruktur
+  dependsOn:
+    - resource:it-miljo/ot-dmz
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: gast-kontor
+  namespace: it-miljo
+  title: "Gästnät"
+  description: "Trådlöst gästnät. Enheterna når inte varandra."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "gast"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "hk, rk-nord, rk-mitt, rk-ost, rk-vast, rk-syd, dc-nord, dc-syd"
+    architecture.portal/order: "50"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/gast
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ot-styrning
+  namespace: it-miljo
+  title: "Styrsystem"
+  description: "Trafikledningssystemet och anläggningsövervakningen."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "ot"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dc-nord, dc-syd"
+    architecture.portal/order: "51"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-ot-infrastruktur
+  dependsOn:
+    - resource:it-miljo/ot
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ot-operator
+  namespace: it-miljo
+  title: "Operatörsplatser"
+  description: "Trafikledarnas arbetsplatser."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "ot"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dc-nord, dc-syd"
+    architecture.portal/order: "52"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-ot-infrastruktur
+  dependsOn:
+    - resource:it-miljo/ot
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ot-falt
+  namespace: it-miljo
+  title: "Fältnät"
+  description: "Ställverk, detektorer och annan utrustning längs anläggningen."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "ot"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "falt"
+    architecture.portal/order: "53"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-ot-infrastruktur
+  dependsOn:
+    - resource:it-miljo/ot
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ot-sakerhet
+  namespace: it-miljo
+  title: "OT:s säkerhetstjänster"
+  description: "OT:s egen katalog, tid, logg och säkerhetskopiering."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "ot"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "dc-nord, dc-syd"
+    architecture.portal/order: "54"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-ot-infrastruktur
+  dependsOn:
+    - resource:it-miljo/ot
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ot-sensor
+  namespace: it-miljo
+  title: "Tillståndssensorer"
+  description: "Sensorer som mäter anläggningens tillstånd men inte styr något. Mätvärdena lämnas genom OT-reläet."
+  tags: [referensmiljo, segment]
+  annotations:
+    architecture.portal/zone: "ot"
+    architecture.portal/stages: "gemensam"
+    architecture.portal/sites: "falt"
+    architecture.portal/order: "55"
+spec:
+  type: network-segment
+  owner: group:it-miljo/team-ot-infrastruktur
+  dependsOn:
+    - resource:it-miljo/ot
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: internetoperator-a
+  namespace: it-miljo
+  title: "Internetoperatör A"
+  description: "Internetanslutning i båda datahallarna, med operatörens skydd mot överbelastning."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "internet"
+    architecture.portal/through: "component:it-miljo/exponeringsplattform, component:it-miljo/utgaende-proxy"
+    architecture.portal/connection: "Egen fiber till varje datahall"
+    architecture.portal/order: "1"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/internet
+  dependencyOf:
+    - component:it-miljo/exponeringsplattform
+    - component:it-miljo/utgaende-proxy
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: internetoperator-b
+  namespace: it-miljo
+  title: "Internetoperatör B"
+  description: "Den andra internetanslutningen, i en annan fiberväg och med ett annat stamnät."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "internet"
+    architecture.portal/through: "component:it-miljo/exponeringsplattform, component:it-miljo/utgaende-proxy"
+    architecture.portal/connection: "Egen fiber till varje datahall"
+    architecture.portal/order: "2"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/internet
+  dependencyOf:
+    - component:it-miljo/exponeringsplattform
+    - component:it-miljo/utgaende-proxy
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: sgsi
+  namespace: it-miljo
+  title: "Det myndighetsgemensamma nätet SGSI"
+  description: "Utbyte med andra myndigheter utan att gå över internet."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "partner"
+    architecture.portal/through: "dmz-partner"
+    architecture.portal/connection: "Fast förbindelse"
+    architecture.portal/order: "3"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/partner
+  dependencyOf: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: partner-entreprenorer
+  namespace: it-miljo
+  title: "Underhållsentreprenörer"
+  description: "Arbetsorder och återrapportering mellan underhållssystemet och entreprenörernas system."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "partner"
+    architecture.portal/through: "component:it-miljo/filoverforing, component:it-miljo/api-gateway-extern"
+    architecture.portal/connection: "VPN över internet"
+    architecture.portal/order: "4"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-integration
+  dependsOn:
+    - resource:it-miljo/partner
+  dependencyOf:
+    - component:it-miljo/filoverforing
+    - component:it-miljo/api-gateway-extern
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: identitetsformedlare
+  namespace: it-miljo
+  title: "Identitetsförmedlare för e-legitimation"
+  description: "Allmänhetens inloggning i e-tjänsterna, genom inloggningstjänsten."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "internet"
+    architecture.portal/through: "component:it-miljo/utgaende-proxy, component:it-miljo/exponeringsplattform"
+    architecture.portal/connection: "Internet"
+    architecture.portal/order: "5"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-identitet-och-atkomst
+  dependsOn:
+    - resource:it-miljo/internet
+  dependencyOf:
+    - component:it-miljo/utgaende-proxy
+    - component:it-miljo/exponeringsplattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: publik-certifikatutfardare
+  namespace: it-miljo
+  title: "Publik certifikatutfärdare"
+  description: "Publikt betrodda certifikat till exponeringsplattformen och e-postgatewayen."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "internet"
+    architecture.portal/through: "component:it-miljo/utgaende-proxy"
+    architecture.portal/connection: "Internet"
+    architecture.portal/order: "6"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/internet
+  dependencyOf:
+    - component:it-miljo/utgaende-proxy
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: sdk-federation
+  namespace: it-miljo
+  title: "Säker digital kommunikation"
+  description: "Meddelanden med känsligt innehåll mellan offentliga aktörer."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "internet"
+    architecture.portal/through: "component:it-miljo/sdk-accesspunkt"
+    architecture.portal/connection: "Internet, med ömsesidig TLS"
+    architecture.portal/order: "7"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-integration
+  dependsOn:
+    - resource:it-miljo/internet
+  dependencyOf:
+    - component:it-miljo/sdk-accesspunkt
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: mina-meddelanden
+  namespace: it-miljo
+  title: "Mina meddelanden"
+  description: "Digital post till privatpersoner och företag."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "internet"
+    architecture.portal/through: "component:it-miljo/utgaende-proxy"
+    architecture.portal/connection: "Internet"
+    architecture.portal/order: "8"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-integration
+  dependsOn:
+    - resource:it-miljo/internet
+  dependencyOf:
+    - component:it-miljo/utgaende-proxy
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: tidskalla
+  namespace: it-miljo
+  title: "Tidstjänsten Swedish Distributed Time Service (ntp.se)"
+  description: "Tid som är spårbar till UTC(SP)."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "internet"
+    architecture.portal/through: "dmz-namn"
+    architecture.portal/connection: "Internet, NTP med NTS"
+    architecture.portal/order: "9"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/internet
+  dependencyOf: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: dataportal
+  namespace: it-miljo
+  title: "Sveriges dataportal"
+  description: "Hämtar beskrivningarna av myndighetens öppna data."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "internet"
+    architecture.portal/through: "component:it-miljo/exponeringsplattform"
+    architecture.portal/connection: "Internet"
+    architecture.portal/order: "10"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-integration
+  dependsOn:
+    - resource:it-miljo/internet
+  dependencyOf:
+    - component:it-miljo/exponeringsplattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: leverantorsuppdateringar
+  namespace: it-miljo
+  title: "Leverantörernas uppdateringstjänster"
+  description: "Uppdateringar och signaturer till uppdateringsdistributionen och skyddet mot skadlig kod."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "internet"
+    architecture.portal/through: "component:it-miljo/utgaende-proxy"
+    architecture.portal/connection: "Internet"
+    architecture.portal/order: "11"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-drift-och-leverans
+  dependsOn:
+    - resource:it-miljo/internet
+  dependencyOf:
+    - component:it-miljo/utgaende-proxy
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: leverantorssupport
+  namespace: it-miljo
+  title: "Leverantörernas tekniker"
+  description: "Support och felsökning, från en virtuell arbetsplats och genom privilegierad åtkomst, enligt RA-ADM-01."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "internet"
+    architecture.portal/through: "component:it-miljo/fjarratkomst"
+    architecture.portal/connection: "Internet"
+    architecture.portal/order: "12"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-sakerhetstjanster
+  dependsOn:
+    - resource:it-miljo/internet
+  dependencyOf:
+    - component:it-miljo/fjarratkomst
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: sms-operator
+  namespace: it-miljo
+  title: "Operatör för sms"
+  description: "Sms från utskickstjänsten."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "internet"
+    architecture.portal/through: "component:it-miljo/utgaende-proxy"
+    architecture.portal/connection: "Internet"
+    architecture.portal/order: "13"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-integration
+  dependsOn:
+    - resource:it-miljo/internet
+  dependencyOf:
+    - component:it-miljo/utgaende-proxy
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: pushtjanster
+  namespace: it-miljo
+  title: "Apples och Googles tjänster för pushnotiser"
+  description: "Pushnotiser från utskickstjänsten till myndighetens appar."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "internet"
+    architecture.portal/through: "component:it-miljo/utgaende-proxy"
+    architecture.portal/connection: "Internet"
+    architecture.portal/order: "14"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-integration
+  dependsOn:
+    - resource:it-miljo/internet
+  dependencyOf:
+    - component:it-miljo/utgaende-proxy
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: appbutiker
+  namespace: it-miljo
+  title: "Apples och Googles appbutiker"
+  description: "Myndighetens appar publiceras här, från pipelinen."
+  tags: [referensmiljo, extern-anslutning]
+  annotations:
+    architecture.portal/zone: "internet"
+    architecture.portal/through: "component:it-miljo/utgaende-proxy"
+    architecture.portal/connection: "Internet"
+    architecture.portal/order: "15"
+spec:
+  type: external-service
+  owner: group:it-miljo/team-utvecklarstod
+  dependsOn:
+    - resource:it-miljo/internet
+  dependencyOf:
+    - component:it-miljo/utgaende-proxy
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: inloggningstjanst
+  namespace: it-miljo
+  title: "Inloggningstjänst"
+  description: "Inloggning för användare och token för tjänster, med MFA och federation."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-identitet"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "OpenID Connect, OAuth 2.0, SAML"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-identitet-och-atkomst
+  system: plattform-identitet-och-atkomst
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-identitet
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: katalogtjanst
+  namespace: it-miljo
+  title: "Katalogtjänst"
+  description: "Konton och grupper för medarbetare och konsulter. Källa för roller."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-identitet"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "Nås genom inloggningstjänsten"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-identitet-och-atkomst
+  system: plattform-identitet-och-atkomst
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-identitet
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: pam
+  namespace: it-miljo
+  title: "Privilegierad åtkomst"
+  description: "Administrativ åtkomst med personlig identitet, MFA och spårbara sessioner."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "adm-pam"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "SSH, RDP och HTTPS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-sakerhetstjanster
+  system: plattform-sakerhetstjanster
+  dependsOn:
+    - resource:it-miljo/forvaltning
+    - resource:it-miljo/adm-pam
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: fjarratkomst
+  namespace: it-miljo
+  title: "Fjärråtkomst"
+  description: "Medarbetare på distans och leverantörer når en hanterad arbetsplats i klientzonen, med personlig identitet och MFA."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "dmz-atkomst"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "VPN eller fjärrskrivbord"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-natverk-och-exponering
+  system: plattform-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/dmz
+    - resource:it-miljo/dmz-atkomst
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: exponeringsplattform
+  namespace: it-miljo
+  title: "Exponeringsplattform"
+  description: "Enda vägen in för webb och API från internet: TLS med publikt certifikat, webbskydd och skydd mot överbelastning."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "dmz-webb"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-natverk-och-exponering
+  system: plattform-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/dmz
+    - resource:it-miljo/dmz-webb
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: api-gateway-extern
+  namespace: it-miljo
+  title: "Extern API-gateway"
+  description: "API:er till internet och partner: identifierar konsumenten, tillämpar kvoter och släpper igenom publicerade operationer."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "dmz-api"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "HTTPS, OAuth 2.0, mTLS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-integration
+  system: plattform-integration
+  dependsOn:
+    - resource:it-miljo/dmz
+    - resource:it-miljo/dmz-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: api-gateway-intern
+  namespace: it-miljo
+  title: "Intern API-gateway"
+  description: "API:er mellan verksamhetsområden: visar vilka API:er som finns och vem som använder dem."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "tjanst-integration"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "HTTPS, OAuth 2.0"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-integration
+  system: plattform-integration
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-integration
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: meddelandeplattform
+  namespace: it-miljo
+  title: "Meddelandeplattform"
+  description: "Händelser och köer mellan lösningar."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-meddelande"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "AMQP 1.0 över TLS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-integration
+  system: plattform-integration
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-meddelande
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: filoverforing
+  namespace: it-miljo
+  title: "Filöverföringstjänst"
+  description: "Filer till och från partner, med kontroll av innehåll och kvittens. Den yttre noden tar emot och lämnar ut; filerna lagras i en inkorg i tjänstezonen."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "dmz-fil"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "SFTP, HTTPS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-integration
+  system: plattform-integration
+  dependsOn:
+    - resource:it-miljo/dmz
+    - resource:it-miljo/dmz-fil
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: utgaende-proxy
+  namespace: it-miljo
+  title: "Utgående proxy"
+  description: "Enda vägen ut mot internet, med godkända destinationer per lösning."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "dmz-ut"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-natverk-och-exponering
+  system: plattform-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/dmz
+    - resource:it-miljo/dmz-ut
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ot-rela
+  namespace: it-miljo
+  title: "OT-relä"
+  description: "Utbyte mellan IT och OT, där båda sidor ansluter utifrån. Reläet kontrollerar själv identiteten hos den som ansluter."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "otdmz-rela"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "AMQP 1.0 över TLS, SFTP"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-ot-infrastruktur
+  system: plattform-ot-infrastruktur
+  dependsOn:
+    - resource:it-miljo/ot-dmz
+    - resource:it-miljo/otdmz-rela
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ot-hoppserver
+  namespace: it-miljo
+  title: "OT-hoppserver"
+  description: "Administration av OT-system, nådd genom privilegierad åtkomst."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "otdmz-hopp"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "SSH, RDP"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-ot-infrastruktur
+  system: plattform-ot-infrastruktur
+  dependsOn:
+    - resource:it-miljo/ot-dmz
+    - resource:it-miljo/otdmz-hopp
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hemlighetstjanst
+  namespace: it-miljo
+  title: "Hemlighetstjänst"
+  description: "Lagrar och lämnar ut hemligheter, och skapar kortlivade databaskonton."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-sakerhet"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "HTTPS med plattformsidentitet"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-sakerhetstjanster
+  system: plattform-sakerhetstjanster
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-sakerhet
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: intern-pki
+  namespace: it-miljo
+  title: "Intern PKI"
+  description: "Certifikat för tjänster, utfärdade och förnyade automatiskt."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-sakerhet"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "ACME"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-sakerhetstjanster
+  system: plattform-sakerhetstjanster
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-sakerhet
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: loggplattform
+  namespace: it-miljo
+  title: "Loggplattform"
+  description: "Central insamling av loggar och säkerhetsövervakning."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-logg"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "Syslog över TLS, OpenTelemetry"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-sakerhetstjanster
+  system: plattform-sakerhetstjanster
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-logg
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: containerplattform
+  namespace: it-miljo
+  title: "Containerplattform"
+  description: "Standardmiljö för att köra tjänster, med ingress, tjänsteidentitet och nätverkspolicy."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "tjanst-container"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "Kubernetes"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-drift-och-leverans
+  system: plattform-drift-och-leverans
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-container
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: leveransplattform
+  namespace: it-miljo
+  title: "Leveransplattform"
+  description: "Repon, pipelines och artefaktregister."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "lev-plattform"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "Git, OCI-register"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-drift-och-leverans
+  system: plattform-drift-och-leverans
+  dependsOn:
+    - resource:it-miljo/leverans
+    - resource:it-miljo/lev-plattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: databasplattform
+  namespace: it-miljo
+  title: "Databasplattform"
+  description: "Förvaltade databaser med säkerhetskopiering och kryptering."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "data-databas"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "PostgreSQL, MongoDB, Neo4j"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-drift-och-leverans
+  system: plattform-drift-och-leverans
+  dependsOn:
+    - resource:it-miljo/data
+    - resource:it-miljo/data-databas
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: objektlagring
+  namespace: it-miljo
+  title: "Objektlagring"
+  description: "Filer och stora objekt som en lösning lagrar, med versioner av varje objekt."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "data-objekt"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "S3-kompatibelt API över HTTPS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-drift-och-leverans
+  system: plattform-drift-och-leverans
+  dependsOn:
+    - resource:it-miljo/data
+    - resource:it-miljo/data-objekt
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: virtuella-servrar
+  namespace: it-miljo
+  title: "Virtuella servrar"
+  description: "Servrar ur mall för det som inte går att köra i container."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "tjanst-vm"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "SSH och RDP genom privilegierad åtkomst"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-datahall-och-infrastruktur
+  system: plattform-datahall-och-infrastruktur
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-vm
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: lastbalansering
+  namespace: it-miljo
+  title: "Lastbalansering"
+  description: "Ingången till en miljö: fördelar trafik till containerplattformens ingress och till virtuella servrar, i båda datahallarna."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "tjanst-lb"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "HTTPS, TCP"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-natverk-och-exponering
+  system: plattform-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-lb
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: overvakning
+  namespace: it-miljo
+  title: "Övervakning"
+  description: "Kontrollerar utifrån att tjänster svarar, och hämtar mätvärden från plattformar och utrustning."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "adm-verktyg"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "OpenMetrics över HTTPS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-drift-och-leverans
+  system: plattform-drift-och-leverans
+  dependsOn:
+    - resource:it-miljo/forvaltning
+    - resource:it-miljo/adm-verktyg
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: telemetriinsamling
+  namespace: it-miljo
+  title: "Telemetriinsamling"
+  description: "En mottagare för loggar, mätvärden och spår från alla lösningar och miljöer."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-logg"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "OpenTelemetry (OTLP), syslog över TLS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-drift-och-leverans
+  system: plattform-drift-och-leverans
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-logg
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: matvarden
+  namespace: it-miljo
+  title: "Mätvärden"
+  description: "Lagrar mätvärden från lösningar, plattformar och övervakningen."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-logg"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "OpenMetrics, PromQL"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-drift-och-leverans
+  system: plattform-drift-och-leverans
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-logg
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sparning
+  namespace: it-miljo
+  title: "Spårning"
+  description: "Visar ett anrops väg genom flera tjänster, och var tiden går åt."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-logg"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "OpenTelemetry (OTLP)"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-drift-och-leverans
+  system: plattform-drift-och-leverans
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-logg
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: driftvyer
+  namespace: it-miljo
+  title: "Driftvyer och larm"
+  description: "Vyer över loggar, mätvärden och spår per lösning, och larm till det förvaltande teamet."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-logg"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-drift-och-leverans
+  system: plattform-drift-och-leverans
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-logg
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: e-postrela
+  namespace: it-miljo
+  title: "E-postrelä"
+  description: "E-post som en lösning skickar, till medarbetare och till mottagare utanför myndigheten."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-meddelande"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "SMTP med TLS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-arbetsplats-och-samarbete
+  system: plattform-arbetsplats-och-samarbete
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-meddelande
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: namntjanst
+  namespace: it-miljo
+  title: "Intern namntjänst"
+  description: "Namn för tjänster under den interna zonen. Containerplattformen registrerar namnen åt dig."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-nat"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "DNS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-natverk-och-exponering
+  system: plattform-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-nat
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sakerhetskopieringstjanst
+  namespace: it-miljo
+  title: "Säkerhetskopiering"
+  description: "Kopior av servrar, databaser, objekt och repon, förvarade skilt från produktionen och med en frånkopplad kopia."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "kopia-tjanst"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "Beställs, ingen anslutning från lösningen"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-datahall-och-infrastruktur
+  system: plattform-datahall-och-infrastruktur
+  dependsOn:
+    - resource:it-miljo/sakerhetskopiering
+    - resource:it-miljo/kopia-tjanst
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sdk-accesspunkt
+  namespace: it-miljo
+  title: "Accesspunkt för säker digital kommunikation"
+  description: "Meddelanden med känsligt innehåll till och från andra offentliga aktörer."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "dmz-api"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "AS4 över HTTPS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-integration
+  system: plattform-integration
+  dependsOn:
+    - resource:it-miljo/dmz
+    - resource:it-miljo/dmz-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: digital-post
+  namespace: it-miljo
+  title: "Avsändartjänst för digital post"
+  description: "Beslut och meddelanden till privatpersoners och företags digitala brevlådor."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "tjanst-integration"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "HTTPS, OAuth 2.0"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-integration
+  system: plattform-integration
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-integration
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: geodatatjanst
+  namespace: it-miljo
+  title: "Geodatatjänst"
+  description: "Kartor och geodata över anläggningen till andra lösningar."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "tjanst-container"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "OGC API, WMS, WMTS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-geodata
+  system: plattform-geodata
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-container
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: komponentbibliotek
+  namespace: it-miljo
+  title: "Komponentbibliotek"
+  description: "Gemensamma gränssnittskomponenter för React och Angular, med myndighetens utseende och prövad tillgänglighet."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "lev-plattform"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "Paket i artefaktregistret"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-utvecklarstod
+  system: plattform-utvecklarstod
+  dependsOn:
+    - resource:it-miljo/leverans
+    - resource:it-miljo/lev-plattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: analysplattform
+  namespace: it-miljo
+  title: "Analysplattform"
+  description: "Kopior av verksamhetssystemens data för analys och rapporter, som dataprodukter med utpekad ägare."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "tjanst-analys"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "SQL över HTTPS, filer i Parquet"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-data-och-ai
+  system: plattform-data-och-ai
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-analys
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: rapportverktyg
+  namespace: it-miljo
+  title: "Rapportverktyg"
+  description: "Rapporter, vyer och egna frågor mot dataprodukterna."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "tjanst-analys"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-data-och-ai
+  system: plattform-data-och-ai
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-analys
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: testdatatjanst
+  namespace: it-miljo
+  title: "Testdatatjänst"
+  description: "Avidentifierar ett urval ur en säkerhetskopia av produktionen och lämnar det till testmiljön."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "kopia-tjanst"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "Beställs, ingen anslutning från lösningen"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-datahall-och-infrastruktur
+  system: plattform-datahall-och-infrastruktur
+  dependsOn:
+    - resource:it-miljo/sakerhetskopiering
+    - resource:it-miljo/kopia-tjanst
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: utskickstjanst
+  namespace: it-miljo
+  title: "Utskickstjänst"
+  description: "Sms, pushnotiser och e-post till många mottagare, med kö, takt per kanal och mallar."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-meddelande"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "HTTPS, OAuth 2.0"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-integration
+  system: plattform-integration
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-meddelande
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sprakmodelltjanst
+  namespace: it-miljo
+  title: "Språkmodelltjänst"
+  description: "Språkmodeller som körs i egna datahallar, för att skriva, sammanfatta och söka i text."
+  tags: [referensmiljo, byggsten]
+  annotations:
+    architecture.portal/segment: "plf-ai"
+    architecture.portal/category: "building-block"
+    architecture.portal/interfaces: "HTTPS, OpenAI-kompatibelt API"
+spec:
+  type: platform-service
+  lifecycle: production
+  owner: team-data-och-ai
+  system: plattform-data-och-ai
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-ai
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: dns-extern
+  namespace: it-miljo
+  title: "Extern namntjänst"
+  description: "Svarar för myndighetens publika zon, signerad med DNSSEC. Interna namn finns inte här."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "dmz-namn"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "DNS"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-natverk-och-exponering
+  system: plattform-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/dmz
+    - resource:it-miljo/dmz-namn
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: namnuppslagning
+  namespace: it-miljo
+  title: "Namnuppslagning"
+  description: "Slår upp namn åt alla interna zoner och kontrollerar DNSSEC. Frågor om namn på internet går genom en nod i `dmz-namn`."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "plf-nat"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "DNS"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-natverk-och-exponering
+  system: plattform-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-nat
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: tidstjanst
+  namespace: it-miljo
+  title: "Tidstjänst"
+  description: "Ger alla zoner samma tid, spårbar till UTC(SP). Hämtar tid från tidstjänsten på ntp.se genom en nod i `dmz-namn`, med mottagare för satellittid i båda datahallarna som reserv."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "plf-nat"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "NTP, NTS"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-natverk-och-exponering
+  system: plattform-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-nat
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: adresshantering
+  namespace: it-miljo
+  title: "Adresstilldelning och adressregister"
+  description: "Delar ut adresser till arbetsplatser och kontorsteknik, och är registret över vilka nät och adresser som används."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "plf-nat"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "DHCP, HTTPS"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-natverk-och-exponering
+  system: plattform-natverk-och-exponering
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-nat
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: natatkomstkontroll
+  namespace: it-miljo
+  title: "Nätåtkomstkontroll"
+  description: "Avgör vilket segment en enhet hamnar i när den ansluts, efter kontroll av enhetens certifikat. Okänd utrustning hamnar i gästnätet eller nekas."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "plf-identitet"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "802.1X, RADIUS över TLS"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-identitet-och-atkomst
+  system: plattform-identitet-och-atkomst
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-identitet
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: e-postgateway
+  namespace: it-miljo
+  title: "E-postgateway"
+  description: "Tar emot och skickar e-post mot internet: kontrollerar avsändare med SPF, DKIM och DMARC, söker efter skadlig kod och kräver TLS där motparten kan."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "dmz-epost"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "SMTP med TLS"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-arbetsplats-och-samarbete
+  system: plattform-arbetsplats-och-samarbete
+  dependsOn:
+    - resource:it-miljo/dmz
+    - resource:it-miljo/dmz-epost
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: nyckelskydd
+  namespace: it-miljo
+  title: "Nyckelskydd"
+  description: "Hårdvara som förvarar utfärdarnycklarna för intern PKI och nycklar för signering. Nycklarna lämnar aldrig utrustningen."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "plf-sakerhet"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "PKCS #11"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-sakerhetstjanster
+  system: plattform-sakerhetstjanster
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-sakerhet
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: intrangsdetektering
+  namespace: it-miljo
+  title: "Intrångsdetektering"
+  description: "Sensorer vid zongränserna och mot internet, som larmar om trafik som avviker. Skilda system för det yttre och det inre nätet."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "adm-verktyg"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "Larm till loggplattformen"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-sakerhetsovervakning
+  system: plattform-sakerhetsovervakning
+  dependsOn:
+    - resource:it-miljo/forvaltning
+    - resource:it-miljo/adm-verktyg
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sarbarhetsskanning
+  namespace: it-miljo
+  title: "Sårbarhetsskanning"
+  description: "Söker varje vecka efter kända sårbarheter och felkonfiguration i alla zoner utom OT-zonen."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "adm-verktyg"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "Rapport till det förvaltande teamet"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-sakerhetsovervakning
+  system: plattform-sakerhetsovervakning
+  dependsOn:
+    - resource:it-miljo/forvaltning
+    - resource:it-miljo/adm-verktyg
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: skydd-skadlig-kod
+  namespace: it-miljo
+  title: "Skydd mot skadlig kod"
+  description: "Skydd på arbetsplatser och servrar, med central styrning och larm till säkerhetsövervakningen."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "plf-drift"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "Agent, larm till loggplattformen"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-sakerhetstjanster
+  system: plattform-sakerhetstjanster
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-drift
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: uppdateringsdistribution
+  namespace: it-miljo
+  title: "Uppdateringsdistribution"
+  description: "Uppdateringar till operativsystem och program, hämtade från leverantörerna genom utgående proxy och kontrollerade innan de delas ut."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "plf-drift"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-drift-och-leverans
+  system: plattform-drift-och-leverans
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-drift
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: klienthantering
+  namespace: it-miljo
+  title: "Klienthantering"
+  description: "Konfiguration, program och certifikat till arbetsplatserna."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "plf-drift"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-arbetsplats-och-samarbete
+  system: plattform-arbetsplats-och-samarbete
+  dependsOn:
+    - resource:it-miljo/plattform
+    - resource:it-miljo/plf-drift
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: virtualiseringsplattform
+  namespace: it-miljo
+  title: "Virtualiseringsplattform"
+  description: "Kör de virtuella servrarna, i skilda kluster för zoner med olika tillit."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "adm-virtualisering"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "Hanteras från förvaltningszonen"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-datahall-och-infrastruktur
+  system: plattform-datahall-och-infrastruktur
+  dependsOn:
+    - resource:it-miljo/forvaltning
+    - resource:it-miljo/adm-virtualisering
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: lagringsplattform
+  namespace: it-miljo
+  title: "Lagringsplattform"
+  description: "Lagring åt virtualiseringen och filytor åt lösningar, speglad mellan datahallarna."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "data-fil"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "NFS, SMB"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-datahall-och-infrastruktur
+  system: plattform-datahall-och-infrastruktur
+  dependsOn:
+    - resource:it-miljo/data
+    - resource:it-miljo/data-fil
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ot-sakerhetstjanster
+  namespace: it-miljo
+  title: "OT:s säkerhetstjänster"
+  description: "Katalog, tid, logg och säkerhetskopiering inom OT-zonen, så att OT fungerar utan IT-sidan."
+  tags: [referensmiljo, infrastrukturtjanst]
+  annotations:
+    architecture.portal/segment: "ot-sakerhet"
+    architecture.portal/category: "infrastructure"
+    architecture.portal/interfaces: "Inom OT-zonen"
+spec:
+  type: infrastructure-service
+  lifecycle: production
+  owner: team-ot-infrastruktur
+  system: plattform-ot-infrastruktur
+  dependsOn:
+    - resource:it-miljo/ot
+    - resource:it-miljo/ot-sakerhet
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: arbetsplats
+  namespace: it-miljo
+  title: "Arbetsplatstjänst"
+  description: "Hanterad dator med krypterad disk, certifikat och standardprogram. Finns också som virtuell arbetsplats."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "klient-kontor"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "Beställs per användare"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-arbetsplats-och-samarbete
+  system: tjanster-arbetsplats-och-samarbete
+  dependsOn:
+    - resource:it-miljo/klient
+    - resource:it-miljo/klient-kontor
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: e-post-kalender
+  namespace: it-miljo
+  title: "E-post och kalender"
+  description: "E-post, kalender och adressbok för medarbetare och funktionsbrevlådor."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-samarbete"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS, SMTP med TLS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-arbetsplats-och-samarbete
+  system: tjanster-arbetsplats-och-samarbete
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-samarbete
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: mote-chatt
+  namespace: it-miljo
+  title: "Möte och chatt"
+  description: "Videomöten och chatt, också med deltagare utanför myndigheten."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-samarbete"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-arbetsplats-och-samarbete
+  system: tjanster-arbetsplats-och-samarbete
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-samarbete
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: telefoni
+  namespace: it-miljo
+  title: "Telefoni"
+  description: "Växel, kontaktcenter och hänvisning."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-samarbete"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "SIP över TLS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-arbetsplats-och-samarbete
+  system: tjanster-arbetsplats-och-samarbete
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-samarbete
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: utskrift
+  namespace: it-miljo
+  title: "Utskrift"
+  description: "Utskrift som hämtas vid valfri skrivare med tjänstekort, och skanning till e-post."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-samarbete"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "IPP över TLS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-arbetsplats-och-samarbete
+  system: tjanster-arbetsplats-och-samarbete
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-samarbete
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: dokumentsamarbete
+  namespace: it-miljo
+  title: "Samarbetsytor"
+  description: "Gemensamma dokument i arbetsgrupper och projekt, innan de diarieförs."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-samarbete"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-arbetsplats-och-samarbete
+  system: tjanster-arbetsplats-och-samarbete
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-samarbete
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: intranat
+  namespace: it-miljo
+  title: "Intranät"
+  description: "Nyheter, styrdokument och ingång till tjänsterna."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-container"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-arbetsplats-och-samarbete
+  system: tjanster-arbetsplats-och-samarbete
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-container
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: diarium
+  namespace: it-miljo
+  title: "Diarium och dokumenthantering"
+  description: "Diarieföring och hantering av allmänna handlingar."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-vm"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-arenden-och-dokument
+  system: tjanster-forvaltning-arenden-och-dokument
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-vm
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: e-arkiv
+  namespace: it-miljo
+  title: "E-arkiv"
+  description: "Bevarande av handlingar och uttag ur system som avvecklas."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-vm"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS, filer genom filöverföringstjänsten"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-arenden-och-dokument
+  system: tjanster-forvaltning-arenden-och-dokument
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-vm
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: e-tjansteplattform
+  namespace: it-miljo
+  title: "E-tjänster"
+  description: "Formulär och ärenden för allmänhet och företag, med inloggning med e-legitimation."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-container"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-arenden-och-dokument
+  system: tjanster-forvaltning-arenden-och-dokument
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-container
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: webbplats
+  namespace: it-miljo
+  title: "Webbplats"
+  description: "Myndighetens publika webbplats."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-container"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-arenden-och-dokument
+  system: tjanster-forvaltning-arenden-och-dokument
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-container
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: arendehantering-it
+  namespace: it-miljo
+  title: "IT-ärendehantering"
+  description: "Beställningar, incidenter och ändringar. Här beställer du av de förvaltande teamen."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-vm"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-servicedesk
+  system: tjanster-servicedesk
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-vm
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: konfigurationsdatabas
+  namespace: it-miljo
+  title: "Konfigurationsdatabas"
+  description: "Register över utrustning, program och deras samband."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-vm"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-servicedesk
+  system: tjanster-servicedesk
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-vm
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ekonomisystem
+  namespace: it-miljo
+  title: "Ekonomisystem"
+  description: "Redovisning, fakturor och budget."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-vm"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS, filer genom filöverföringstjänsten"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-ekonomi-och-personal
+  system: tjanster-forvaltning-ekonomi-och-personal
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-vm
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: personalsystem
+  namespace: it-miljo
+  title: "Personal och lön"
+  description: "Anställningar, lön och tid. Källa för konton i katalogtjänsten."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-vm"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-ekonomi-och-personal
+  system: tjanster-forvaltning-ekonomi-och-personal
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-vm
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: inkop-avtal
+  namespace: it-miljo
+  title: "Inköp och avtal"
+  description: "Upphandlingar, avtal och beställningar."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-vm"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-ekonomi-och-personal
+  system: tjanster-forvaltning-ekonomi-och-personal
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-vm
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: larplattform
+  namespace: it-miljo
+  title: "Lärplattform"
+  description: "Kurser och uppföljning av utbildning."
+  tags: [referensmiljo, gemensam-tjanst]
+  annotations:
+    architecture.portal/segment: "tjanst-container"
+    architecture.portal/category: "shared-service"
+    architecture.portal/interfaces: "HTTPS"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-ekonomi-och-personal
+  system: tjanster-forvaltning-ekonomi-och-personal
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-container
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: trafikledningssystem
+  namespace: it-miljo
+  title: "Trafikledningssystem"
+  description: "Styr och övervakar trafiken från driftcentralerna."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+    architecture.portal/segment: "ot-styrning"
+    architecture.portal/category: "business-system"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-trafikledning
+  system: trafikledningssystem
+  dependsOn:
+    - resource:it-miljo/ot
+    - resource:it-miljo/ot-styrning
+    - component:it-miljo/ot-sakerhetstjanster
+    - component:it-miljo/ot-rela
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: anlaggningsovervakning
+  namespace: it-miljo
+  title: "Anläggningsövervakning"
+  description: "Övervakar och styr kraftförsörjning, detektorer och teknikhus längs anläggningen."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+    architecture.portal/segment: "ot-styrning"
+    architecture.portal/category: "business-system"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-trafikledning
+  system: anlaggningsovervakning
+  dependsOn:
+    - resource:it-miljo/ot
+    - resource:it-miljo/ot-styrning
+    - component:it-miljo/ot-sakerhetstjanster
+    - component:it-miljo/ot-rela
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: anlaggningsregister
+  namespace: it-miljo
+  title: "Anläggningsregister"
+  description: "Register över anläggningens delar, deras läge och skick."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+    architecture.portal/segment: "tjanst-container"
+    architecture.portal/category: "business-system"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-anlaggning-och-underhall
+  system: anlaggningsregister
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-container
+    - component:it-miljo/geodatatjanst
+    - component:it-miljo/api-gateway-intern
+    - component:it-miljo/containerplattform
+    - component:it-miljo/databasplattform
+    - component:it-miljo/objektlagring
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: underhallssystem
+  namespace: it-miljo
+  title: "Underhåll och arbetsorder"
+  description: "Planerar underhåll och utbyter arbetsorder med entreprenörerna. Anskaffad produkt."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+    architecture.portal/segment: "tjanst-vm"
+    architecture.portal/category: "business-system"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-anlaggning-och-underhall
+  system: underhallssystem
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-vm
+    - component:it-miljo/virtuella-servrar
+    - component:it-miljo/filoverforing
+    - component:it-miljo/api-gateway-extern
+    - component:it-miljo/databasplattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: felanmalan
+  namespace: it-miljo
+  title: "Felanmälan"
+  description: "Tar emot anmälningar om fel på anläggningen från allmänhet, entreprenörer och driftcentraler."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+    architecture.portal/segment: "tjanst-container"
+    architecture.portal/category: "business-system"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-anlaggning-och-underhall
+  system: felanmalan
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-container
+    - component:it-miljo/exponeringsplattform
+    - component:it-miljo/inloggningstjanst
+    - component:it-miljo/meddelandeplattform
+    - component:it-miljo/containerplattform
+    - component:it-miljo/databasplattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: tillstandsarenden
+  namespace: it-miljo
+  title: "Tillstånd och dispenser"
+  description: "Handlägger ansökningar om tillstånd och dispenser, från ansökan till beslut."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+    architecture.portal/segment: "tjanst-container"
+    architecture.portal/category: "business-system"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-arenden-och-dokument
+  system: tillstandsarenden
+  dependsOn:
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-container
+    - component:it-miljo/e-tjansteplattform
+    - component:it-miljo/diarium
+    - component:it-miljo/digital-post
+    - component:it-miljo/containerplattform
+    - component:it-miljo/databasplattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ritningsarkiv
+  namespace: it-miljo
+  title: "Ritningsarkiv"
+  description: "Äldre arkiv över ritningar. Produkten får inga säkerhetsuppdateringar och står därför i isoleringszonen."
+  tags: [referensmiljo, verksamhetssystem]
+  annotations:
+    architecture.portal/segment: "iso-ritningsarkiv"
+    architecture.portal/category: "business-system"
+spec:
+  type: service
+  lifecycle: production
+  owner: team-forvaltning-anlaggning-och-underhall
+  system: ritningsarkiv
+  dependsOn:
+    - resource:it-miljo/isolerad
+    - resource:it-miljo/iso-ritningsarkiv
+    - component:it-miljo/lastbalansering
+    - component:it-miljo/sakerhetskopieringstjanst

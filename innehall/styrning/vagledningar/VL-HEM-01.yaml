@@ -1,0 +1,29 @@
+id: VL-HEM-01
+kind: guide
+title: Hur ska hemligheter hanteras i min lösning?
+topic: Hemligheter och certifikat
+answer: 'Lägg alla hemligheter i hemlighetstjänsten, och låt tjänsten hämta dem när den körs. Ingenting hemligt ligger i kod, konfiguration, container-images eller byggvariabler. Certifikat beställer du inte alls: de utfärdas automatiskt.'
+before: |-
+  - Vilka hemligheter har lösningen? Databaskonton, klienthemligheter, nycklar till andras API:er, signeringsnycklar och certifikat.
+  - Vilka av dem kan ersättas med tjänsteidentitet eller kortlivade konton, så att ingen hemlighet behöver lagras?
+scope: Alla lösningar i verksamhets-IT som använder lösenord, nycklar, token eller certifikat.
+steps: |-
+  1. Lista hemligheterna, och stryk dem som kan ersättas med tjänsteidentitet.
+  2. Lägg resten i hemlighetstjänsten, skilda per miljö.
+  3. Ge tjänsten en policy som bara når dess egna hemligheter.
+  4. Hämta hemligheterna vid körning enligt mönstret, och ta bort dem ur konfiguration och pipeline.
+  5. Bestäm hur varje hemlighet byts, och öva ett byte.
+  6. Slå på sökning efter hemligheter i repon och container-images.
+  7. Har en hemlighet hamnat i ett repo, en logg eller ett ärende: byt den. Att ta bort raden räcker inte.
+leadsTo:
+  - target: RA-HEM-01
+    when: Lösenord, nycklar och token som tjänsten använder.
+  - target: RA-HEM-02
+    when: Certifikat och privata nycklar för TLS och mTLS.
+  - target: RA-ID-02
+    when: Hemligheten är till för att anropa en annan intern tjänst. Använd tjänsteidentitet i stället för en delad nyckel.
+  - target: RA-EXP-03
+    when: Nyckeln är till för en extern tjänst på internet.
+  - target: RA-ADM-01
+    when: Personliga administratörskonton. De hanteras i privilegierad åtkomst, inte i hemlighetstjänsten.
+motivatedBy: [TP-HEM-01, TP-KRY-01, TP-ID-02, TP-SÄK-11]

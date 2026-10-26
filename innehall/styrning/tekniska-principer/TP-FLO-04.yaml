@@ -1,0 +1,20 @@
+id: TP-FLO-04
+kind: technical-principle
+title: Ändringar granskas av någon annan innan de når huvudbranchen
+binding: binding
+topic: Flöde och kvalitet
+statement: Ingen ändring når den gemensamma huvudbranchen utan att ha granskats av minst en annan person.
+rationale: Fångar defekter tidigt, sprider kunskap så att ingen kod bara förstås av en person, och är den naturliga punkten där kraven här kontrolleras.
+scope: Alla ändringar som ska in i den gemensamma huvudbranchen, i alla system.
+preconditions: Snabb granskningsledtid (en granskningskö som tar dagar gör detta till en flaskhals); små ändringar; enighet om vad granskare faktiskt kontrollerar.
+solutions: Granskning via pull request med krav på godkännande; par- eller mobbprogrammering (räknas som kontinuerlig granskning); en pull request-mall som länkar till Definition of Done; automatisk granskning i pull requesten, AI-baserad eller regelstyrd, som röjer undan det uppenbara innan en människa läser — den kortar granskningsledtiden, men godkännandet kommer fortfarande från en person.
+ifNotMet: Obligatoriskt — inget system är undantaget, och detta är en av de poster som efterlevs som en grind i utvecklingsplattformen snarare än som god vilja (se TP-GRU-02). Den som inte når utfallet bär en dokumenterad brist med namngiven ägare och datum. Se Tillämpning.
+requirements:
+  - id: TP-FLO-04-K01
+    title: Ändringar granskas av någon annan före huvudbranchen
+    statement: Ingen ändring ska nå den gemensamma huvudbranchen utan att ha granskats av minst en annan person.
+    scope: Alltid. Par- eller mobbprogrammering räknas som kontinuerlig granskning.
+    criteria: |-
+      - Kravet på granskning är en grind i utvecklingsplattformen (se TP-GRU-02).
+      - Godkännandet kommer från en person.
+    notEnough: Automatisk granskning, AI-baserad eller regelstyrd. Den kortar granskningsledtiden men ersätter inte godkännandet från en person.

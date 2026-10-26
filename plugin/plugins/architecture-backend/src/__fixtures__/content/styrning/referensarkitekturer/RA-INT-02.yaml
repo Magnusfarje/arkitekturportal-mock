@@ -1,0 +1,26 @@
+id: RA-INT-02
+kind: reference-architecture
+title: Händelser mellan lösningar genom meddelandeplattformen
+topic: Integration mellan domäner
+solution: Den lösning där något händer publicerar en händelse på ett ämne (topic) i meddelandeplattformen. Mottagare prenumererar och behandlar händelsen i egen takt.
+rationale: Avsändaren behöver inte känna till mottagarna och blir inte beroende av att de är uppe.
+fits: Flera mottagare ska få veta att något har hänt, eller avsändaren ska inte vänta på mottagaren. Mönstret passar inte när avsändaren behöver ett svar för att fortsätta.
+responsibilities: |-
+  - Publicerande tjänst: äg ämnet och händelsens schema, och registrera dem i katalogen.
+  - Publicerande tjänst: lägg inte mer i händelsen än alla prenumeranter får se.
+  - Prenumererande tjänst: tål att samma händelse kommer två gånger och att händelser kommer i en annan ordning.
+  - Prenumererande tjänst: ta hand om händelser som inte går att behandla, så att de inte blockerar resten.
+  - Båda: anslut med tjänsteidentitet. Rätt att läsa och skriva ges per ämne.
+flows:
+  - from: { name: Publicerande tjänst, zone: tjanst }
+    to: { name: Meddelandeplattform, zone: plattform }
+    label: publicerar händelse på sitt ämne
+  - from: { name: Prenumererande tjänst, zone: tjanst }
+    to: { name: Meddelandeplattform, zone: plattform }
+    label: hämtar händelser från ämnet
+uses:
+  - target: component:it-miljo/meddelandeplattform
+    role: ämnen, leverans och åtkomst per ämne
+  - target: component:it-miljo/inloggningstjanst
+    role: tjänsteidentitet
+motivatedBy: [TP-INT-01, TP-ID-02]

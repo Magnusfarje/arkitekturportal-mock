@@ -1,0 +1,24 @@
+id: VL-AI-01
+kind: guide
+title: Får jag använda en språkmodell, och hur?
+topic: AI
+answer: Ja, genom språkmodelltjänsten, som kör modellerna i egna datahallar. Text skickas inte till AI-tjänster på internet. Modellen ger förslag, och en människa beslutar.
+before: |-
+  - Vad ska modellen hjälpa till med, och vem läser resultatet innan det används?
+  - Vilken information skickas till modellen, och är behandlingen godkänd enligt gällande regler?
+  - Vad händer om modellen har fel? Går felet att upptäcka och rätta?
+  - Går arbetet att göra när tjänsten inte svarar?
+scope: Lösningar som använder en språkmodell för att skriva, sammanfatta, klassificera eller söka i text.
+steps: |-
+  1. Beställ en kvot i språkmodelltjänsten hos teamet för data och AI.
+  2. Välj modell efter uppgiften: den mindre när svaret ska komma snabbt, den större när uppgiften är svår.
+  3. Bygg enligt mönstret: underlaget hämtas med användarens behörighet, och svaret visas som ett förslag.
+  4. Samla exempel på bra och dåliga svar innan du bygger, och pröva mot dem varje gång du ändrar instruktionen eller modellen byts.
+  5. Pröva med text som försöker styra modellen, till exempel ett ärende som innehåller instruktioner.
+  6. Kontrollera att underlag och svar inte hamnar i loggarna.
+leadsTo:
+  - target: RA-AI-01
+    when: En språkmodell ger förslag åt en användare i en applikation.
+  - target: TP-AI-01
+    when: Du överväger en AI-tjänst utanför myndigheten, eller en egen modell.
+motivatedBy: [TP-AI-01, TP-MIL-01, TP-BEH-01, TP-IND-01]

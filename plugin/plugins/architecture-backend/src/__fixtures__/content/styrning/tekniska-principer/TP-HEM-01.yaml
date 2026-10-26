@@ -1,0 +1,15 @@
+id: TP-HEM-01
+kind: technical-principle
+title: Hemligheter finns i hemlighetstjänsten och hämtas vid körning
+binding: binding
+topic: Hemligheter och certifikat
+statement: Lösenord, nycklar och token lagras i hemlighetstjänsten. En tjänst hämtar sina hemligheter när den körs, med sin plattformsidentitet. Hemligheter finns inte i kod, konfigurationsfiler, container-images eller byggloggar.
+rationale: 'En hemlighet i ett repo eller en container-image sprids till alla som kan läsa den och går inte att dra tillbaka. I hemlighetstjänsten går åtkomsten att styra, logga och återkalla, och hemligheten kan bytas utan ny leverans. Bortvalt: krypterade hemligheter i repot, och hemligheter som variabler i pipelinen.'
+scope: Alla hemligheter som en lösning använder, i test och produktion. Personliga administratörskonton hanteras i privilegierad åtkomst.
+consequences: |-
+  - Varje tjänst når bara sina egna hemligheter, och varje miljö har egna.
+  - Hemligheter byts enligt plan, och alltid när en läcka misstänks. Där det går används kortlivade hemligheter som hemlighetstjänsten skapar vid behov, till exempel databaskonton.
+  - Pipelinen får kortlivad åtkomst för det steg som behöver den, med byggjobbets egen identitet.
+  - Hemligheter skrivs inte i loggar, felsvar eller ärenden.
+  - En hemlighet som har hamnat i ett repo räknas som röjd och byts. Att ta bort raden räcker inte.
+motivatedBy: [AP-SÄK-05, TP-SÄK-11]

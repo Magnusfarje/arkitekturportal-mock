@@ -1,0 +1,19 @@
+id: TP-TEK-01
+kind: technical-principle
+title: Lösningar byggs med godkända språk, ramverk och databaser
+binding: recommended
+topic: Godkänd teknik
+statement: Serverkod skrivs i .NET, Python eller JavaScript på Node.js, och körs på en runtime som fortfarande får säkerhetsuppdateringar. Webbgränssnitt byggs med React eller Angular. Applikationsdata lagras i PostgreSQL, MongoDB eller Neo4j, och databasen väljs efter vad datat är.
+rationale: 'Med få tekniker kan plattformen ge färdiga container-images, mallar, uppdateringar och övervakning för var och en, och en utvecklare kan byta team utan att byta verktyg. Tre databaser räcker för de tre slag av data vi har: tabeller, dokument och samband. Våra system lever i decennier och överlever dem som byggde dem: ett gemensamt språk gör att kompetensen räcker till fler system än det egna, så att någon kan flyttas in, en rättning göras av någon annan och en överlämning bli möjlig. Det är versionen som föråldras, inte språkvalet. En runtime som inte längre får säkerhetsuppdateringar gör TP-SÄK-11 omöjlig att uppfylla, och höjningen blir dyrare ju längre den skjuts upp. Få databaser håller systemen driftbara och säkra: patchning, säkerhetskopiering, kompetens och licenser, utan engångslager som ingen annan kan drifta. Bortvalt: fritt val per team, och en enda databas för allt.'
+scope: 'Egenutvecklade lösningar: serverkod, webbgränssnitt och applikationsdata. Skript, infrastruktur som kod och analysarbete omfattas inte. En anskaffad produkt har den teknik leverantören har valt, men står i beroendeförteckningen enligt TP-BER-01.'
+consequences: |-
+  - PostgreSQL är standardvalet. Välj MongoDB när datat är dokument vars form varierar, och Neo4j när frågorna handlar om hur saker hänger ihop, till exempel anläggningens delar.
+  - Tidsserier lagras i PostgreSQL med tillägget TimescaleDB, och text som ska vara sökbar efter innebörd i PostgreSQL med tillägget pgvector. Ingen särskild databas behövs för dem.
+  - Mobilappar byggs med React Native, så att samma språk och komponenter används som i webbgränssnitten.
+  - Databasen beställs på databasplattformen. En egen databasinstallation i tjänstezonen används inte.
+  - TypeScript räknas som JavaScript, både på Node.js och i webbgränssnittet.
+  - Bygg på de container-images som finns i artefaktregistret för .NET, Python och Node.js. De hålls uppdaterade. Håll dig på en version med aktiv support, och planera höjningen innan supporten upphör i stället för efter: höjningar är underhåll och vinner sällan mot ny funktionalitet om de inte planeras in.
+  - Webbgränssnitt använder komponentbiblioteket, som finns för React och Angular.
+  - Ett annat språk, ramverk eller datalager väljs bara där det verkligen är motiverat: en komponent som måste köras inuti en plattform med ett annat språk, eller ett specialiserat behov som det valda inte möter. Då kan du inte räkna med stöd från plattformen, och du bär själv det som följer med tekniken: skydd mot angrepp på leveranskedjan, pakethantering, CVE-bevakning och utbildning. TP-SÄK-11 och TP-DRI-16 gäller fullt ut även då.
+  - Ett val utanför listan dokumenteras som ett beslut i lösningens repo, enligt TP-SAM-26. Tekniken ska ändå vara tillåten att ha i drift, enligt TP-BER-01-K02.
+motivatedBy: [TP-BER-01]

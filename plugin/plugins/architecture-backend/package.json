@@ -1,0 +1,61 @@
+{
+  "name": "@myndigheten/backstage-plugin-architecture-backend",
+  "version": "0.2.0",
+  "description": "Registret som läser arkitekturstyrningens innehållsrepo och katalogen",
+  "license": "UNLICENSED",
+  "publishConfig": {
+    "access": "restricted",
+    "main": "dist/index.cjs.js",
+    "types": "dist/index.d.ts"
+  },
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "backstage": {
+    "role": "backend-plugin",
+    "pluginId": "architecture",
+    "pluginPackages": [
+      "@myndigheten/backstage-plugin-architecture",
+      "@myndigheten/backstage-plugin-architecture-backend",
+      "@myndigheten/backstage-plugin-architecture-common"
+    ]
+  },
+  "scripts": {
+    "start": "backstage-cli package start",
+    "build": "backstage-cli package build",
+    "test": "backstage-cli package test",
+    "lint": "backstage-cli package lint",
+    "check": "backstage-cli package test check.test",
+    "prepack": "backstage-cli package prepack",
+    "postpack": "backstage-cli package postpack"
+  },
+  "dependencies": {
+    "@backstage/backend-plugin-api": "^1.10.1",
+    "@backstage/catalog-client": "^1.16.2",
+    "@backstage/config": "^1.3.9",
+    "@backstage/errors": "^1.3.1",
+    "@backstage/plugin-permission-common": "^0.9.11",
+    "@myndigheten/backstage-plugin-architecture-common": "^0.2.0",
+    "express": "^4.22.3",
+    "express-promise-router": "^4.1.1",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.5",
+    "zod-to-json-schema": "^3.25.2"
+  },
+  "devDependencies": {
+    "@backstage/backend-defaults": "^0.18.0",
+    "@backstage/cli": "^0.36.6",
+    "@backstage/plugin-auth-backend": "^0.30.1",
+    "@backstage/plugin-auth-backend-module-guest-provider": "^0.2.23",
+    "@backstage/plugin-catalog-backend": "^4.0.0",
+    "@backstage/plugin-permission-backend": "^0.7.16",
+    "@backstage/plugin-permission-backend-module-allow-all-policy": "^0.2.23",
+    "@types/express": "^4.17.25",
+    "better-sqlite3": "^12.0.0",
+    "jest": "~30.2.0"
+  },
+  "files": [
+    "dist",
+    "config.d.ts"
+  ],
+  "configSchema": "config.d.ts"
+}

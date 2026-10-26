@@ -1,0 +1,35 @@
+id: VL-ID-01
+kind: guide
+title: Vilken autentisering ska vi använda?
+topic: Identitet och åtkomst
+answer: Människor loggar in genom inloggningstjänsten med OpenID Connect. Tjänster identifierar sig med kortlivade token eller certifikat. Applikationen bygger aldrig egen inloggning. Det du väljer är vem som ska kunna logga in, och hur stark inloggningen ska vara.
+before: |-
+  - Vem anropar: en människa eller ett system?
+  - Var finns den som anropar: klientzon, tjänstezon, internet, partnernät eller OT?
+  - Vilken information når den, och kräver informationen MFA?
+scope: Applikationer och tjänster i verksamhets-IT. Komponenter i OT-zonen följer ERJU-profilen.
+steps: |-
+  1. Bestäm vilka som ska kunna logga in och vilka roller applikationen behöver.
+  2. Beställ en klient i inloggningstjänsten hos teamet för identitet och åtkomst, en per miljö.
+  3. Beställ rollerna som grupper hos samma team.
+  4. Anslut med ett etablerat bibliotek, enligt mönstret.
+  5. Pröva behörighet i applikationen för varje anrop. Inloggningen visar vem någon är, inte vad den får göra.
+  6. Testa med en användare utan roll och med en session som har gått ut.
+leadsTo:
+  - target: RA-ID-01
+    when: En medarbetare eller konsult loggar in i en applikation.
+  - target: RA-ID-01
+    when: En extern användare hos en partner loggar in. Använd varianten med federation eller externt konto.
+  - target: RA-ID-01
+    when: Allmänheten loggar in. Använd varianten med e-legitimation.
+  - target: RA-ID-02
+    when: En tjänst anropar en annan tjänst.
+  - target: RA-EXP-02
+    when: Ett externt system anropar vårt API.
+  - target: RA-ID-03
+    when: En användare loggar in i en mobilapp, ett skrivbordsprogram eller ett kommandoradsverktyg.
+  - target: RA-ADM-01
+    when: En administratör eller leverantör administrerar lösningen.
+  - target: TP-ERJU-SCS-01
+    when: En komponent i järnvägsautomation ansluter. Certifikat, nätåtkomst och identitet följer ERJU-profilen.
+motivatedBy: [TP-ID-01, TP-ID-02, TP-BEH-01]

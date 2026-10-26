@@ -1,0 +1,14 @@
+id: TP-AI-01
+kind: technical-principle
+title: Språkmodeller körs i egna datahallar, genom språkmodelltjänsten
+binding: binding
+topic: AI
+statement: En lösning som använder en språkmodell anropar språkmodelltjänsten. Text skickas inte till AI-tjänster utanför myndigheten, och en lösning kör inte egna modeller vid sidan av tjänsten.
+rationale: 'Det som skickas till en språkmodell är ofta just den information som lösningen finns till för att skydda. I egna datahallar vet vi var texten finns, att den inte sparas och att modellen inte tränas på den. En gemensam tjänst gör att grafikprocessorerna används av alla, och att modellerna byts på ett ställe. Bortvalt: AI-tjänster på internet, och egna modeller per lösning.'
+scope: Alla lösningar som använder en språkmodell, också anskaffade produkter. En produkt som bara fungerar med en AI-tjänst utanför myndigheten kräver avsteg, på samma sätt som en molntjänst enligt TP-MIL-01.
+consequences: |-
+  - Lösningen anropar språkmodelltjänsten med sin tjänsteidentitet och har en egen kvot.
+  - Lösningen anger vilken modell den använder, och prövar sina resultat igen när modellen byts.
+  - Verktyg för utvecklare som skickar kod eller text till en tjänst på internet omfattas på samma sätt.
+  - Behöver en lösning en modell som tjänsten inte har: ta upp det med teamet för data och AI innan du bygger något eget.
+motivatedBy: [TP-MIL-01, AP-SÄK-02]

@@ -1,0 +1,26 @@
+id: RA-HEM-02
+kind: reference-architecture
+title: Certifikat utfärdas och förnyas automatiskt
+topic: Hemligheter och certifikat
+solution: Tjänsten begär sitt certifikat från intern PKI med ACME. För tjänster på containerplattformen gör plattformen det. Certifikatet gäller en kort tid och förnyas utan handarbete.
+rationale: Korta giltighetstider begränsar skadan av en röjd nyckel, och automatisk förnyelse gör att inget certifikat går ut för att någon glömde det.
+fits: Tjänster som tar emot TLS-anslutningar eller identifierar sig med klientcertifikat. Publika certifikat mot internet hanteras av exponeringsplattformen och beställs inte av lösningen.
+responsibilities: |-
+  - Använd plattformens certifikathantering. Beställ inte certifikat för hand.
+  - Låt klienter lita på intern PKI:s rotcertifikat, och stäng aldrig av certifikatkontroll.
+  - Skapa den privata nyckeln där den används. Kopiera den inte mellan miljöer.
+  - Låt klientcertifikatets namn peka ut tjänsten, så att mottagaren kan avgöra vem som anropar.
+  - Övervaka att förnyelsen fungerar.
+flows:
+  - from: { name: Din tjänst, zone: tjanst }
+    to: { name: Intern PKI, zone: plattform }
+    label: begär och förnyar certifikat med ACME
+  - from: { name: Anropande tjänst, zone: tjanst }
+    to: { name: Din tjänst, zone: tjanst }
+    label: TLS, kontrollerar certifikatet mot intern PKI
+uses:
+  - target: component:it-miljo/intern-pki
+    role: utfärdar och förnyar certifikat
+  - target: component:it-miljo/containerplattform
+    role: begär certifikat åt tjänster som körs där
+motivatedBy: [TP-KRY-01, TP-SÄK-10]

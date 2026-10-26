@@ -1,0 +1,21 @@
+id: TP-SÄK-12
+kind: technical-principle
+title: Utvecklings- och testmiljöer kan inte nå produktion av misstag
+binding: binding
+topic: Säkerhet
+statement: Det som håller isär utvecklings-, test- och utbildningsmiljöer från produktion är något annat än att konfigurationen råkar vara rätt. Pekas en testmiljö mot produktion ska försöket misslyckas, inte lyckas. Produktionsdata hamnar inte i en lägre miljö utan att först ha avidentifierats.
+rationale: 'Skilda installationer är inte skilda miljöer. Är enda skillnaden en anslutningssträng i en konfigurationsfil vilar separationen på att ingen skriver fel — då är den en konvention, inte en spärr, precis som en lokal git-hook jämfört med en branchpolicy. Felet upptäcks dessutom oftast först när ett testjobb redan skrivit i produktionsdatabasen, och då är frågan återställning snarare än separation. Riktningen tillbaka väger lika tungt: lägre miljöer är sämre härdade, sämre övervakade och fulla av kopior av verklig data — en bekväm väg in mot produktion. De föreskrifter som är på väg under Cybersäkerhetslagen pekar ut både angrepp och misstag, och nämner utvecklings- och testmiljöer särskilt.'
+scope: Alla system som har utvecklings-, test- eller utbildningsmiljöer vid sidan av produktion. En miljö för återställningsövning enligt TP-DRI-14 räknas inte som en lägre miljö.
+preconditions: En driftmiljö som kan ge separata segment eller nätverkspolicyer; hemligheter per miljö så att en lägre miljö aldrig kan läsa produktionens.
+solutions: 'Låt produktionen avvisa anslutningar utifrån produktionssegmentet — då ger en felpekad konfiguration connection refused. Ge inte lägre miljöer produktionens autentiseringsuppgifter, separata hemligheter per miljö gör felkonfigurationen ofarlig även när nätverket inte hindrar den. Använd avidentifierade eller syntetiska testdata, och behandla en återställd produktionssäkerhetskopia som produktionsdata tills den avidentifierats. Verifiera separationen i stället för att anta den: försök ansluta till produktion från en testvärd — misslyckas det på nätverksnivå är separationen verklig, misslyckas det på autentisering vilar den på hemligheterna ensamma, lyckas det finns ingen. Säkerhetslogga försök att korsa gränsen (TP-DRI-13), så att ett konfigurationsfel ger larm och inte tystnad. Leveranspipelinen korsar gränsen per definition — behandla den som en egen kontrollerad väg med behörigheter per miljö.'
+ifNotMet: 'Obligatoriskt — inget system är undantaget. Ägs segmenteringen av någon annan än teamet är det fortfarande systemets brist: begär åtgärden, och dokumentera bristen med namngiven ägare och datum. Se Tillämpning.'
+concretizes: [AP-SÄK-03]
+requirements:
+  - id: TP-SÄK-12-K01
+    title: Lägre miljöer kan inte nå produktion av misstag
+    statement: Det som håller isär utvecklings-, test- och utbildningsmiljöer från produktion ska vara något annat än att konfigurationen råkar vara rätt. Produktionsdata ska inte hamna i en lägre miljö utan att först ha avidentifierats.
+    scope: Systemet har miljöer vid sidan av produktion. Ägs segmenteringen av någon annan än teamet är det fortfarande systemets brist.
+    criteria: |-
+      - Ett försök att ansluta till produktion från en lägre miljö misslyckas, och det är prövat, inte antaget.
+      - Data i lägre miljöer är avidentifierade eller syntetiska. En återställd produktionssäkerhetskopia behandlas som produktionsdata tills den avidentifierats.
+    notEnough: Skilda installationer där enda skillnaden är en anslutningssträng i en konfigurationsfil.

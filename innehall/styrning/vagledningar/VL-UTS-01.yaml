@@ -1,0 +1,24 @@
+id: VL-UTS-01
+kind: guide
+title: Hur skickar jag sms, pushnotiser eller e-post till många?
+topic: Exponering
+answer: Lämna utskicken till utskickstjänsten. Den köar, håller takten mot operatören och apptjänsterna och skickar. Lösningen öppnar inga egna vägar ut och har inga egna nycklar till operatörer.
+before: |-
+  - Har mottagarna begärt utskicken, och hur avslutar de?
+  - Hur många utskick blir det i värsta fall, och hur fort ska de fram?
+  - Hur länge är ett meddelande aktuellt?
+scope: Lösningar som skickar meddelanden till många mottagare utanför myndigheten.
+steps: |-
+  1. Beställ anslutning till utskickstjänsten hos integrationsteamet, med kanaler, mallar och förväntad volym.
+  2. Spara mottagarnas val i din lösning, och gör det lätt att avsluta.
+  3. Lämna utskicken till tjänsten med ID och med hur länge de är aktuella.
+  4. Pröva i testmiljön, där bara godkända testmottagare får utskick.
+  5. Följ i driftvyerna hur många utskick som kom fram, och hur lång tid det tog.
+leadsTo:
+  - target: RA-UTS-01
+    when: Sms, pushnotiser eller e-post till många.
+  - target: RA-MOB-01
+    when: Mottagaren använder myndighetens app.
+  - target: VL-DRI-05
+    when: Utskicken hänger ihop med en lasttopp i tjänsten.
+motivatedBy: [TP-ZON-01, TP-MIL-01]

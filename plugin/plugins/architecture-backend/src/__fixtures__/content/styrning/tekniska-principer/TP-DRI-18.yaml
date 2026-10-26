@@ -1,0 +1,11 @@
+id: TP-DRI-18
+kind: technical-principle
+title: Systemet går att förstå och drifta utan den som byggde det
+binding: recommended
+topic: Drift och återställning
+statement: Någon som inte byggt systemet kan ta reda på vad det gör, vad det hänger ihop med, hur det byggs och levereras, och vad man gör när det inte fungerar — utan att fråga den som byggde det. Underlaget finns där koden finns och beskriver systemet som det faktiskt ser ut.
+rationale: Våra system lever i decennier och byter team flera gånger under tiden. Kunskap som bara finns hos en person försvinner vid semester, tjänstebyte eller pensionering, och det märks först när något är trasigt och den personen inte är i tjänst. Beskrivningar som inte stämmer är sämre än inga alls — den som följer dem agerar på något som ser tillförlitligt ut men säger något annat än verkligheten — så det som skrivs ner måste vara litet nog att faktiskt hållas aktuellt.
+scope: Alla system som ska förvaltas över tid.
+preconditions: Att underlaget bor tillsammans med koden, så att det kan ändras i samma ändring och granskas i samma granskning (TP-FLO-04); att omfattningen hålls nere till det någon faktiskt behöver för att komma igång eller ingripa; att det går att svara på vem som äger systemet och vem som kontaktas.
+solutions: En README.md i repot som svarar på vad systemet gör och för vem, hur det byggs och körs lokalt, hur det levereras och var det körs, vad det beror på och vad som beror på det, samt vem som äger det; en driftinstruktion (runbook) för de vanligaste ingripandena — starta om, rulla tillbaka, återställa från backup, vad de vanliga larmen betyder; en översiktsbild över systemet och dess grannar; gränssnittsdokumentation genererad ur källan (t.ex. en OpenAPI-beskrivning byggd ur koden) hellre än handskriven; att beskrivningen ändras i samma pull request som ändringen den beskriver; ADR:er för resonemanget bakom besluten (TP-SAM-26).
+ifNotMet: Huvudregel — vad det innebär.

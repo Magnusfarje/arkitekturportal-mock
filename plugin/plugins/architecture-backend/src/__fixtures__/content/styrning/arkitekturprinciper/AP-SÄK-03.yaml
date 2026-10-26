@@ -1,0 +1,13 @@
+id: AP-SÄK-03
+kind: architecture-principle
+title: Åtkomst avgörs vid tillitsgränsen, inte av var man befinner sig
+statement: Lösningen ska ha definierade tillitsgränser och vid varje gräns pröva vem som får göra vad. Att någon finns på ett internt nät eller har loggat in avgör inte vad den får göra.
+rationale: Placering i ett internt nät eller en genomförd inloggning säger inte vilken åtkomst som är avsedd. Arkitekturen behöver uttrycka gränserna och verkställa dem.
+scope: Lösningar med skyddad information, privilegierade funktioner eller kommunikation över tillitsgränser – nya som befintliga, IT som OT. Omfattar användare, administratörer, leverantörer och tjänsteidentiteter.
+consequences: |-
+  - Varje skyddat flöde har en åtkomstregel och en utpekad kontrollpunkt där regeln verkställs.
+  - Ansvaret för åtkomstbeslut är fördelat mellan komponenterna.
+  - Alternativa vägar, mellanliggande tjänster och administrativa gränssnitt omfattas av samma gränser.
+  - Designen förlitar sig inte enbart på kontroller i klienten eller på att nätverket går att lita på.
+  - Ett fel i åtkomstkontrollen ger inte otillåten åtkomst.
+notCovered: TP-ÅTK-01 och TP-BEH-01 täcker administrativ åtkomst och behörighet i applikationer. TP-SÄK-10 täcker skydd under överföring och TP-SÄK-12 separationen mellan miljöer. Tjänsteidentiteter och nätverkssegmentering i övrigt har inga regler.

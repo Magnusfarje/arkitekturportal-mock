@@ -1,0 +1,38 @@
+id: AP-ERJU-01
+kind: architecture-principle
+title: SCS skärmar av automationen från förändringar i enterprise-miljön
+statement: Säkerhetstjänsternas arkitektur ska skilja enterprise-funktioner (ECS) från automationsmiljön och ha en definierad gräns av delade tjänster (SCS) och standardiserade gränssnitt (SSI). Gränsen ska begränsa hur förändringar i ECS påverkar automationskomponenterna.
+rationale: Enterprise-miljön och automationsmiljön förändras i olika takt. Det kräver tydliga kontrakt och ansvar mellan dem. Principen är härledd ur arkitekturbeskrivningen i E1 SP-SEC-Serv-3-1 och 3-2, s. 9; källan ställer inget eget shall-krav. Principen hänger ihop med AP-SÄK-02 och AP-SÄK-03.
+scope: |-
+  Arkitektur för samverkan mellan ECS och SCS och de komponenter som ansluter, inom profilen P-ERJU-01. Riktar sig till enterprise- och OT-arkitekter, tjänsteägare och systemintegratörer.
+
+  Profilen P-ERJU-01 gäller markbaserad järnvägsautomation där ERJU System Pillars cybersäkerhetsarkitektur tillämpas genom ett uttryckligt införandebeslut. Den är inte generell styrning för alla IT-system, alla säkerhetstjänster eller all OT. Ombord och blandade ombord/mark-fall utreds separat.
+
+  Tillämplighet prövas i ordning: profilens omfattning, objektroll (ECS, SCS eller Secure Component), tjänst, ändpunktsroll och kravets egna villkor. Saknas en uppgift som behövs är svaret ”behöver utredas”, inte ”gäller inte”.
+consequences: |-
+  - Arkitekturen pekar ut ECS, SCS, anslutande komponenter och gränssnitten mellan dem.
+  - Ändringar i ECS konsekvensbedöms mot SCS och berörda SSI.
+  - Rollen hos adaptrar, tillitsgränser och komponenter är dokumenterad.
+  - Arkitekturunderlaget visar med ett förändringsscenario, till exempel byte av enterprise-katalog, hur en ändring hanteras utan oplanerade ändringar i de beslutade SSI-kontrakten. Ett diagram utan förändringsanalys räcker inte.
+  - Principen kräver ingen viss fysisk topologi och ingen DMZ. Åtskild driftsättning är en rekommendation, se TP-ERJU-ECS-01-K02.
+
+  För alla regler i profilen gäller:
+
+  - Varje ändpunkt har en namngiven ansvarig.
+  - Kontrollplanen anger testmiljö, versioner, tillåtna testaktiviteter, certifikatprofiler, motparter och hur gammalt underlaget får vara.
+  - Tester körs med testidentiteter i isolerade eller särskilt godkända miljöer. Underlaget innehåller inga privata nycklar eller användbara hemligheter.
+  - Ett godkänt resultat betyder ”valda kontroller uppfyllda inom angiven profil och omfattning”, aldrig ”ERJU-godkänd lösning”.
+sections:
+  - title: Begrepp
+    text: |-
+      Förkortningarna kommer ur källan.
+
+      - ECS: Enterprise Cybersecurity Services, säkerhetstjänsterna i enterprise-miljön.
+      - SCS: Shared Cybersecurity Services, de delade säkerhetstjänsterna för automationsmiljön.
+      - Secure Component: en automationskomponent som använder SCS.
+      - SSI: gränssnitten mellan SCS och de komponenter som ansluter.
+      - ESI: gränssnitten mellan ECS och SCS.
+      - Tjänsterna: STS (tid), PKI (certifikat), IAM (identitet), NAC (nätåtkomst), LOG (logg), UAS (användarautentisering), BKP (säkerhetskopiering), MNT (underhåll) och DNS.
+      - ONCC, MDC och ODC är certifikat som källan definierar.
+externalReferences:
+  - Europe’s Rail Joint Undertaking, Shared Cybersecurity Services Specification (SP-SEC-ServSpec), version 1.1, Released 23-MAR-2026 – i paketet kallad E1. Källregister, kontrollsummor och attribution finns i valideringspaket 0.4, avsnitt 15.10. Texten är en svensk, avgränsad bearbetning och är inte författad eller godkänd av Europe’s Rail.

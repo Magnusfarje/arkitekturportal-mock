@@ -1,0 +1,39 @@
+id: RA-UTS-01
+kind: reference-architecture
+title: Utskick till allmänheten genom utskickstjänsten
+topic: Exponering
+solution: Tjänsten lämnar mottagare, kanal och innehåll till utskickstjänsten. Den köar utskicken, håller den takt som operatören och apptjänsterna tar emot, och skickar genom utgående proxy och e-postgatewayen.
+rationale: Lösningen behöver inga egna avtal, nycklar eller vägar ut mot operatörer och apptjänster. Vid en stor händelse tar kön emot hundratusentals utskick utan att lösningen väntar på dem.
+fits: Sms, pushnotiser eller e-post till många mottagare utanför myndigheten, till exempel vid en trafikstörning. E-post från en lösning till enstaka mottagare går genom e-postreläet. Beslut och meddelanden som ska till en digital brevlåda går genom avsändartjänsten för digital post.
+responsibilities: |-
+  - Skicka bara till den som har begärt utskicken, och gör det lika lätt att avsluta som att börja.
+  - Håll innehållet kort och fritt från uppgifter som inte ska synas på en låst skärm.
+  - Ange hur länge ett utskick är aktuellt. Det som inte hinner fram i tid ska inte skickas alls.
+  - Ge varje utskick ett ID, så att samma händelse inte skickas två gånger.
+  - Bestäm vad som går före när kön är lång: det som gäller nu, före det som gällde nyss.
+  - Följ hur många utskick som kom fram, i driftvyerna.
+variants: |-
+  - Pushnotis till myndighetens app: appen registrerar sin adress hos utskickstjänsten efter inloggning.
+  - Sms: avsändarnamnet är myndighetens och beställs hos integrationsteamet.
+  - I testmiljön skickar utskickstjänsten bara till mottagare som är godkända för test.
+flows:
+  - from: { name: Din tjänst, zone: tjanst }
+    to: { name: Utskickstjänst, zone: plattform }
+    label: mottagare, kanal, mall och innehåll
+  - from: { name: Utskickstjänst, zone: plattform }
+    to: { name: Utgående proxy, zone: dmz }
+    label: sms till operatören och pushnotiser till apptjänsterna
+  - from: { name: Utgående proxy, zone: dmz }
+    to: { name: Extern tjänst, zone: internet }
+    label: HTTPS
+  - from: { name: Utskickstjänst, zone: plattform }
+    to: { name: E-postgateway, zone: dmz }
+    label: e-post till mottagare utanför myndigheten
+uses:
+  - target: component:it-miljo/utskickstjanst
+    role: kö, takt per kanal och mallar
+  - target: component:it-miljo/utgaende-proxy
+    role: vägen till operatören och apptjänsterna
+  - target: component:it-miljo/e-postgateway
+    role: e-post till mottagare utanför myndigheten
+motivatedBy: [TP-ZON-01, TP-MIL-01, TP-HEM-01]

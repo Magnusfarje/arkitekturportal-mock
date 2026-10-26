@@ -1,0 +1,37 @@
+{
+  "name": "backstage-plugin-arkitektur",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Backstage-plugin för arkitekturstyrning, arkitekturguide och IT-miljön",
+  "engines": {
+    "node": "22 || 24"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "test": "backstage-cli repo test",
+    "lint": "backstage-cli repo lint",
+    "build": "backstage-cli repo build --all",
+    "fix": "backstage-cli repo fix",
+    "prettier:check": "prettier --check .",
+    "check": "yarn workspace @myndigheten/backstage-plugin-architecture-backend check"
+  },
+  "workspaces": [
+    "plugins/*"
+  ],
+  "devDependencies": {
+    "@backstage/cli": "^0.36.6",
+    "@backstage/cli-defaults": "^0.1.6",
+    "@jest/environment-jsdom-abstract": "~30.2.0",
+    "@types/jest": "^30.0.0",
+    "jest": "~30.2.0",
+    "jsdom": "^27.1.0",
+    "prettier": "^2.3.2",
+    "typescript": "~5.8.0"
+  },
+  "resolutions": {
+    "@types/react": "^18",
+    "@types/react-dom": "^18"
+  },
+  "prettier": "@backstage/cli/config/prettier",
+  "packageManager": "yarn@4.13.0"
+}

@@ -1,0 +1,29 @@
+id: RA-EXP-03
+kind: reference-architecture
+title: Utgående anrop mot internet genom utgående proxy
+topic: Exponering
+solution: Tjänsten anropar den externa tjänsten genom utgående proxy, som bara släpper fram de destinationer som är godkända för lösningen. Nyckeln till den externa tjänsten ligger i hemlighetstjänsten.
+rationale: Det går att se vilka externa tjänster en lösning är beroende av, och en tjänst som tagits över kan inte skicka data vart som helst.
+fits: En tjänst behöver anropa ett API, hämta uppdateringar eller lämna data till en part på internet eller i ett partnernät.
+responsibilities: |-
+  - Beställ destinationerna hos teamet för nätverk och exponering: värdnamn och port, inte hela internet.
+  - Registrera beroendet till den externa tjänsten i katalogen.
+  - Kontrollera den externa tjänstens certifikat. Stäng inte av kontrollen för att komma förbi proxyn.
+  - Behandla svaret som data utifrån och validera det.
+  - Bestäm vad tjänsten gör när den externa tjänsten inte svarar.
+flows:
+  - from: { name: Din tjänst, zone: tjanst }
+    to: { name: Hemlighetstjänst, zone: plattform }
+    label: hämtar nyckeln till den externa tjänsten
+  - from: { name: Din tjänst, zone: tjanst }
+    to: { name: Utgående proxy, zone: dmz }
+    label: HTTPS mot en godkänd destination
+  - from: { name: Utgående proxy, zone: dmz }
+    to: { name: Extern tjänst, zone: internet }
+    label: HTTPS
+uses:
+  - target: component:it-miljo/utgaende-proxy
+    role: godkända destinationer per lösning
+  - target: component:it-miljo/hemlighetstjanst
+    role: nyckeln till den externa tjänsten
+motivatedBy: [TP-ZON-01, TP-MIL-01, TP-HEM-01]

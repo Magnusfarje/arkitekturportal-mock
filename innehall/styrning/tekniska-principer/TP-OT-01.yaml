@@ -1,0 +1,14 @@
+id: TP-OT-01
+kind: technical-principle
+title: OT-zonen nås bara genom OT-DMZ
+binding: binding
+topic: Integration mellan domäner
+statement: Utbyte mellan IT och OT går genom OT-reläet i OT-DMZ. IT-sidan och OT-sidan ansluter var för sig till reläet, och ingen anslutning går rakt igenom. OT-zonen nås aldrig från internet, partnernät eller klientzon.
+rationale: 'Trafikstyrning och järnvägsautomation har högre krav på tillgänglighet och integritet än övrig IT, och förändras i en annan takt. När ingen anslutning passerar gränsen kan ett fel eller ett intrång på IT-sidan inte följa en öppen session in i OT. Bortvalt: brandväggsöppningar direkt mellan tjänstezon och OT-zon, och leverantörsanslutningar direkt in i OT.'
+scope: All kommunikation med komponenter i OT-zonen. Inom OT-zonen gäller ERJU-profilen P-ERJU-01 där den har införts.
+consequences: |-
+  - Data från OT till IT: OT-systemet lämnar data i reläet, och IT-tjänsten hämtar den där.
+  - Begäran från IT till OT: IT-tjänsten lämnar begäran i reläet, och OT-systemet hämtar den. OT-systemet avgör själv om begäran ska utföras.
+  - Information från OT som ska vidare till internet publiceras av en tjänst i tjänstezonen, aldrig från OT.
+  - Administration av OT går från privilegierad åtkomst, genom OT-hoppservern. Det är den enda anslutning som öppnas in i OT-zonen.
+motivatedBy: [AP-SÄK-03, TP-ZON-01, AP-ERJU-01]

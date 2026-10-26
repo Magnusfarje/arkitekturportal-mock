@@ -1,0 +1,43 @@
+id: RA-ID-03
+kind: reference-architecture
+title: Inloggning i mobilapp, skrivbordsprogram och kommandoradsverktyg
+topic: Identitet och åtkomst
+solution: Appen öppnar inloggningstjänstens sida i enhetens vanliga webbläsare och får tillbaka en kod, som den byter mot token med PKCE. Appen har ingen klienthemlighet. Ett verktyg utan webbläsare visar en kod som användaren bekräftar i en webbläsare på en annan enhet.
+rationale: En app som installeras hos användaren kan inte hålla en hemlighet, eftersom den som har appen kan läsa den. Med PKCE behövs ingen. När inloggningen sker i enhetens webbläsare ser appen aldrig lösenordet, och MFA och policy fungerar som för webbapplikationer.
+fits: Mobilappar, program som installeras på en dator och kommandoradsverktyg där en människa loggar in. En tjänst utan användare följer RA-ID-02, och en webbapplikation RA-ID-01.
+responsibilities: |-
+  - Registrera appen som en klient utan hemlighet, med exakta återanropsadresser som bara din app kan ta emot.
+  - Använd enhetens webbläsare för inloggningen, inte en inbäddad webbvy i appen.
+  - Lagra token i enhetens skyddade nyckellager, aldrig i en fil eller i appens inställningar.
+  - Håll åtkomsttoken kortlivad. Förnyelsetoken byts vid varje användning, och en som används två gånger spärrar inloggningen.
+  - Låt upplåsning med fingeravtryck eller ansikte skydda appen lokalt. Det ersätter inte inloggningen.
+  - Kontrollera token i API:et: signatur, utfärdare, mottagare och giltighetstid, och pröva behörighet för varje anrop enligt TP-BEH-01.
+  - Gör det möjligt att spärra en borttappad enhet: när användarens inloggning återkallas slutar förnyelsen att fungera.
+variants: |-
+  - Kommandoradsverktyg och utrustning utan webbläsare: verktyget visar en kod och en adress, och användaren loggar in i en webbläsare på en annan enhet.
+  - Program på en hanterad arbetsplats: samma flöde, men direkt från klientzonen till inloggningstjänsten.
+  - Extern användare hos en partner: inloggningstjänsten litar på partnerns inloggning genom federation, eller har ett externt konto med MFA.
+flows:
+  - from: { name: Användare, zone: internet }
+    to: { name: Exponeringsplattform, zone: dmz }
+    label: appen öppnar inloggningssidan i enhetens webbläsare
+  - from: { name: Exponeringsplattform, zone: dmz }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: inloggning med MFA, Authorization Code Flow med PKCE
+  - from: { name: Användare, zone: internet }
+    to: { name: Exponeringsplattform, zone: dmz }
+    label: appen anropar API:et med åtkomsttoken
+  - from: { name: Exponeringsplattform, zone: dmz }
+    to: { name: Extern API-gateway, zone: dmz }
+    label: anrop med token
+  - from: { name: Extern API-gateway, zone: dmz }
+    to: { name: Ditt API, zone: tjanst }
+    label: HTTPS med mTLS, användarens token följer med
+uses:
+  - target: component:it-miljo/exponeringsplattform
+    role: publicerar inloggningssidan och API:et
+  - target: component:it-miljo/inloggningstjanst
+    role: inloggning, MFA och token
+  - target: component:it-miljo/api-gateway-extern
+    role: släpper igenom publicerade operationer
+motivatedBy: [TP-ID-01, TP-KRY-01, TP-BEH-01]

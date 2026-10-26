@@ -1,0 +1,29 @@
+id: VL-LIV-01
+kind: guide
+title: Hur byter jag ut ett system som är i drift?
+topic: Livscykel
+answer: Ta reda på vilka som är beroende av det gamla systemet, och ge dem ett API i stället för databasen. Flytta sedan en del i taget bakom API-gatewayen, med en väg tillbaka för varje steg. Öva flytten av data i testmiljön innan du gör den i produktion.
+before: |-
+  - Vilka system och människor använder det gamla systemet i dag? Se beroendena i katalogen, och fråga efter dem som inte står där.
+  - Läser någon direkt i det gamla systemets databas?
+  - Hur länge får verksamheten vara utan systemet vid själva växlingen?
+  - Vad i det gamla systemet ska bevaras, och vad ska inte följa med?
+scope: Ett system i drift ersätts av ett nytt, egenutvecklat eller anskaffat.
+steps: |-
+  1. Lista konsumenterna, och kom överens med var och en om när den byter.
+  2. Bygg det nya systemet enligt VL-DRI-02 och VL-DRI-03.
+  3. Beställ avidentifierade data från testdatatjänsten, och öva flytten i testmiljön tills den går att göra inom den tid verksamheten tål.
+  4. Flytta data och funktioner enligt mönstret, en del i taget.
+  5. Bestäm i förväg vad som avgör att ett steg ska tas tillbaka, och vem som beslutar det.
+  6. Pröva återställningen av det nya systemet enligt VL-DRI-04 innan det gamla stängs.
+  7. Avveckla det gamla systemet enligt VL-LIV-02.
+leadsTo:
+  - target: RA-LIV-01
+    when: Systemet har konsumenter, och båda systemen måste vara i drift under en tid.
+  - target: RA-INT-01
+    when: Konsumenter som läser i databasen ska få ett API.
+  - target: RA-INT-02
+    when: Konsumenter ska få veta när något ändras.
+  - target: VL-LIV-02
+    when: Det gamla systemet ska avvecklas när övergången är klar.
+motivatedBy: [TP-INT-01, AP-SÄK-04, TP-ENK-22, TP-DRI-15]

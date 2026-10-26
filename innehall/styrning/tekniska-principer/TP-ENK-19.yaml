@@ -1,0 +1,11 @@
+id: TP-ENK-19
+kind: technical-principle
+title: Enkelhet först
+binding: recommended
+topic: Enkelhet och gränssnitt
+statement: Vi bygger det enklaste som möter behovet; komplexitet måste förtjäna sin plats. Att ta bort ett felläge ni kan namnge är ett giltigt skäl, även om inget krav ber om det.
+rationale: Enkla system är billigare att förstå, ändra och drifta. Spekulativ komplexitet (YAGNI) är ett vanligt och dyrt misstag — men det YAGNI syftar på är spekulativ generalitet, abstraktioner för den andra användningen som aldrig kommer, inte struktur som finns för att systemet ska bete sig vettigt när något runtomkring det inte gör det.
+scope: Utformning av nya system och ändringar av befintliga.
+preconditions: En kultur där enkla lösningar värderas högre än påhittiga; tillräcklig domänförståelse för att veta vad som faktiskt behövs nu, och vilka fellägen systemet faktiskt har.
+solutions: Föredra beprövad, väl förstådd teknik; ta bort spekulativa abstraktioner; gå igenom designen innan ni bygger och stryk det som ingen behöver.
+ifNotMet: Huvudregel — vad det innebär.

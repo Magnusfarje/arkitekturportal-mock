@@ -1,0 +1,19 @@
+id: TP-GRU-01
+kind: technical-principle
+title: All källkod och konfiguration finns i versionshantering
+binding: binding
+topic: Grunden
+statement: Allt som behövs för att bygga och köra ett system — kod, konfiguration, infrastrukturdefinitioner — finns i versionshantering. Kravet på källkod gäller den kod vi äger. För ett inköpt system gäller posten konfigurationen — det som gör installationen till just vår — men inte leverantörens kod, och inte levererade binärer eller installationsfiler.
+rationale: 'Spårbarhet, reproducerbarhet och möjlighet att rulla tillbaka. Odokumenterade, oversionerade artefakter är hur system blir ohanterbara och hur kunskap försvinner när någon slutar. Binärer hör inte hit: de går varken att granska eller jämföra, och en ominstallation ska utgå från leverantörens leverans.'
+scope: Alla system. För kod vi äger gäller posten källkod, konfiguration och infrastrukturdefinitioner. För ett inköpt system gäller den konfigurationen, men inte leverantörens kod, levererade binärer eller installationsfiler.
+preconditions: En supportad versionshanteringsplattform (TP-GRU-02); överenskommelse om att inte lagra hemligheter i repot (se TP-SÄK-11).
+solutions: 'Git som enda källa till sanning, på vår godkända källkods- och leveransplattform — se tech-radarn för vilka tekniker och plattformar som är godkända. Ett system vars kod ligger någon annanstans uppfyller ändå utfallet; frågan tas upp när systemet ändå ska byggas om. Infrastruktur som kod; konfiguration hanterad tillsammans med repot, hemligheter utanför (se TP-SÄK-11). För ett inköpt system är det konfigurationen som ska in: inställningsfiler, driftsättnings- och integrationsskript, scheman och miljöspecifika värden — det som en ominstallation annars inte får tillbaka.'
+ifNotMet: Obligatoriskt — inget system är undantaget. Den som inte når utfallet bär en dokumenterad brist med namngiven ägare och datum. Se Tillämpning.
+requirements:
+  - id: TP-GRU-01-K01
+    title: Kod och konfiguration finns i versionshantering
+    statement: Allt som behövs för att bygga och köra systemet ska finnas i versionshantering.
+    scope: Alltid. För ett inköpt system gäller kravet konfigurationen, inte leverantörens kod, binärer eller installationsfiler.
+    criteria: |-
+      - Kod, konfiguration och infrastrukturdefinitioner för systemet finns i versionshantering.
+      - För ett inköpt system finns det som gör installationen till just vår: inställningsfiler, driftsättnings- och integrationsskript, scheman och miljöspecifika värden.

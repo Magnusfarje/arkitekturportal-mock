@@ -1,0 +1,11 @@
+id: TP-ENK-21
+kind: technical-principle
+title: Levererade artefakter versioneras förutsägbart
+binding: recommended
+topic: Enkelhet och gränssnitt
+statement: Allt som har konsumenter — bibliotek, paket, tjänster, API:er — märks med en version som visar en ändrings art och påverkan, så att konsumenten snabbt kan bedöma uppgraderingsrisken.
+rationale: Förutsägbar versionering är det som gör att andra team kan bero på er mjukvara på ett säkert sätt. Utan en gemensam innebörd för versionsnummer blir varje uppgradering en gissning och koordineringskostnaden exploderar i ett stort system av system.
+scope: 'Allt som har konsumenter: bibliotek, paket, tjänster och API:er. För interna, kontinuerligt driftsatta applikationer utan externa konsumenter kan en bygg- eller release-identifierare räcka.'
+preconditions: En tydlig definition av det publika gränssnitt som versioneras (API, paketgränssnitt); en release-/taggningsprocess; överenskommelse om hur brytande ändringar deklareras.
+solutions: 'Semantisk versionering (SemVer) är det rekommenderade schemat — MAJOR.MINOR.PATCH: höj MAJOR för brytande ändringar, MINOR för bakåtkompatibla funktioner, PATCH för bakåtkompatibla rättningar. Passar naturligt med Conventional Commits (TP-FLO-08): fix → PATCH, feat → MINOR, BREAKING CHANGE → MAJOR, vilket möjliggör automatiska versionshöjningar. För API-/schemaevolution specifikt, se TP-ENK-20. Obs: för interna, kontinuerligt driftsatta applikationer utan externa konsumenter kan en bygg-/release-identifierare vara lämpligare än SemVer — tillämpa detta där något faktiskt konsumeras.'
+ifNotMet: Huvudregel — vad det innebär.

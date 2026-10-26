@@ -1,0 +1,674 @@
+# Fem exempelsystem i katalogen, som en organisations egna system. De placerar sig
+# i IT-miljön genom annotationen architecture.portal/segment och anger vad de bygger
+# på med hela referensen in i namespace it-miljo. Kedjan: tågplanen lämnas till
+# planerad annonsering och tågläge, trafikinformationen samlar båda, och det öppna
+# trafik-API:et exponerar den mot internet.
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: tagplan
+  title: Tågplan
+  description: Lägger tågplanen och lämnar den till annonseringen och tågläget.
+spec:
+  owner: group:it-miljo/team-forvaltning-planering
+  domain: domain:it-miljo/planering
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: annonsering
+  title: Planerad annonsering
+  description: Gör tågplanen till planerad annonsering.
+spec:
+  owner: group:it-miljo/team-forvaltning-trafikinformation
+  domain: domain:it-miljo/trafikinformation
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: taglage
+  title: Tågläge
+  description: Aktuellt tågläge och förseningar.
+spec:
+  owner: group:it-miljo/team-forvaltning-trafikledning
+  domain: domain:it-miljo/trafikledning
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: trafikinformation
+  title: Trafikinformation
+  description: Samlad trafikinformation ur planerad annonsering och aktuellt tågläge.
+spec:
+  owner: group:it-miljo/team-forvaltning-trafikinformation
+  domain: domain:it-miljo/trafikinformation
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: oppet-trafik-api
+  title: Öppet trafik-API
+  description: Trafikinformation som öppet API mot internet.
+spec:
+  owner: group:it-miljo/team-forvaltning-trafikinformation
+  domain: domain:it-miljo/trafikinformation
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: tagplan
+  title: Tågplan
+  description: Tar emot tågplaner och skickar dem till Planerad annonsering och Tågläge.
+  tags:
+    - verksamhetssystem
+    - sqlite
+  annotations:
+    architecture.portal/segment: tjanst-container
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:it-miljo/team-forvaltning-planering
+  system: tagplan
+  providesApis:
+    - tagplan-http
+  consumesApis:
+    - annonsering-http
+    - taglage-http
+  dependsOn:
+    - component:annonsering
+    - component:taglage
+    - resource:tagplan-db
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-container
+    - component:it-miljo/api-gateway-intern
+    - component:it-miljo/inloggningstjanst
+    - component:it-miljo/containerplattform
+    - component:it-miljo/databasplattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: annonsering
+  title: Planerad annonsering
+  description: Skickar planerad annonsering till Trafikinformation.
+  tags:
+    - verksamhetssystem
+    - nunjucks
+    - sqlite
+  annotations:
+    architecture.portal/segment: tjanst-operativ
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:it-miljo/team-forvaltning-trafikinformation
+  system: annonsering
+  providesApis:
+    - annonsering-http
+  consumesApis:
+    - trafikinformation-http
+  dependsOn:
+    - component:trafikinformation
+    - resource:annonsering-db
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-operativ
+    - component:it-miljo/api-gateway-intern
+    - component:it-miljo/inloggningstjanst
+    - component:it-miljo/containerplattform
+    - component:it-miljo/databasplattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: taglage
+  title: Tågläge
+  description: Tar emot tågläge och förseningar och uppdaterar Trafikinformation.
+  tags:
+    - verksamhetssystem
+    - nunjucks
+    - sqlite
+  annotations:
+    architecture.portal/segment: tjanst-operativ
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:it-miljo/team-forvaltning-trafikledning
+  system: taglage
+  providesApis:
+    - taglage-http
+  consumesApis:
+    - trafikinformation-http
+  dependsOn:
+    - component:trafikinformation
+    - resource:taglage-db
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-operativ
+    - component:it-miljo/ot-rela
+    - component:it-miljo/api-gateway-intern
+    - component:it-miljo/inloggningstjanst
+    - component:it-miljo/containerplattform
+    - component:it-miljo/databasplattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: trafikinformation
+  title: Trafikinformation
+  description: Sammanställer planerade och aktuella tågtider.
+  tags:
+    - verksamhetssystem
+    - sqlite
+  annotations:
+    architecture.portal/segment: tjanst-operativ
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:it-miljo/team-forvaltning-trafikinformation
+  system: trafikinformation
+  providesApis:
+    - trafikinformation-http
+  dependsOn:
+    - resource:trafikinformation-db
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-operativ
+    - component:it-miljo/meddelandeplattform
+    - component:it-miljo/inloggningstjanst
+    - component:it-miljo/containerplattform
+    - component:it-miljo/databasplattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: oppet-trafik-api
+  title: Öppet trafik-API
+  description: Hämtar Trafikinformations trafikinformation för resenärer.
+  tags:
+    - verksamhetssystem
+    - nunjucks
+  annotations:
+    architecture.portal/segment: tjanst-operativ
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:it-miljo/team-forvaltning-trafikinformation
+  system: oppet-trafik-api
+  providesApis:
+    - oppet-trafik-api-http
+  consumesApis:
+    - trafikinformation-http
+  dependsOn:
+    - component:trafikinformation
+    - resource:it-miljo/tjanst
+    - resource:it-miljo/tjanst-operativ
+    - component:it-miljo/exponeringsplattform
+    - component:it-miljo/api-gateway-extern
+    - component:it-miljo/containerplattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: tagplan-http
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: group:it-miljo/team-forvaltning-planering
+  system: tagplan
+  definition: |
+    {
+      "openapi": "3.0.3",
+      "info": {
+        "title": "Tågplan",
+        "version": "2.0.0"
+      },
+      "paths": {
+        "/plans": {
+          "get": {
+            "summary": "Lista tåg",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          },
+          "post": {
+            "summary": "Skapa och distribuera tågplan",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/plans/{trainId}": {
+          "get": {
+            "summary": "Visa tåg",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/integrations": {
+          "get": {
+            "summary": "Integrationshistorik",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/plans/{trainId}/distribute": {
+          "post": {
+            "summary": "Distribuera lagrad plan",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        }
+      },
+      "components": {
+        "securitySchemes": {
+          "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+          }
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: annonsering-http
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: group:it-miljo/team-forvaltning-trafikinformation
+  system: annonsering
+  definition: |
+    {
+      "openapi": "3.0.3",
+      "info": {
+        "title": "Planerad annonsering",
+        "version": "2.0.0"
+      },
+      "paths": {
+        "/trains": {
+          "get": {
+            "summary": "Lista tåg",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/trains/{trainId}": {
+          "get": {
+            "summary": "Visa tåg",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/integrations": {
+          "get": {
+            "summary": "Integrationshistorik",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/announcements/planned": {
+          "post": {
+            "summary": "Ta emot planerad annonsering",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/trains/{trainId}/publish": {
+          "post": {
+            "summary": "Skicka planerad annonsering",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        }
+      },
+      "components": {
+        "securitySchemes": {
+          "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+          }
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: taglage-http
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: group:it-miljo/team-forvaltning-trafikledning
+  system: taglage
+  definition: |
+    {
+      "openapi": "3.0.3",
+      "info": {
+        "title": "Tågläge",
+        "version": "2.0.0"
+      },
+      "paths": {
+        "/trains": {
+          "get": {
+            "summary": "Lista tåg",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/trains/{trainId}": {
+          "get": {
+            "summary": "Visa tåg",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/integrations": {
+          "get": {
+            "summary": "Integrationshistorik",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/plans": {
+          "post": {
+            "summary": "Ta emot tågplan",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/trains/{trainId}/delay": {
+          "post": {
+            "summary": "Registrera försening",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        }
+      },
+      "components": {
+        "securitySchemes": {
+          "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+          }
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: trafikinformation-http
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: group:it-miljo/team-forvaltning-trafikinformation
+  system: trafikinformation
+  definition: |
+    {
+      "openapi": "3.0.3",
+      "info": {
+        "title": "Trafikinformation",
+        "version": "2.0.0"
+      },
+      "paths": {
+        "/trains": {
+          "get": {
+            "summary": "Lista tåg",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/trains/{trainId}": {
+          "get": {
+            "summary": "Visa tåg",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/integrations": {
+          "get": {
+            "summary": "Integrationshistorik",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/announcements/planned": {
+          "post": {
+            "summary": "Ta emot planerad annonsering",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/trains/{trainId}/running": {
+          "post": {
+            "summary": "Ta emot aktuellt tågläge",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        }
+      },
+      "components": {
+        "securitySchemes": {
+          "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+          }
+        }
+      },
+      "security": [
+        {
+          "bearerAuth": []
+        }
+      ]
+    }
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: oppet-trafik-api-http
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: group:it-miljo/team-forvaltning-trafikinformation
+  system: oppet-trafik-api
+  definition: |
+    {
+      "openapi": "3.0.3",
+      "info": {
+        "title": "Öppet trafik-API",
+        "version": "2.0.0"
+      },
+      "paths": {
+        "/trains": {
+          "get": {
+            "summary": "Lista tåg",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/trains/{trainId}": {
+          "get": {
+            "summary": "Visa tåg",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/integrations": {
+          "get": {
+            "summary": "Integrationshistorik",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        }
+      },
+      "components": {
+        "securitySchemes": {
+          "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+          }
+        }
+      },
+      "security": []
+    }
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: tagplan-db
+  description: Databas för Tågplan
+  annotations:
+    architecture.portal/zone: data
+    architecture.portal/segment: data-databas
+  tags:
+    - sqlite
+spec:
+  type: database
+  owner: group:it-miljo/team-forvaltning-planering
+  system: tagplan
+  dependsOn:
+    - resource:it-miljo/data
+    - resource:it-miljo/data-databas
+    - component:it-miljo/databasplattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: annonsering-db
+  description: Databas för Planerad annonsering
+  annotations:
+    architecture.portal/zone: data
+    architecture.portal/segment: data-operativ
+  tags:
+    - sqlite
+spec:
+  type: database
+  owner: group:it-miljo/team-forvaltning-trafikinformation
+  system: annonsering
+  dependsOn:
+    - resource:it-miljo/data
+    - resource:it-miljo/data-operativ
+    - component:it-miljo/databasplattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: taglage-db
+  description: Databas för Tågläge
+  annotations:
+    architecture.portal/zone: data
+    architecture.portal/segment: data-operativ
+  tags:
+    - sqlite
+spec:
+  type: database
+  owner: group:it-miljo/team-forvaltning-trafikledning
+  system: taglage
+  dependsOn:
+    - resource:it-miljo/data
+    - resource:it-miljo/data-operativ
+    - component:it-miljo/databasplattform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: trafikinformation-db
+  description: Databas för Trafikinformation
+  annotations:
+    architecture.portal/zone: data
+    architecture.portal/segment: data-operativ
+  tags:
+    - sqlite
+spec:
+  type: database
+  owner: group:it-miljo/team-forvaltning-trafikinformation
+  system: trafikinformation
+  dependsOn:
+    - resource:it-miljo/data
+    - resource:it-miljo/data-operativ
+    - component:it-miljo/databasplattform

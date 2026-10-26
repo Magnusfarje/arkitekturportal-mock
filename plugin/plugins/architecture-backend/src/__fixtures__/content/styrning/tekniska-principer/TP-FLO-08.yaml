@@ -1,0 +1,11 @@
+id: TP-FLO-08
+kind: technical-principle
+title: Commit-historiken är konsekvent och strukturerad
+binding: recommended
+topic: Flöde och kvalitet
+statement: Commit-meddelanden följer en konsekvent, strukturerad konvention, så att historiken är lätt att överblicka och kan driva automation (ändringsloggar, versionshöjningar, release notes).
+rationale: En disciplinerad commit-historik håller ändringar granskningsbara och spårbara, och möjliggör automation som en fritextshistorik inte klarar. Disciplinen kostar lite och betalar tillbaka mer ju längre historiken blir.
+scope: Repon med kod eller konfiguration som vi förvaltar.
+preconditions: Överenskommelse om tillåtna commit-typer/scope; commit-meddelande-linting och/eller git-hooks så att det kontrolleras snarare än önskas; teamvana vid formatet.
+solutions: 'Conventional Commits är den rekommenderade konventionen (type(scope): beskrivning — t.ex. feat, fix, docs, refactor, chore, plus BREAKING CHANGE). Kontrollera den med en commit-meddelande-linter (t.ex. commitlint) i en git-hook och/eller CI, och mata in den strukturerade historiken i automatiska ändringslogg-/versionsverktyg. En egen strukturerad konvention duger lika bra om teamet föredrar det — utfallet är att historiken går att bearbeta maskinellt, inte att den följer just det här formatet. Villkoret är detsamma: formatet står nedskrivet i repot och kontrolleras automatiskt, annars är det en vana och inte en konvention. Vad ni avstår från är färdigt verktygsstöd — ändringslogg- och versionsverktyg läser Conventional Commits utan att någon skriver dem först.'
+ifNotMet: Huvudregel — vad det innebär.

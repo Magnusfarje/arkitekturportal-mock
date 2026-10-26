@@ -1,0 +1,48 @@
+id: RA-EXP-01
+kind: reference-architecture
+title: Webbapplikation mot internet
+topic: Exponering
+solution: Webbapplikationen körs i tjänstezonen och publiceras genom exponeringsplattformen, som tar emot trafiken med publikt certifikat och filtrerar den. Inloggning går genom inloggningstjänsten, vars inloggningssida publiceras samma väg och har samma adress inifrån och utifrån.
+rationale: Lösningen behöver inget eget skydd mot internet, och det som går att nå utifrån är bara det som uttryckligen har publicerats.
+fits: Webbapplikationer och webbplatser som allmänheten, externa användare eller medarbetare på distans ska nå från internet. En applikation som bara används internt nås från klientzonen och publiceras inte. Ett API för andra system publiceras enligt RA-EXP-02.
+responsibilities: |-
+  - Beställ publicering: domännamn, vilka sökvägar som ska nås och för vilken målgrupp.
+  - Registrera applikationen i inloggningstjänsten med det inloggningssätt målgruppen ska ha.
+  - Håll administration, hälsokontroller och API-dokumentation utanför de publicerade sökvägarna.
+  - Håll sessionen på serversidan. Webbläsaren får en sessionskaka som är Secure, HttpOnly och SameSite=Lax, inte token.
+  - Skydda anrop som ändrar något mot förfalskade förfrågningar (CSRF).
+  - Pröva behörighet i applikationen för varje anrop. Exponeringsplattformen gör det inte åt dig.
+  - Validera indata och koda utdata i applikationen. Webbskyddet är ett extra lager, inte en ersättning.
+  - Se till att felsvar inte röjer interna uppgifter.
+variants: |-
+  - Webbplats utan inloggning: samma väg in, utan stegen mot inloggningstjänst.
+  - Ensidesapplikation (SPA) med eget API: webbläsaren talar bara med applikationens egen serverdel, som håller token. API:et publiceras tillsammans med applikationen.
+  - Medarbetare på distans: samma mönster, och inloggningstjänsten kräver MFA.
+flows:
+  - from: { name: Användare, zone: internet }
+    to: { name: Exponeringsplattform, zone: dmz }
+    label: HTTPS med publikt certifikat
+  - from: { name: Exponeringsplattform, zone: dmz }
+    to: { name: Din webbapplikation, zone: tjanst }
+    label: HTTPS med internt certifikat, bara publicerade sökvägar
+  - from: { name: Exponeringsplattform, zone: dmz }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: inloggningssidan, publicerad samma väg
+  - from: { name: Din webbapplikation, zone: tjanst }
+    to: { name: Inloggningstjänst, zone: plattform }
+    label: byter kod mot token
+  - from: { name: Din webbapplikation, zone: tjanst }
+    to: { name: Din databas, zone: data }
+    label: TLS med kortlivat konto
+uses:
+  - target: component:it-miljo/exponeringsplattform
+    role: tar emot trafiken, webbskydd, publicerade sökvägar
+  - target: component:it-miljo/inloggningstjanst
+    role: inloggning och token
+  - target: component:it-miljo/containerplattform
+    role: kör applikationen i tjänstezonen
+  - target: component:it-miljo/databasplattform
+    role: lagring
+  - target: component:it-miljo/hemlighetstjanst
+    role: databaskonto och klienthemlighet
+motivatedBy: [TP-EXP-01, TP-ID-01, TP-KRY-01, TP-BEH-01, TP-IND-01, TP-KON-01]

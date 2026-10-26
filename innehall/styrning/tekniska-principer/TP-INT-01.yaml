@@ -1,0 +1,14 @@
+id: TP-INT-01
+kind: technical-principle
+title: Lösningar utbyter information genom API, händelser eller filer
+binding: binding
+topic: Integration mellan domäner
+statement: En lösning delar information med andra genom ett API, genom händelser på meddelandeplattformen eller genom filöverföringstjänsten. En lösning läser eller skriver aldrig i en annan lösnings databas.
+rationale: 'Databasen är lösningens inre. Den som läser direkt i den blir beroende av tabeller som ägaren inte har lovat att hålla stabila, och ägaren vet inte vem som är beroende av vad. Ett API eller en händelse är ett kontrakt med ägare, version och åtkomstkontroll. Bortvalt: delade databaser, databaslänkar, och replikering mellan lösningar.'
+scope: Informationsutbyte mellan lösningar med olika ägare, inom och mellan domäner.
+consequences: |-
+  - Den som äger informationen publicerar kontraktet i katalogen.
+  - Konsumenter registreras, så att ägaren vet vem en ändring påverkar.
+  - API väljs när avsändaren behöver svar direkt, händelser när andra ska få veta att något har hänt, och filer för stora mängder eller motparter som inte kan annat.
+  - Behöver någon stora datamängder för analys eller rapportering publicerar ägaren en kopia som är avsedd för det.
+motivatedBy: [AP-SÄK-02, TP-ENK-20, TP-ENK-22]

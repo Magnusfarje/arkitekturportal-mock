@@ -1,0 +1,13 @@
+id: AP-SÄK-05
+kind: architecture-principle
+title: Skyddet ska hålla genom hela livscykeln
+statement: Den som ansvarar för en lösning ska låta skyddsbehov och risker styra arkitekturvalen och följa upp dem vid anskaffning, utveckling, förändring, drift och avveckling.
+rationale: Skydd kan försvagas när en lösning ändras eller byter ansvarig. Säkerhetsbeslut och verifiering behöver därför följa lösningen genom hela livscykeln.
+scope: Egenutvecklade och anskaffade lösningar – nya som befintliga, IT som OT.
+consequences: |-
+  - Skyddsbehov och risker är kopplade till säkerhetskrav, designbeslut, ansvar och verifiering.
+  - Skyddsåtgärder väljs så att de går att införa, verifiera och förvalta.
+  - Designen hanterar säkra standardinställningar, uppdatering och avveckling, inklusive data, åtkomst och kvarvarande integrationer.
+  - Säkerhetsansvaret är tydligt vid överlämning till drift eller leverantör.
+  - Kända luckor döljs inte av att enskilda tekniska kontroller är godkända.
+notCovered: TP-IND-01 och TP-KON-01 täcker indatahantering och produktionskonfiguration. TP-SÄK-11 täcker säkerhet före release och TP-DRI-16 sårbarheter i det som är i drift. Anskaffning och avveckling har inga regler.

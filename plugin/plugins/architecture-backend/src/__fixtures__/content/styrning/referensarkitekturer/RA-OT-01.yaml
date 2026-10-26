@@ -1,0 +1,26 @@
+id: RA-OT-01
+kind: reference-architecture
+title: Utbyte mellan IT och OT genom OT-reläet
+topic: Integration mellan domäner
+solution: OT-systemet och IT-tjänsten ansluter var för sig till OT-reläet i OT-DMZ. Data och begäranden mellanlagras där. Ingen anslutning för data går från IT in i OT eller från OT in i IT.
+rationale: IT-lösningen får de data den behöver utan att OT-zonen öppnas, och OT-systemet fortsätter att fungera när IT-sidan inte gör det.
+fits: En IT-lösning behöver data från trafikstyrning eller järnvägsautomation, eller behöver lämna en begäran eller ett underlag till ett OT-system.
+responsibilities: |-
+  - Bestäm med OT-systemets ägare vilka data som lämnas ut, hur ofta och vilken fördröjning som accepteras.
+  - Bygg IT-tjänsten så att den tål att data är fördröjda eller uteblir.
+  - Behandla en begäran till OT som en förfrågan som OT-systemet kan avvisa. OT-systemet validerar och avgör själv.
+  - Ge varje begäran ett ID som följer med i bekräftelsen, och bestäm hur länge IT-tjänsten väntar på svar.
+  - Anslut till reläet med tjänstens certifikat. Reläet kontrollerar identiteten själv, eftersom OT-sidan inte når inloggningstjänsten.
+  - Låt en tjänst i tjänstezonen hämta från reläet och publicera vidare enligt RA-INT-01, RA-INT-02 eller RA-EXP-02. Varje konsument ansluter inte själv till OT-DMZ.
+  - Registrera beroendet i katalogen på båda sidor.
+flows:
+  - from: { name: OT-system, zone: ot }
+    to: { name: OT-relä, zone: ot-dmz }
+    label: lämnar data och hämtar begäranden
+  - from: { name: IT-tjänst, zone: tjanst }
+    to: { name: OT-relä, zone: ot-dmz }
+    label: hämtar data och lämnar begäranden
+uses:
+  - target: component:it-miljo/ot-rela
+    role: mellanlagring av data och begäranden
+motivatedBy: [TP-OT-01, TP-ZON-01, AP-SÄK-02, AP-ERJU-01]

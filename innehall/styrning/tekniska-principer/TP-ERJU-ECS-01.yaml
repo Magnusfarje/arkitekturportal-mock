@@ -1,0 +1,62 @@
+id: TP-ERJU-ECS-01
+kind: technical-principle
+title: Följ ERJU:s rekommendationer för kopplingen mellan ECS och SCS
+binding: recommended
+statement: Integrationen mellan ECS och SCS bör använda de protokoll källan rekommenderar, och ECS och SCS bör driftsättas åtskilda. Ett annat val redovisas öppet, med motivering.
+rationale: 'Källan rekommenderar, men föreskriver inte, hur ECS och SCS kopplas ihop. Rekommendationerna hålls därför isär från bindande krav: ett annat val är ingen brist mot bindande krav, men det ska synas.'
+scope: Integration mellan ECS och SCS inom profilen P-ERJU-01. Profilens omfattning och prövningsordning beskrivs i AP-ERJU-01. Riktar sig till ECS-ägare, nätverks- och integrationsansvariga.
+consequences: |-
+  - Ett val som skiljer sig från en rekommendation redovisas som ”rekommendationen ej följd”, med motivering. Ett beslut om ett annat alternativ gör inte rekommendationen uppfylld.
+  - Resultaten redovisas skilt från bindande krav.
+  - Generella bindande krav, till exempel om åtkomststyrning, gäller oavsett vilket val som görs.
+  - Följ det som gäller för alla regler i profilen. Det står i AP-ERJU-01.
+howTo: |-
+  Beskriv varje ESI med valt protokoll och hur valet förhåller sig till källans rekommendation. Då går det att skilja ett medvetet val från en rekommendation som ingen har tagit ställning till.
+
+  Innan du börjar:
+
+  - Vilka ESI har lösningen, och vilket protokoll är valt för var och en?
+  - Finns en intern regel som gör något protokoll obligatoriskt?
+
+  Gör så här:
+
+  1. Beskriv varje ESI med valt protokoll, alternativ, rekommendationsstatus och konsekvenser för SCS.
+  2. Dokumentera separat vilken intern regel som eventuellt gör ett protokoll obligatoriskt.
+  3. Kontrollera synkronisering och felhantering med representativa källdata.
+  4. Visa i portalen både vad källan rekommenderar och vad organisationen har beslutat.
+
+  Arbetssättet är ett eget förslag utifrån källarkitekturen, inte en officiell ERJU-anvisning.
+sections:
+  - title: Rekommenderade protokoll på ESI
+    text: |-
+      Enligt E1 SP-SEC-Serv-4-4, s. 14.
+
+      - STS: NTS
+      - PKI: CMP över HTTP; CRL över HTTP
+      - IAM: SCIM 2.0 via HTTPS eller LDAPS med TLS
+      - LOG: syslog över TLS
+      - DNS: DNSSEC
+
+      NAC, UAS, BKP och MNT finns inte i källans ESI-tabell. Ett ESI-UAS ska inte läggas till som föreskrivet gränssnitt för att det förekommer i äldre översikter.
+concretizes: [AP-ERJU-01]
+requirements:
+  - id: TP-ERJU-ECS-01-K01
+    title: Använd de rekommenderade protokollen på ESI
+    statement: ESI bör använda de protokoll källan rekommenderar. SCS-DNS bör verifiera information från överordnad DNS-server med DNSSEC när det flödet finns.
+    scope: 'Lösningen har ESI-STS, ESI-PKI, ESI-IAM, ESI-LOG eller ESI-DNS inom P-ERJU-01. DNSSEC-valideringen görs på SCS-sidan. Ansvarar: ECS-ägare och integrationsansvarig för SCS-motparten.'
+    criteria: |-
+      - Redovisa protokollval för varje ESI, och motivera andra val.
+      - Jämför konfigurerade gränssnitt med rekommendationen, och håll interna säkerhetskrav åtskilda.
+      - Demonstrera den beslutade integrationen. Där DNSSEC följs: testa både giltiga och ogiltiga signaturer.
+    limits: Ett annat protokoll är inte automatiskt en brist mot bindande ERJU-krav. SCS-IAM:s synkroniseringsförmåga (TP-ERJU-SCS-01-K03) kan samtidigt vara bindande.
+  - id: TP-ERJU-ECS-01-K02
+    title: Driftsätt ECS och SCS åtskilda
+    statement: ECS och SCS bör driftsättas åtskilda genom nätverkssegmentering, till exempel med en DMZ.
+    scope: 'Arkitekturen har både ECS och SCS inom P-ERJU-01. Ansvarar: enterprise-/OT-arkitekt och nätverksansvarig.'
+    criteria: |-
+      - Beskriv placering, segment och kommunikationsvägar, och motivera en annan utformning om en sådan väljs.
+      - Kontrollera faktisk placering och regler mot designen.
+      - Verifiera att avsedda förbindelser fungerar och att övriga är blockerade enligt den beslutade segmenteringen.
+    limits: DMZ är ett exempel, inte ett föreskrivet val. Bindande åtkomstkrav bedöms för sig även om en annan topologi väljs.
+externalReferences:
+  - E1, Shared Cybersecurity Services Specification V1.1. Se AP-ERJU-01 för fullständig källhänvisning.

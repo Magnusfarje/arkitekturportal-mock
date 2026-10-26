@@ -1,0 +1,42 @@
+id: RA-AI-01
+kind: reference-architecture
+title: Språkmodell som stöd i en applikation
+topic: AI
+solution: Applikationen hämtar det underlag som användaren har rätt att se, och skickar det tillsammans med en instruktion till språkmodelltjänsten. Svaret visas som ett förslag, som användaren läser, ändrar och själv står för.
+rationale: Modellen når ingenting själv, så den kan inte lämna ut mer än applikationen har skickat. När en människa beslutar blir ett felaktigt svar ett dåligt förslag och inte ett felaktigt beslut.
+fits: Sammanfattningar, utkast, förslag till klassificering och sökning i egna texter, som stöd åt en användare. Mönstret passar inte för beslut som fattas utan att en människa har läst underlaget.
+responsibilities: |-
+  - Skicka bara underlag som den inloggade användaren själv får se. Pröva det i applikationen, enligt TP-BEH-01, innan något skickas.
+  - Skicka inte mer än uppgiften kräver, och se till att behandlingen är godkänd enligt gällande regler.
+  - Behandla text utifrån som data. Ett ärende kan innehålla text som är skriven för att styra modellen. Håll instruktionen skild från underlaget, och låt aldrig modellens svar utföra något av sig självt, enligt TP-IND-01.
+  - Visa tydligt vad som är ett förslag från modellen, och vilket underlag det bygger på.
+  - Låt användaren ändra och godkänna. Det är användaren som beslutar.
+  - Håll underlag och svar borta från loggarna. Logga att modellen användes, inte vad som skickades.
+  - Pröva resultaten mot exempel som du har valt i förväg, och gör om prövningen när modellen byts.
+  - Bestäm vad applikationen gör när språkmodelltjänsten inte svarar. Arbetet ska gå att göra utan den.
+variants: |-
+  - Sökning i egna texter: applikationen gör texterna sökbara med inbäddningar i sin egen databas, och skickar bara de avsnitt som är relevanta och som användaren får se.
+  - Bearbetning i bakgrunden: ett jobb förbereder förslag i förväg. Samma regler gäller, och förslaget visas först för den som får se underlaget.
+flows:
+  - from: { name: Användare, zone: klient }
+    to: { name: Lastbalansering, zone: tjanst }
+    label: arbetar i applikationen
+  - from: { name: Lastbalansering, zone: tjanst }
+    to: { name: Din applikation, zone: tjanst }
+    label: HTTPS
+  - from: { name: Din applikation, zone: tjanst }
+    to: { name: Din databas, zone: data }
+    label: hämtar det underlag som användaren får se
+  - from: { name: Din applikation, zone: tjanst }
+    to: { name: Språkmodelltjänst, zone: plattform }
+    label: instruktion och underlag, med tjänsteidentitet
+uses:
+  - target: component:it-miljo/sprakmodelltjanst
+    role: språkmodeller i egna datahallar
+  - target: component:it-miljo/lastbalansering
+    role: ingången från klientzonen
+  - target: component:it-miljo/databasplattform
+    role: underlaget, och sökning i text
+  - target: component:it-miljo/containerplattform
+    role: kör applikationen
+motivatedBy: [TP-AI-01, TP-ID-02, TP-BEH-01, TP-IND-01]

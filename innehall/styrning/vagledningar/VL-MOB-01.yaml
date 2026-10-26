@@ -1,0 +1,29 @@
+id: VL-MOB-01
+kind: guide
+title: Hur bygger jag en mobilapp?
+topic: Mobilappar
+answer: Bygg appen med React Native, och låt den tala med ett eget API som publiceras genom exponeringsplattformen. Användaren loggar in i telefonens webbläsare, och appen har inga hemligheter. Räkna med att telefonen inte är hanterad av oss.
+before: |-
+  - Räcker en webbsida som fungerar i telefonens webbläsare? Den är enklare att förvalta än en app.
+  - Vilka är användarna: medarbetare, externa användare hos en partner eller allmänheten?
+  - Ska appen fungera utan täckning, och vad ska i så fall gå att göra?
+  - Vad får finnas i en telefon som kan tappas bort?
+scope: Appar för telefoner och surfplattor, för medarbetare, entreprenörer och allmänhet.
+steps: |-
+  1. Skapa projektet på leveransplattformen från mallen för React Native, och använd komponentbiblioteket.
+  2. Bygg appens API i tjänstezonen, och beställ publicering hos integrationsteamet.
+  3. Beställ en klient utan hemlighet per miljö hos Identitet och åtkomst.
+  4. Bestäm vad som sparas i telefonen, kryptera det och ta bort det vid utloggning.
+  5. Pröva behörighet och indata i API:et. Appen är inget skydd.
+  6. Testa utan täckning, med dålig täckning och med en användare vars inloggning har återkallats.
+  7. Publicera appen i appbutikerna från pipelinen.
+leadsTo:
+  - target: RA-MOB-01
+    when: En app för användare i fält eller på resande fot.
+  - target: RA-ID-03
+    when: Inloggningen i appen.
+  - target: RA-EXP-01
+    when: Det räcker med en webbsida i telefonens webbläsare.
+  - target: RA-UTS-01
+    when: Appen ska ta emot pushnotiser.
+motivatedBy: [TP-TEK-01, TP-EXP-01, TP-ID-01, TP-BEH-01]

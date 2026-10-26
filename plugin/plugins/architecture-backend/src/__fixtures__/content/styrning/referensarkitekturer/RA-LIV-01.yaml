@@ -1,0 +1,42 @@
+id: RA-LIV-01
+kind: reference-architecture
+title: Stegvis övergång bakom API-gatewayen
+topic: Livscykel
+solution: Konsumenterna anropar det gamla systemets API genom den interna API-gatewayen. Gatewayen styr sedan om en operation i taget till det nya systemet. Under tiden håller de två systemen varandra uppdaterade genom händelser.
+rationale: Konsumenterna märker inte bytet, och varje steg är litet nog att ta tillbaka. Det gamla systemet kan stängas när den sista operationen har flyttats, i stället för vid en enda växling där allt måste fungera på en gång.
+fits: Ett system med konsumenter ska ersättas, och båda systemen måste vara i drift under en tid. Ett system utan konsumenter kan bytas vid ett tillfälle, enligt VL-LIV-01.
+responsibilities: |-
+  - Flytta först de konsumenter som läser i det gamla systemets databas till ett API, enligt TP-INT-01. Det är förutsättningen för allt annat.
+  - Bestäm för varje uppgift vilket system som äger den just nu. En uppgift har en ägare i taget.
+  - Flytta en operation, låt den gå en tid och jämför resultaten innan du flyttar nästa.
+  - Håll vägen tillbaka öppen för varje steg, enligt TP-DRI-15: gatewayen kan styra tillbaka operationen.
+  - Öva flytten av data i testmiljön, med avidentifierade data från testdatatjänsten, och mät hur lång tid den tar.
+  - Sätt ett slutdatum för den parallella driften. Två system som ska hållas lika kostar mer för varje månad.
+variants: |-
+  - Det gamla systemet har inget API: lägg ett tunt API framför det först, och publicera det i gatewayen.
+  - Det gamla systemet kan inte ta emot händelser: det nya systemet skriver till det genom dess API, eller så flyttas all skrivning på en gång och bara läsningen stegvis.
+  - Det gamla systemet får inga säkerhetsuppdateringar: det står i isoleringszonen under övergången och nås genom lastbalanseringen.
+flows:
+  - from: { name: Konsumerande tjänst, zone: tjanst }
+    to: { name: Intern API-gateway, zone: tjanst }
+    label: anropar samma API som förut
+  - from: { name: Intern API-gateway, zone: tjanst }
+    to: { name: Nytt system, zone: tjanst }
+    label: de operationer som har flyttats
+  - from: { name: Intern API-gateway, zone: tjanst }
+    to: { name: Gammalt system, zone: tjanst }
+    label: de operationer som är kvar
+  - from: { name: Nytt system, zone: tjanst }
+    to: { name: Meddelandeplattform, zone: plattform }
+    label: publicerar sina ändringar
+  - from: { name: Gammalt system, zone: tjanst }
+    to: { name: Meddelandeplattform, zone: plattform }
+    label: tar emot ändringarna under den parallella driften
+uses:
+  - target: component:it-miljo/api-gateway-intern
+    role: styr varje operation till det system som har den
+  - target: component:it-miljo/meddelandeplattform
+    role: håller systemen uppdaterade under den parallella driften
+  - target: component:it-miljo/testdatatjanst
+    role: avidentifierade data för att öva flytten
+motivatedBy: [TP-INT-01, TP-ENK-22, TP-DRI-15]

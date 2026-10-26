@@ -1,0 +1,120 @@
+id: TP-ERJU-SCS-01
+kind: technical-principle
+title: Säkerhetstjänsterna i automationsmiljön följer ERJU:s gränssnittskrav
+binding: binding
+statement: Varje säkerhetstjänst i automationsmiljön – tid, certifikat, identitet, nätåtkomst, logg, användarautentisering, säkerhetskopiering, underhåll och DNS – ska uppfylla de utvalda ERJU-kraven nedan. Uppfyllnaden visas för varje ändpunkt för sig.
+rationale: Tjänsterna är gemensamma för komponenterna i automationsmiljön, så ett fel i en tjänst drabbar alla som ansluter. Underlag behövs per ändpunkt eftersom klient och server har olika krav.
+scope: |-
+  Säkerhetstjänster och anslutande komponenter inom profilen P-ERJU-01. Profilens omfattning och prövningsordning beskrivs i AP-ERJU-01. Riktar sig till tjänsteägare, leverantörer, test- och driftansvariga.
+
+  STS, PKI, IAM, NAC, LOG och MNT är obligatoriska inom källans tillämpningsområde (E1 3-3, s. 10). UAS krävs när människor behöver åtkomst, BKP när det finns tillstånd som behöver säkerhetskopieras och DNS när DNS används. Obligatorisk betyder inte att varje komponent ska tillhandahålla alla tjänster eller använda varje gränssnitt; roller härleds ur lösningens servicefördelning.
+consequences: |-
+  - Följ det som gäller för alla regler i profilen. Det står i AP-ERJU-01.
+  - Kraven är ett urval ur källan.
+howTo: |-
+  Bygg en avgränsad testkedja och följ samma syntetiska identitet genom certifikatbegäran och nätåtkomst. Tjänstekraven hänger ihop: PKI och NAC beror på tillståndet i IAM. En sammanhållen kedja visar att de fungerar tillsammans.
+
+  Innan du börjar:
+
+  - Vilka säkerhetstjänster ingår i kedjan: tidskälla, PKI, IAM och nätåtkomst?
+  - Finns en avgränsad testmiljö och en syntetisk identitet att använda?
+
+  Gör så här:
+
+  1. Bygg en avgränsad testkedja med tidskälla, PKI, IAM och en komponent.
+  2. Registrera ett känt tillstånd och följ samma syntetiska identitet genom certifikatbegäran och nätåtkomst.
+  3. Kör tillåtna och nekade fall samt relevanta fasövergångar.
+  4. Lägg till loggning, användarautentisering, säkerhetskopiering, underhåll och DNS där de behövs.
+  5. Återanvänd underlag mellan kontroller, men lagra delresultaten var för sig. Flera lyckade anrop mot samma testfall är inte oberoende bevis på full täckning.
+
+  Arbetssättet är ett eget förslag utifrån källarkitekturen, inte en officiell ERJU-anvisning.
+concretizes: [AP-ERJU-01]
+requirements:
+  - id: TP-ERJU-SCS-01-K01
+    title: Tid synkroniseras med NTS och autentiserade klienter
+    statement: STS-server och klient ska använda NTS med föreskrivna ONCC-certifikat. Servern ska använda fasta protokollportar och bara acceptera autentiserade NTS-KE-klienter. Under commissioning bedöms klientens föreskrivna NTP-förfarande för sig.
+    scope: 'Ändpunkten är STS-server eller SSI-STS-klient inom P-ERJU-01. Skilj commissioning från ordinarie drift. Ansvarar: SCS-STS-ägare, komponentleverantör och PKI-/driftansvarig.'
+    criteria: |-
+      - Dokumentera kedjan från initial tid och certifikatinförande till NTS i drift, inklusive fasövergången.
+      - Granska certifikat, portar, TLS/NTS-konfiguration och klientautentisering.
+      - Testa giltig och ogiltig klient samt normal synkronisering, och pröva commissioning-förloppet skilt från driftscenariot.
+    notEnough: Att hänvisa till NTP under commissioning. Undantaget godkänner inte oskyddad tid i drift.
+    limits: NTS krävs inte före den commissioning-fas där källan föreskriver NTP. Källans rekommendation om flera tidsservrar ingår inte.
+  - id: TP-ERJU-SCS-01-K02
+    title: RA behandlar bara begäranden från behöriga enheter i rätt tillstånd
+    statement: RA ska bara behandla CMP-begäranden som är autentiserade och auktoriserade. Initialisering med MDC kräver att enheten är registrerad och i tillståndet COMMISSIONING; certifieringsbegäran med ODC kräver ACTIVE. Vid fel tillstånd ska RA ge källans rejection-svar och inte skicka begäran vidare till CA.
+    scope: 'Ändpunkten är PKI-RA inom P-ERJU-01. ECS-CA omfattas inte automatiskt. Ansvarar: PKI-RA-ägare, IAM-ägare och komponentleverantör.'
+    criteria: |-
+      - Beskriv flödet RA–IAM–CA och beslutet för varje meddelandetyp.
+      - Granska kontroll av certifikatsignatur, uppslag av tillstånd och svarshantering.
+      - Testa giltiga fall, okänd tillgång och fel tillstånd.
+    notEnough: Att RA svarar rätt. Visa också att en otillåten begäran inte når CA.
+    limits: Fullständiga CMP-profiler, rekey, certifikatprofiler och spärrlistor ingår inte.
+  - id: TP-ERJU-SCS-01-K03
+    title: SCS-IAM kan synkronisera enheter och användare från ECS
+    statement: SCS-IAM ska kunna synkronisera enhetsdatabasen med asset management och användardatabasen med corporate directory via ESI-IAM.
+    scope: 'Ändpunkten är SCS-IAM inom P-ERJU-01. Relaterade ECS-system anges som integrationsmotparter. Ansvarar: SCS-IAM-ägare och ägarna av asset management och corporate directory.'
+    criteria: |-
+      - Ange ansvar, mappningar och beslutade testfall för båda datamängderna.
+      - Verifiera konfigurerade integrationsfunktioner och datamappningar.
+      - Ändra syntetiska källdata och visa att ändringen når målet, för både enheter och användare.
+    limits: Källan kräver förmågan, inte en viss frekvens eller ett visst ESI-protokoll. Synkroniseringsintervall, konflikthantering och vad som händer vid borttagning behöver interna beslut. SSI-IAM:s fullständiga schema bedöms separat.
+  - id: TP-ERJU-SCS-01-K04
+    title: NAC ger nätåtkomst utifrån identitet och tillstånd
+    statement: NAC ska kontrollera nätverksbehörighet via SSI-IAM. Åtkomst med MDC förutsätter att enheten är registrerad och i tillståndet COMMISSIONING; åtkomst med ODC förutsätter ACTIVE. En behörig begäran ska ge EAP success och en obehörig EAP failure.
+    scope: 'Ändpunkten är SCS-NAC som beslutspunkt inom P-ERJU-01. Ansvarar: NAC-/nätverksansvarig och IAM-ägare.'
+    criteria: |-
+      - Dokumentera en beslutsmatris för certifikattyp, registrering, tillstånd och behörighet.
+      - Kontrollera kopplingen mellan NAC och IAM och den beslutslogik som tillämpas.
+      - Testa båda tillåtna fallen och negativa fall.
+    notEnough: Att EAP-svaret är rätt. Verifiera också den faktiska nätåtkomsten.
+    limits: Authenticator-kraven i E2 och fullständig konformitet för EAP-TLS/RADIUS ingår inte.
+  - id: TP-ERJU-SCS-01-K05
+    title: Loggar på SSI skickas med syslog över TLS
+    statement: Parterna i SSI-LOG ska använda syslog över TLS enligt källans referenser, med ONCC för varje sådan anslutning.
+    scope: 'Ändpunkten kommunicerar över SSI-LOG inom P-ERJU-01. ESI-LOG bedöms som rekommendation i TP-ERJU-ECS-01-K01. Ansvarar: ansvariga för komponent, loggrelä och loggmottagare.'
+    criteria: |-
+      - Identifiera avsändare, reläer och mottagare, och skilj SSI-sträckor från ESI- och legacy-sträckor.
+      - Granska TLS- och certifikatkonfiguration för varje bedömd sträcka.
+      - Skicka en testhändelse och verifiera mottagning och transportskydd. Pröva felaktig certifikatkontext i godkänd testmiljö.
+    notEnough: Oskyddad syslog på en legacy-sträcka. Källan medger det för legacy, men sträckan saknar då integritets- och konfidentialitetsskydd. Registrera den som separat legacy-profil med risk, och kalla den inte TLS-skyddad eller kravet uppfyllt.
+  - id: TP-ERJU-SCS-01-K06
+    title: Människor autentiseras via SCS-UAS med OIDC
+    statement: SCS-UAS ska stödja MFA. SSI-UAS ska använda OIDC 1.0 och Authorization Code Flow när människor autentiseras. En resource server ska bara acceptera användare som är autentiserade via SCS-UAS och ge åtkomst enligt tokenens claims.
+    scope: 'Människor behöver åtkomst (humanAccessRequired = ja) inom P-ERJU-01. Provider, klient och resource server prövas var för sig. Ansvarar: UAS-ägare och ansvariga för anslutande applikationer och komponenter.'
+    criteria: |-
+      - Identifiera ändpunktsroller och avsedda autentiserings- och resursflöden.
+      - Granska konfigurationen för varje roll, MFA-förmågan och kopplingen till rättigheter.
+      - Demonstrera MFA och kodflödet, samt tillåten och nekad resursåtkomst för definierade claims.
+    limits: Stöd för MFA är inte samma krav som obligatorisk MFA vid varje inloggning. PKCE är rekommenderat i källan och inte bindande här. Fullständig tokenvalidering och övriga autentiseringsmetoder i kapitel 10 ingår inte, och inte heller inloggning i operativsystem.
+  - id: TP-ERJU-SCS-01-K07
+    title: Säkerhetskopior följer föreskrivet format och gränssnitt
+    statement: En säkerhetskopia ska bestå av ett .tar.gz-arkiv och en .metadata.json med källans namnschema. SSI-BKP ska tillhandahålla CreateBackup och RestoreBackup med argument och svar enligt källans tabell 8.
+    scope: 'Komponenten har tillstånd som behöver säkerhetskopieras (backupRelevantState = ja) inom P-ERJU-01. Kravet gäller komponentens SSI-BKP-server; bedöm bland annat IAM och UAS enligt 11-1. Ansvarar: komponent- eller dataägare, service management och återställningsansvarig.'
+    criteria: |-
+      - Skilj operationella data från konfiguration som tillförs genom andra gränssnitt, och ange vilken komponent som exponerar metoderna.
+      - Jämför OPC UA-metoder och säkerhetskopiornas filer med tabell 8 och 11-4.
+      - Skapa och återläs syntetiska data genom gränssnittet, och verifiera namn, metadata, argument, svar och återställt tillstånd.
+    notEnough: Ett godkänt format. Det visar inte att RTO och RPO nås; kombinera med TP-ÅTE-01.
+    limits: Statusrapporteringen i 11-6 ingår inte.
+  - id: TP-ERJU-SCS-01-K08
+    title: Komponenten rapporterar säkerhets- och integritetsstatus
+    statement: 'SSI-MNT ska exponera Security:SecurityStatus och Security:IntegrityCheckStatus som booleska värden med källans semantik: aktuella säkerhetsproblem respektive integritetsfel sedan uppstart.'
+    scope: 'Komponenten är markbaserad och ska exponera SSI-MNT inom P-ERJU-01. Ombord utreds separat. Ansvarar: komponentleverantör och drift-/underhållsansvarig.'
+    criteria: |-
+      - Dokumentera vilka händelser i komponenten som påverkar respektive status och hur de nås.
+      - Granska typ, namn och koppling till säkerhets- och integritetskontrollerna.
+      - Simulera fel på ett säkert sätt och verifiera statusövergångarna, också skillnaden mellan aktuellt problem och historik sedan uppstart.
+    notEnough: Statusvärdet i sig. Det bevisar inte att komponenten är säker.
+    limits: Underhållsmetoder och behörigheter i kapitel 12 ingår inte.
+  - id: TP-ERJU-SCS-01-K09
+    title: DNS-uppslag på SSI går över TLS
+    statement: DNS-server och klient på SSI-sidan ska använda DNS over TLS med källans ONCC-certifikat.
+    scope: 'DNS används (usesDns = ja) inom P-ERJU-01, för SSI-DNS-server eller klient. Ansvarar: DNS-tjänsteägare och ansvarig för anslutande komponent.'
+    criteria: |-
+      - Skilj komponenternas uppslag från kommunikationen till överordnade DNS-tjänster.
+      - Granska resolver-, TLS- och certifikatkonfiguration för varje bedömd ändpunkt.
+      - Verifiera uppslag genom rätt resolver och transport, och hur felaktig certifikatkontext hanteras.
+    limits: DNSSEC är inte samma sak som DNS over TLS. Källans DNSSEC-rekommendation gäller information från överordnad DNS och är inget krav på varje Secure Component; den hanteras i TP-ERJU-ECS-01-K01.
+externalReferences:
+  - E1, Shared Cybersecurity Services Specification V1.1. Se AP-ERJU-01 för fullständig källhänvisning.

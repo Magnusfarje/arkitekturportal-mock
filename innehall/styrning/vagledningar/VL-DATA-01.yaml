@@ -1,0 +1,26 @@
+id: VL-DATA-01
+kind: guide
+title: Hur gör jag data tillgängliga för analys och rapporter?
+topic: Data och analys
+answer: 'Publicera en dataprodukt till analysplattformen: en kopia som är avsedd för analys, med beskrivning och ägare. Analytiker läser den genom rapportverktyget. Ingen läser i ditt systems databas, och du bestämmer vem som får åtkomst.'
+before: |-
+  - Vilka frågor ska datat svara på, och vilka uppgifter behövs för det?
+  - Vem får se uppgifterna, och finns det sådant som inte ska med alls?
+  - Hur färskt måste det vara: en minut eller ett dygn?
+  - Hur länge ska uppgifterna finnas kvar?
+scope: Verksamhetssystem vars uppgifter ska användas i rapporter, uppföljning eller analys.
+steps: |-
+  1. Bestäm dataproduktens innehåll tillsammans med dem som ska använda den.
+  2. Beställ dataprodukten hos teamet för data och AI, och beskriv den i katalogen.
+  3. Publicera den som händelser enligt RA-INT-02, eller som filer i Parquet en gång per dygn.
+  4. Beställ en grupp för åtkomsten hos Identitet och åtkomst, och bevilja medlemskap själv.
+  5. Kontrollera i rapportverktyget att datat stämmer med källan.
+  6. Meddela dem som har åtkomst före en ändring som bryter formen.
+leadsTo:
+  - target: RA-DATA-01
+    when: Uppgifterna ska användas för rapporter och analys.
+  - target: RA-INT-02
+    when: En annan lösning behöver uppgifterna för sin egen funktion, inte för analys.
+  - target: RA-INT-03
+    when: Systemet kan bara lämna uppgifterna som filer.
+motivatedBy: [TP-INT-01, TP-BEH-01, TP-ENK-20]

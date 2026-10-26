@@ -1,0 +1,11 @@
+id: TP-DRI-15
+kind: technical-principle
+title: En leverans går att ta tillbaka, och det syns vad som är driftsatt
+binding: recommended
+topic: Drift och återställning
+statement: När en leverans visar sig felaktig går det att komma tillbaka till närmast föregående fungerande version inom minuter, utan att först hinna bygga något nytt. Det går också att se vilken version som är driftsatt i varje miljö, när den sattes dit och vad som utlöste det. Vägen tillbaka är prövad, inte antagen.
+rationale: 'Det vanliga felet är inte att allt går förlorat — det är att en ändring som passerat alla grindar ändå beter sig fel i produktion. TP-DRI-14 handlar om att bygga upp systemet igen efter förlust; det här handlar om de tio minuterna efter en dålig leverans. Att i stället rulla framåt med en rättning låter snabbare än det är: rättningen ska hinna skrivas, granskas och testas medan felet pågår. Går det att gå tillbaka blir varje leverans billig att ångra, och det är det som gör frekventa leveranser trygga (TP-FLO-07). Vet ni dessutom inte vilken version som faktiskt kör blir både felsökningen och beslutet att backa gissningar.'
+scope: System som levereras till en driftmiljö. Återuppbyggnad efter förlust hanteras i TP-DRI-14.
+preconditions: Att äldre versioner sparas tillräckligt länge för att hinna sättas tillbaka; att databasändringar är gjorda så att föregående version fortfarande kan läsa datat — det är oftast här möjligheten att backa faller; att den som upptäcker felet också får backa, utan att invänta ett beslutsmöte.
+solutions: Driftsätt samma oföränderliga, versionsmärkta artefakt som testats (TP-ENK-21) i stället för att bygga om per miljö. Gör databasändringar i två steg — lägg till först, ta bort i en senare leverans — så att föregående version fortsätter fungera under tiden. Använd feature flags så att en enskild funktion kan stängas av utan att hela leveransen backas. Logga varje driftsättning med version, miljö, tidpunkt och vad som utlöste den, någonstans som överlever systemet självt (TP-DRI-13). Pröva vägen tillbaka på samma sätt som återställningen provas i TP-DRI-14.
+ifNotMet: Huvudregel — vad det innebär.

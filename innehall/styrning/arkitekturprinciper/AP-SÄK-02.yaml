@@ -1,0 +1,12 @@
+id: AP-SÄK-02
+kind: architecture-principle
+title: Känn dina beroenden och vem som ansvarar för dem
+statement: Den som ansvarar för en lösning ska känna till dess betydelsefulla beroenden, veta vem som ansvarar för vart och ett och väga in dem när teknik väljs eller lösningen förändras.
+rationale: Ett beroende påverkar lösningens säkerhet, tillgänglighet, förändringsbarhet och tekniska livslängd. Det gäller också när en annan förvaltning eller en leverantör äger beroendet.
+scope: Lösningar som är beroende av andra system, tjänster, plattformar, komponenter eller leverantörer – nya som befintliga, IT som OT. Ett beroende är betydelsefullt om lösningens funktion eller skydd påverkas väsentligt när beroendet faller bort, ändras eller avvecklas.
+consequences: |-
+  - Val av produkt eller plattform väger in beroendenas livscykel, ansvar och påverkan.
+  - Dolda beroenden och oklara gränssnitt reds ut i designen.
+  - Gemensamma förmågor får användas, men förutsättningarna för att använda dem dokumenteras.
+  - Arkitekturunderlaget visar vad som händer när ett beroende faller bort eller ändras, och hur det har påverkat arkitekturvalen.
+notCovered: TP-BER-01 täcker teknisk inventering, tillåtna versioner och sårbarheter. TP-DRI-16 och TP-TEK-01 gäller samma område, och TP-ENK-20 till TP-ENK-22 gränssnitt och koppling mellan system. Vad som händer när ett beroende faller bort har ingen regel och bedöms i arkitekturgranskning.

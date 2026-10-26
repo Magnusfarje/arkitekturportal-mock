@@ -1,0 +1,28 @@
+id: VL-LIV-02
+kind: guide
+title: Hur avvecklar jag ett system?
+topic: Livscykel
+answer: 'Ett system är avvecklat när ingen längre använder det, det som ska bevaras är uttaget, och allt som gav det åtkomst är borttaget: klienter, hemligheter, öppningar och namn. Stäng av först och ta bort sedan, så att du hinner upptäcka den som fortfarande var beroende av det.'
+before: |-
+  - Vilka konsumenter står kvar i katalogen?
+  - Vilka handlingar och uppgifter ska bevaras, och hur länge?
+  - Vad har systemet åtkomst till i dag: andra system, databaser, hemligheter?
+scope: System som tas ur drift, också när ett nytt system har tagit över.
+steps: |-
+  1. Kontrollera i katalogen och i loggarna att ingen längre anropar systemet.
+  2. Ta ut det som ska bevaras till e-arkivet, enligt gällande regler.
+  3. Stäng av systemet, men låt det stå kvar i en månad. Den som fortfarande var beroende av det hör av sig.
+  4. Beställ att systemets klienter spärras hos Identitet och åtkomst, och ta bort dess hemligheter.
+  5. Beställ att publiceringar, brandväggsöppningar, namn och godkända destinationer tas bort.
+  6. Ta bort namespace, servrar och databaser. Säkerhetskopiorna finns kvar under sin lagringstid.
+  7. Märk systemet som avvecklat i katalogen, och ta bort det ur andra systems beroendeförteckningar.
+motivatedBy: [AP-SÄK-02, TP-BER-01, TP-HEM-01]
+uses:
+  - target: component:it-miljo/e-arkiv
+    role: det som ska bevaras tas ut hit
+  - target: component:it-miljo/inloggningstjanst
+    role: systemets klienter spärras
+  - target: component:it-miljo/hemlighetstjanst
+    role: systemets hemligheter tas bort
+  - target: component:it-miljo/sakerhetskopieringstjanst
+    role: säkerhetskopiorna sparas under sin lagringstid
